@@ -6,7 +6,7 @@
   "icon": "block-default",
   "keywords": ["growthlabseo", "selling points", "items"],
   "acf": {
-    "mode": "edit",
+    "renderPreview": false,
     "renderTemplate": "block.php"
   },
   "supports": {
