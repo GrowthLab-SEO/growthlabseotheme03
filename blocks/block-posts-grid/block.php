@@ -25,8 +25,12 @@ if (get_field('toggle_block')):
 
     if ($grid_type === "case-result") {
         $args['posts_per_page'] = -1;
-        $args['meta_key'] = 'numerical_amount';
-        $args['orderby'] = 'meta_value_num';
+        $args['meta_query'] = array(
+            'relation'  => 'OR',
+            'amount'    => array('key' => 'numerical_amount', 'compare' => 'EXISTS', 'type' => 'NUMERIC'),
+            'no_amount' => array('key' => 'numerical_amount', 'compare' => 'NOT EXISTS'),
+        );
+        $args['orderby'] = array('amount' => 'DESC', 'date' => 'DESC');
     }
 
     if ($grid_type === "custom" && $select_or_create_items) {
