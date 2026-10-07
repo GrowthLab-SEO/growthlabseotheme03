@@ -192,6 +192,11 @@ strong {
   font-weight: 600;
 }
 
+span {
+  font-size: inherit;
+  line-height: inherit;
+}
+
 //Utilities
 [data-visible="true"] {
   content-visibility: visible;
