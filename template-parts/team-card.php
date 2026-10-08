@@ -24,7 +24,7 @@ if (!defined('ABSPATH')) {
             <?php if ($args['link_url']): ?>
                 <div class="team-card__btn">
                     <a href="<?= $args['link_url'] ?>" target="<?= $args['link_target'] ?>" class="btn btn--tertiary-light" aria-label="Meet <?= esc_attr($args['title']) ?>">
-                        <span>MEET <?= $args["title"] ?></span>
+                        <span>meet <?= $args["title"] ?></span>
                     </a>
                 </div>
             <?php endif ?>
