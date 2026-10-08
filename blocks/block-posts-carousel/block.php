@@ -69,7 +69,7 @@ if (get_field('toggle_block')):
                 ?>
 
                 <?php if (isset($text_content) && $text_content): ?>
-                    <div class="posts-carousel__content formatted-text tx-center">
+                    <div class="posts-carousel__text-content formatted-text tx-center">
                         <?= $text_content ?>
                     </div>
                 <?php endif ?>
