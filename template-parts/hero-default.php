@@ -10,6 +10,7 @@ foreach ($args as $field => $content) $$field = $content;
 if (get_field('hero_properties') !== null && !empty(get_field('hero_properties'))) foreach (get_field('hero_properties') as $key => $value) $$key = $value;
 $cta_button = isset($hero_cta_button) && $hero_cta_button ? $hero_cta_button : $hero_cta_button_default;
 
+
 //Hero pictures
 if (isset($hero_pictures)) foreach ($hero_pictures as $type => $picture) $$type = $picture;
 
