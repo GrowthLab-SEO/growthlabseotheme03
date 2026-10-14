@@ -40,12 +40,19 @@ if (get_field('toggle_block')):
                 if (isset($items) && !empty($items)):
                     foreach ($items as $item):
                         foreach ($item as $key => $value) $$key = $value;
-                        $bg_item_url = get_template_directory_uri() . '\assets\img\figure_selling_points.webp';
                         $item_wrapper = isset($link) && $link ? "a" : "div";
                 ?>
 
                         <<?= $item_wrapper ?> class="item" <?= isset($link) && $link ? "href='" . esc_url($link['url']) . "' target='" . esc_attr($link['target']) . "'" : "" ?>>
-                            <img data-src="<?= $bg_item_url ?>" alt="" class="item__bg lazy-image">
+                            <?php
+                            if ($items_background_image && !empty($items_background_image)) {
+                                img_print_picture_tag(img: $items_background_image, is_cover: false, classes: "item__bg", max_size: "featured-small", min_size: "thumbnail");
+                            } else {
+                                $bg_item_url = get_template_directory_uri() . '/assets/img/figure_selling_points.webp';
+                                echo '<img data-src="' . esc_url($bg_item_url) . '" alt="" class="item__bg lazy-image">';
+                            }
+                            ?>
+
                             <div class="item__icon">
                                 <?php if (isset($icon) && $icon) img_print_picture_tag(img: $icon, max_size: "thumbnail"); ?>
                             </div>
