@@ -14,15 +14,31 @@ if (get_field('toggle_block')):
         <?php if (isset($extract_block_from_content) && $extract_block_from_content) echo "data-extract='$place'"; ?>>
 
         <?php
-        if (isset($background_image) && $background_image && isset($background_type) && $background_type === 'image') img_print_picture_tag(img: $background_image, is_cover: true, classes: "cta-box__bg bg-image");
+        if (isset($background_image) && $background_image && isset($background_type) && $background_type === 'image') {
+            img_print_picture_tag(img: $background_image, is_cover: true, classes: "cta-box__bg bg-image");
+        } elseif (isset($background_video) && $background_video && isset($background_type) && $background_type === 'video') {
+            $video_url = $background_video['url'] ?? null;
+            if ($video_url) {
+                $video_cover_url = is_array($background_video_cover ?? null) ? ($background_video_cover['url'] ?? null) : null;
+                echo '<video class="cta-box__bg cta-box__bg--video" data-src="' . esc_url($video_url) . '"';
+                if ($video_cover_url) {
+                    echo ' data-poster="' . esc_url($video_cover_url) . '"';
+                }
+                echo ' muted loop playsinline preload="none"></video>';
+            }
+        }
         ?>
 
         <div class="cta-box__wrapper container">
 
             <?php
             $options = get_field_options("options");
-            if ($options["logo_symbol"]) {
-                img_print_picture_tag(img: $options["logo_symbol"], max_size: "medium", classes: "cta-box__symbol");
+            $logo_symbol = is_array($options) ? ($options["logo_symbol"] ?? null) : null;
+
+            if (!empty($side_image)) {
+                img_print_picture_tag(img: $side_image, max_size: "content", min_size: "featured-small", classes: "cta-box__side-image");
+            } elseif (!empty($logo_symbol)) {
+                img_print_picture_tag(img: $logo_symbol, max_size: "medium", classes: "cta-box__symbol");
             }
             ?>
 

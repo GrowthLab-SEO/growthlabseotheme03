@@ -11,7 +11,8 @@
   $parent: &;
 
   &.dark,
-  &.image {
+  &.image,
+  &.video {
     background-image: linear-gradient(
       to right bottom,
       rgba(var(--primary-dark)) 10%,
@@ -38,6 +39,18 @@
           color-mix(in srgb, rgb(var(--primary-dark)) 35%, #000 65%)
         );
         opacity: 0.9;
+      }
+
+      &--video {
+        width: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        display: block;
+        object-fit: cover;
+        object-position: center center;
       }
     }
 
@@ -81,6 +94,7 @@
         );
       }
 
+      &--video,
       img {
         filter: contrast(0.5);
         object-position: top center;
@@ -138,6 +152,7 @@
     }
   }
 
+  &__side-image,
   &__symbol {
     min-width: 280px;
     height: auto;

@@ -202,7 +202,8 @@
             "choices": {
                 "light": "Light",
                 "dark": "Dark",
-                "image": "Image"
+                "image": "Image",
+                "video": "Video"
             },
             "default_value": "light",
             "return_format": "value",
@@ -250,6 +251,69 @@
             "preview_size": "medium"
         },
         {
+            "key": "field_6acf0219ec613",
+            "label": "Background Video",
+            "name": "background_video",
+            "aria-label": "",
+            "type": "file",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_69e87c02d60e5",
+                        "operator": "==",
+                        "value": "video"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "min_size": "",
+            "max_size": "",
+            "mime_types": "",
+            "allow_in_bindings": 0
+        },
+        {
+            "key": "field_6acf0219ec614",
+            "label": "Background Video Cover",
+            "name": "background_video_cover",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_69e87c02d60e5",
+                        "operator": "==",
+                        "value": "video"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "",
+            "allow_in_bindings": 0,
+            "preview_size": "medium"
+        },
+        {
             "key": "field_690e5f0c46a2b",
             "label": "Title",
             "name": "title",
@@ -269,6 +333,40 @@
             "toolbar": "full",
             "media_upload": 1,
             "delay": 0
+        },
+        {
+            "key": "field_6acf015c1ef29",
+            "label": "Side Image",
+            "name": "side_image",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "If the field is left blank, the site logo symbol will be displayed.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_690e5f0c3bae6",
+                        "operator": "==",
+                        "value": "simple"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "",
+            "allow_in_bindings": 0,
+            "preview_size": "medium"
         },
         {
             "key": "field_690e5f0c4e34e",
@@ -363,5 +461,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1776843977
+    "modified": 1791956123
 }

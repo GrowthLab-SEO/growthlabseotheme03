@@ -1,0 +1,2 @@
+document.querySelectorAll(".cta-box").forEach(e=>{const t=e.querySelector(".cta-box__bg--video[data-src]");if(!t)return;const r=()=>{t.dataset.poster&&(t.poster=t.dataset.poster,t.removeAttribute("data-poster")),t.dataset.src&&(t.src=t.dataset.src,t.removeAttribute("data-src"),t.load());const e=t.play();e&&e.catch(e=>{console.warn("CTA background video could not play:",e)})};"IntersectionObserver"in window?new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting?r():t.pause()})},{threshold:.1}).observe(e):r()});
+//# sourceMappingURL=block-min.js.map
