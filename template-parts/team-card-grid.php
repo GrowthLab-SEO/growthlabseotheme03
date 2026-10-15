@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
         <a href="<?= $args['link_url'] ?>" target="<?= $args['link_target'] ?>" class="team-card-grid__wrapper" aria-label="<?= esc_attr($args['name']) ?>">
             <?php
             if (isset($args['picture']) && $args['picture'] && $args['picture'] !== '') {
-                $bg_item_url = get_template_directory_uri() . '\assets\img\thumbnail-bg.webp';
+                $bg_item_url = get_template_directory_uri() . '/assets/img/thumbnail-bg.webp';
                 img_print_picture_tag(img: $args["picture"], max_size: "cover-mobile", min_size: "featured-small", classes: "team-card-grid__pic");
             } else {
                 include get_template_directory() . '/assets/icons/icon-file-image.svg';

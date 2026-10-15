@@ -186,7 +186,7 @@ if (get_field('toggle_block')):
                     <div class="splide__track">
                         <ul class="splide__list">
                             <?php if (isset($query) && $query->have_posts()) :
-                                $bg_item_url = get_template_directory_uri() . '\assets\img\thumbnail-bg.webp';
+                                $bg_item_url = get_template_directory_uri() . '/assets/img/thumbnail-bg.webp';
                                 while ($query->have_posts()) :
                                     $query->the_post();
 

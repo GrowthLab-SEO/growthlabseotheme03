@@ -52,7 +52,7 @@ if (!$bg_mobile) $bg_mobile = [];
     </div>
 
     <?php if (!$use_custom_badge_image && isset($trust_badge_text) && $trust_badge_text): ?>
-        <?php $url = get_template_directory_uri() . '\assets\img\badge.webp'; ?>
+        <?php $url = get_template_directory_uri() . '/assets/img/badge.webp'; ?>
         <div class="hero__badge">
             <div class="content tx-center">
                 <?= $trust_badge_text ?>
