@@ -121,22 +121,22 @@ if (get_field('toggle_block')):
                                 while ($query->have_posts()) {
                                     $query->the_post();
 
-                                    if (!empty(get_fields(get_the_ID()))) foreach (get_fields(get_the_ID()) as $field => $content) $$field = $content;
+                                    $post_fields = get_fields(get_the_ID()) ?: [];
 
                                     switch ($carousel_type) {
                                         case 'case-result':
                                             get_template_part('template-parts/result', 'card', array(
                                                 "classes" => "splide__slide posts-carousel__card " . (isset($background_type) && $background_type ? $background_type : 'light'),
-                                                "numerical_amount" => $numerical_amount,
-                                                "case_title" => $case_title,
-                                                "case_description" => $case_description,
+                                                "numerical_amount" => ($post_fields['numerical_amount'] ?? ''),
+                                                "case_title" => ($post_fields['case_title'] ?? ''),
+                                                "case_description" => ($post_fields['case_description'] ?? ''),
                                             ));
                                             break;
 
                                         case 'team':
                                             get_template_part('template-parts/team', 'card', array(
                                                 "classes" => "splide__slide posts-carousel__card " . (isset($background_type) && $background_type ? $background_type : 'light'),
-                                                "picture" => $headshot,
+                                                "picture" => ($post_fields['headshot'] ?? ''),
                                                 "title" => get_the_title(),
                                                 "content" => get_the_excerpt(),
                                                 "link_url" => get_the_permalink(),
@@ -160,9 +160,9 @@ if (get_field('toggle_block')):
                                         case 'testimonial':
                                             get_template_part('template-parts/testimonial', 'card', array(
                                                 "classes" => "splide__slide posts-carousel__card " . (isset($background_type) && $background_type ? $background_type : 'light'),
-                                                "author" => $author_name,
-                                                "role" => $author_role,
-                                                "content" => $testimonial_content,
+                                                "author" => ($post_fields['author_name'] ?? ''),
+                                                "role" => ($post_fields['author_role'] ?? ''),
+                                                "content" => ($post_fields['testimonial_content'] ?? ''),
                                             ));
                                             break;
 
@@ -207,14 +207,14 @@ if (get_field('toggle_block')):
                                 while ($query->have_posts()) :
                                     $query->the_post();
 
-                                    if (!empty(get_fields(get_the_ID()))) foreach (get_fields(get_the_ID()) as $field => $content) $$field = $content;
+                                    $post_fields = get_fields(get_the_ID()) ?: [];
                             ?>
                                     <li class="splide__slide thumbnail">
                                         <div class="thumbnail__wrapper">
                                             <img data-src="<?= $bg_item_url ?>" alt="" class="thumbnail__bg lazy-image">
                                             <?php
-                                            if (isset($headshot) && $headshot) {
-                                                img_print_picture_tag(img: $headshot, max_size: "medium", min_size: "medium", classes: "thumbnail__pic");
+                                            if (!empty($post_fields['headshot'])) {
+                                                img_print_picture_tag(img: ($post_fields['headshot'] ?? ''), max_size: "medium", min_size: "medium", classes: "thumbnail__pic");
                                             } else {
                                                 include get_template_directory() . '/assets/icons/icon-file-image.svg';
                                             }
