@@ -1,5 +1,6 @@
 (() => {
   const sections = document.querySelectorAll(".cta-box");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   sections.forEach((section) => {
     const video = section.querySelector(".cta-box__bg--video[data-src]");
@@ -9,6 +10,12 @@
       if (video.dataset.poster) {
         video.poster = video.dataset.poster;
         video.removeAttribute("data-poster");
+      }
+
+      // Reduced motion: keep only the poster visible, don't load or play the video
+      if (reducedMotion.matches) {
+        video.pause();
+        return;
       }
 
       if (video.dataset.src) {

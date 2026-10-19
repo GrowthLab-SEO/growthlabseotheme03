@@ -25,7 +25,7 @@ if (get_field('toggle_block')):
                 if ($video_cover_url) {
                     echo ' data-poster="' . esc_url($video_cover_url) . '"';
                 }
-                echo ' muted loop playsinline preload="none"></video>';
+                echo ' muted loop playsinline preload="none" aria-hidden="true"></video>';
             }
         }
         ?>
