@@ -231,6 +231,43 @@ add_filter('excerpt_more', 'wpdocs_excerpt_more');
  * @return void
  */
 
+/**
+ * Whether the current request renders a Splide carousel block, in the post content (synced patterns included)
+ * or in a sidebar block widget. No theme template uses Splide outside these blocks.
+ */
+function growthlabseotheme03_request_uses_splide()
+{
+    $splide_blocks = ['acf/logos-carousel', 'acf/posts-carousel'];
+
+    $contains_splide_block = function ($content) use ($splide_blocks) {
+        foreach ($splide_blocks as $block_name) {
+            if (str_contains((string) $content, '<!-- wp:' . $block_name . ' ')) return true;
+        }
+        return false;
+    };
+
+    foreach (get_current_post_blocks() as $block) {
+        if (in_array($block['blockName'] ?? '', $splide_blocks, true)) return true;
+
+        if (($block['blockName'] ?? '') === 'core/block' && !empty($block['attrs']['ref'])) {
+            if ($contains_splide_block(get_post_field('post_content', (int) $block['attrs']['ref']))) return true;
+        }
+    }
+
+    // Carousel blocks placed in the sidebars as block widgets
+    $widget_blocks = get_option('widget_block', []);
+    foreach (wp_get_sidebars_widgets() as $sidebar_id => $widget_ids) {
+        if ($sidebar_id === 'wp_inactive_widgets' || !is_array($widget_ids)) continue;
+
+        foreach ($widget_ids as $widget_id) {
+            if (!preg_match('/^block-(\d+)$/', $widget_id, $matches)) continue;
+            if ($contains_splide_block($widget_blocks[$matches[1]]['content'] ?? '')) return true;
+        }
+    }
+
+    return false;
+}
+
 function inline_main_critical_css()
 {
     global $block_critical_css;
@@ -247,7 +284,7 @@ function inline_main_critical_css()
 
     // Add Splide critical CSS only when carousels are present
     $splide_css_file = get_template_directory() . '/styles/vendor/splide/splide-core.min.css';
-    if (file_exists($splide_css_file)) {
+    if (file_exists($splide_css_file) && growthlabseotheme03_request_uses_splide()) {
         $critical_css .= "\n/* Splide Critical CSS */\n" . file_get_contents($splide_css_file);
     }
 
