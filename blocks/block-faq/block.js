@@ -1,12 +1,22 @@
 (function () {
-  const list = document.querySelector(".faq__items");
-  if (!list) return;
+  const lists = document.querySelectorAll(".faq__items");
+  if (!lists.length) return;
 
-  const col1 = document.getElementById("faq-col-1");
-  const col2 = document.getElementById("faq-col-2");
-  const items = Array.from(list.querySelectorAll(".faq__item"));
+  // Each FAQ block splits its own items into two columns on tablet and up, so several blocks on a page don't clash
+  const faqLists = Array.from(lists).map((list) => {
+    const cols = list.querySelectorAll(":scope > .faq__col");
 
-  function orderItems() {
+    return {
+      list,
+      col1: cols[0],
+      col2: cols[1],
+      items: Array.from(list.querySelectorAll(".faq__item")),
+    };
+  });
+
+  function orderItems({ list, col1, col2, items }) {
+    if (!col1 || !col2) return;
+
     const isMobile = window.innerWidth < 768;
 
     if (isMobile) {
@@ -24,11 +34,11 @@
     }
   }
 
-  orderItems();
+  faqLists.forEach(orderItems);
 
   let resizeTimer;
   window.addEventListener("resize", function () {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(orderItems, 150);
+    resizeTimer = setTimeout(() => faqLists.forEach(orderItems), 150);
   });
 })();

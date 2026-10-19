@@ -41,8 +41,8 @@ if (get_field('toggle_block')):
                 <?php if (isset($faq_items) && !empty($faq_items)) : ?>
                     <div class="faq__items">
 
-                        <div class="faq__col" id="faq-col-1" aria-hidden="true"></div>
-                        <div class="faq__col" id="faq-col-2" aria-hidden="true"></div>
+                        <div class="faq__col"></div>
+                        <div class="faq__col"></div>
 
                         <?php
                         $i = 1;
