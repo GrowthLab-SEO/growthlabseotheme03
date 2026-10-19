@@ -151,7 +151,7 @@ if (get_field('toggle_block')):
                                                 "title_tag" => $items_title_tag ?? "h3",
                                                 "classes" => "splide__slide posts-carousel__card " . (isset($background_type) && $background_type ? $background_type : 'light'),
                                                 "picture" => get_the_post_thumbnail_url(),
-                                                "cat" =>  array_first(get_the_category())->name,
+                                                "cat" =>  get_the_category()[0]->name ?? '',
                                                 "meta" => get_the_date(),
                                                 "title" => get_the_title(),
                                                 "excerpt" => get_the_excerpt(),

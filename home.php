@@ -25,7 +25,7 @@ $post_id = get_option('page_for_posts');
                     get_template_part('template-parts/post', 'card', array(
                         "classes" => "blog__card " . $card_class,
                         "picture" => get_the_post_thumbnail_url(),
-                        "cat" =>  array_first(get_the_category())->name,
+                        "cat" =>  get_the_category()[0]->name ?? '',
                         "meta" => get_the_date(),
                         "title" => get_the_title(),
                         "excerpt" => get_the_excerpt(),
