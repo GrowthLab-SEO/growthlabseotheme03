@@ -7,6 +7,7 @@ $args = wp_parse_args($args, array(
     'classes' => '',
     'paged' => max(1, (int) get_query_var('paged', 1)),
     'query' => null,
+    'query_arg' => '', // Custom page query arg (e.g. "grid-2-page"); empty uses "paged"
     'prev_text' => null,
     'next_text' => null,
     'mid_size' => 2,
@@ -35,14 +36,28 @@ $next_arrow = '
             <span class="arrow__placeholder">Next</span>
         ';
 
+$format   = '?paged=%#%';
+$add_args = array();
+$query_arg = sanitize_key($args['query_arg']);
+
+if ($query_arg !== '' && $query_arg !== 'paged') {
+    $format = '?' . $query_arg . '=%#%';
+
+    // The base URL from get_pagenum_link() drops "paged", so keep the page of the grid that uses it
+    $main_paged = absint($_GET['paged'] ?? 0);
+    if ($main_paged > 1) {
+        $add_args['paged'] = $main_paged;
+    }
+}
+
 $pagination = paginate_links(array(
-    'format' => '?paged=%#%',
+    'format' => $format,
     'current' => max(1, $paged),
     'total' => $query->max_num_pages,
     'prev_text' => $prev_arrow,
     'next_text' => $next_arrow,
     'type' => 'array',
-    'add_args' => array(),
+    'add_args' => $add_args,
     'mid_size' => (int) $args['mid_size'],
     'end_size' => (int) $args['end_size'],
 ));

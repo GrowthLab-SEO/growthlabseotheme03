@@ -372,6 +372,20 @@ if (!function_exists('get_block_extract_attribute')) {
     }
 }
 
+// Query arg a posts grid paginates with, so several grids on one page paginate independently. The first grid of the
+// request returns '' (it keeps the default paged/page query var, so existing URLs keep working); the next ones return
+// "grid-2-page", "grid-3-page"... Grids are numbered in render order with a static counter per request (ACF block ids
+// can't be used: identical blocks share the same id).
+if (!function_exists('get_posts_grid_page_arg')) {
+    function get_posts_grid_page_arg()
+    {
+        static $index = 0;
+        $index++;
+
+        return $index === 1 ? '' : 'grid-' . $index . '-page';
+    }
+}
+
 // Returns the current block's ACF values with every field of its field groups present. Fields that were never saved
 // (e.g. added after the block was created) get their ACF default value, so templates can keep extracting them into
 // variables without undefined variable warnings. Empty defaults are null, so isset() checks keep working as before.

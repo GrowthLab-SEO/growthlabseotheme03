@@ -7,9 +7,16 @@ if (get_field('toggle_block')):
     foreach (get_block_fields($block) as $key => $value) $$key = $value;
     $grid_type = get_valid_field_choice('grid_type', $grid_type ?? '');
 
-    $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-    if (is_front_page()) {
-        $paged = (get_query_var('page')) ? get_query_var('page') : 1;
+    // Each grid paginates on its own: the first grid keeps the paged/page query var, the others use their own query arg
+    $page_arg = get_posts_grid_page_arg();
+
+    if ($page_arg === '') {
+        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+        if (is_front_page()) {
+            $paged = (get_query_var('page')) ? get_query_var('page') : 1;
+        }
+    } else {
+        $paged = max(1, absint($_GET[$page_arg] ?? 1));
     }
 
     $args = array(
@@ -199,6 +206,7 @@ if (get_field('toggle_block')):
                 if ($query && $query->max_num_pages > 1) {
                     get_template_part('template-parts/posts', 'pagination', array(
                         'paged' => $paged,
+                        'query_arg' => $page_arg,
                         'query' => $query,
                         'classes' => 'case-results__pagination'
                     ));
