@@ -7,8 +7,7 @@ if (get_field('toggle_block')):
     foreach (get_fields() as $key => $value) $$key = $value;
 ?>
 
-    <section
-        id="<?= $block_id ?? "" ?>"
+    <section<?= get_block_id_attribute($block_id ?? '') ?>
         class="
         block 
         selling-points
@@ -56,7 +55,7 @@ if (get_field('toggle_block')):
                             <div class="item__icon">
                                 <?php if (isset($icon) && $icon) img_print_picture_tag(img: $icon, max_size: "thumbnail"); ?>
                             </div>
-                            <<?= isset($title_tag) && $title_tag ? $title_tag : "h3" ?> class="item__title tx-center"><?= $title ?></<?= isset($title_tag) && $title_tag ? $title_tag : "h3" ?>>
+                            <?php print_title($title, isset($title_tag) && $title_tag ? $title_tag : "h3", "item__title tx-center"); ?>
                         </<?= $item_wrapper ?>>
 
                 <?php
@@ -66,8 +65,8 @@ if (get_field('toggle_block')):
             </div>
 
             <?php if ($cta_link): ?>
-                <a href="<?= $cta_link['url'] ?>" target="<?= $cta_link['target'] ?>" class="cta-btn btn--tertiary" aria-label="<?= esc_attr($cta_link['title']) ?>">
-                    <span><?= $cta_link['title'] ?></span>
+                <a href="<?= esc_url($cta_link['url']) ?>" target="<?= esc_attr($cta_link['target']) ?>" class="cta-btn btn--tertiary" aria-label="<?= esc_attr($cta_link['title']) ?>">
+                    <span><?= esc_html($cta_link['title']) ?></span>
                 </a>
             <?php endif ?>
 

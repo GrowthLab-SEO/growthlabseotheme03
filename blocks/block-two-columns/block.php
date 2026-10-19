@@ -8,8 +8,7 @@ if (get_field('toggle_block')):
     $reverse =  $reverse_order ? "reverse" : "";
 ?>
 
-    <section
-        id="<?= $block_id ?? "" ?>"
+    <section<?= get_block_id_attribute($block_id ?? '') ?>
         class="
         block 
         two-columns

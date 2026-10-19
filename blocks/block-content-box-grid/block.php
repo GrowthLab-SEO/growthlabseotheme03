@@ -7,8 +7,7 @@ if (get_field('toggle_block')):
     foreach (get_fields() as $key => $value) $$key = $value;
 ?>
 
-    <section
-        id="<?= $block_id ?? "" ?>"
+    <section<?= get_block_id_attribute($block_id ?? '') ?>
         class="block content-box-grid bg-bicolor<?= !empty($block['className']) ? ' ' . esc_attr($block['className']) : '' ?>"
         <?= block_style_attribute($block); ?>
         <?php if (isset($extract_block_from_content) && $extract_block_from_content) echo "data-extract='$place'"; ?>>
@@ -42,13 +41,10 @@ if (get_field('toggle_block')):
 
                                         <div class="content-box__content formatted-text">
 
-                                            <<?= $title_tag ?> class="content-box__title">
-                                                <?php
-                                                if ($title_link) echo "<a href='" . $title_link['url'] . "' target='" . $title_link['target'] . "' aria-label='" . esc_attr($title) . "'>";
-                                                echo $title;
-                                                if ($title_link) echo "</a>";
-                                                ?>
-                                            </<?= $title_tag ?>>
+                                            <?php
+                                            $title_html = $title_link ? "<a href='" . esc_url($title_link['url']) . "' target='" . esc_attr($title_link['target']) . "' aria-label='" . esc_attr($title) . "'>" . $title . "</a>" : $title;
+                                            print_title($title_html, $title_tag, "content-box__title");
+                                            ?>
                                             <?= $text_content; ?>
 
                                         </div>
@@ -68,13 +64,13 @@ if (get_field('toggle_block')):
                     ?>
 
                         <li class="content-box content-box--menu-item">
-                            <a href="<?= $menu_item->url ?>" target="<?= $menu_item->target ?>" class="content-box__wrapper" aria-label="<?= esc_attr($menu_item->title) ?>">
+                            <a href="<?= esc_url($menu_item->url) ?>" target="<?= esc_attr($menu_item->target) ?>" class="content-box__wrapper" aria-label="<?= esc_attr($menu_item->title) ?>">
                                 <div class="content-box__inner">
 
                                     <div class="content-box__content formatted-text">
 
                                         <strong class="content-box__title">
-                                            <?= $menu_item->title ?>
+                                            <?= esc_html($menu_item->title) ?>
                                         </strong>
 
                                     </div>

@@ -7,8 +7,7 @@ if (get_field('toggle_block')):
     foreach (get_fields() as $key => $value) $$key = $value;
 ?>
 
-    <section
-        id="<?= $block_id ?? "" ?>"
+    <section<?= get_block_id_attribute($block_id ?? '') ?>
         class="
         block 
         content-intro
@@ -72,14 +71,14 @@ if (get_field('toggle_block')):
 
                 <div class="inner-cta-box__buttons">
                     <?php if ($cta_link && isset($cta_link) && $cta_link["url"]): ?>
-                        <a href="<?= $cta_link["url"] ?>" target="<?= $cta_link["target"] ?>" class="btn<?= $background_type && isset($background_type) && $background_type !== 'light' ? '--tertiary' : '--tertiary' ?>" aria-label="<?= esc_attr($cta_link["title"]) ?>">
-                            <span><?= $cta_link["title"] ?></span>
+                        <a href="<?= esc_url($cta_link["url"]) ?>" target="<?= esc_attr($cta_link["target"]) ?>" class="btn<?= $background_type && isset($background_type) && $background_type !== 'light' ? '--tertiary' : '--tertiary' ?>" aria-label="<?= esc_attr($cta_link["title"]) ?>">
+                            <span><?= esc_html($cta_link["title"]) ?></span>
                         </a>
                     <?php endif ?>
                     <?php if ($cta_link_2 && isset($cta_link_2) && $cta_link_2["url"]): ?>
-                        <a href="<?= $cta_link_2["url"] ?>" target="<?= $cta_link_2["target"] ?>" class="btn" aria-label="<?= esc_attr($cta_link_2["title"]) ?>">
+                        <a href="<?= esc_url($cta_link_2["url"]) ?>" target="<?= esc_attr($cta_link_2["target"]) ?>" class="btn" aria-label="<?= esc_attr($cta_link_2["title"]) ?>">
                             <?php if (str_contains($cta_link_2["url"], 'tel:')) include get_template_directory() . '/assets/icons/icon-phone.svg' ?>
-                            <span><?= $cta_link_2["title"] ?></span>
+                            <span><?= esc_html($cta_link_2["title"]) ?></span>
                         </a>
                     <?php endif ?>
                 </div>
