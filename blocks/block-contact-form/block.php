@@ -5,12 +5,13 @@ if (!defined('ABSPATH')) {
 
 if (get_field('toggle_block')):
     foreach (get_fields() as $key => $value) $$key = $value;
+    $background_type = get_valid_field_choice('background_type', $background_type ?? '');
 ?>
 
     <section<?= get_block_id_attribute($block_id ?? '') ?>
-        class="block contact-form <?= isset($background_type) && $background_type ? $background_type : 'light' ?><?= !empty($block['className']) ? ' ' . esc_attr($block['className']) : '' ?>"
+        class="block contact-form <?= esc_attr(isset($background_type) && $background_type ? $background_type : 'light') ?><?= !empty($block['className']) ? ' ' . esc_attr($block['className']) : '' ?>"
         <?= block_style_attribute($block); ?>
-        <?php if (isset($extract_block_from_content) && $extract_block_from_content) echo "data-extract='$place'"; ?>>
+        <?= get_block_extract_attribute($extract_block_from_content ?? false, $place ?? '') ?>>
 
         <?php
         if (isset($background_image) && $background_image && isset($background_type) && $background_type === 'image') img_print_picture_tag(img: $background_image, is_cover: true, classes: "contact-form__bg bg-image");

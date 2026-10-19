@@ -5,17 +5,18 @@ if (!defined('ABSPATH')) {
 
 if (get_field('toggle_block')):
     foreach (get_fields() as $key => $value) $$key = $value;
+    $background_type = get_valid_field_choice('background_type', $background_type ?? '');
 ?>
 
     <section<?= get_block_id_attribute($block_id ?? '') ?>
         class="
         block 
         content-intro
-        <?= isset($background_type) && $background_type ? $background_type : 'light' ?>
-        <?= isset($background_type) && $background_type ? $background_type : 'light' ?><?= !empty($block['className']) ? ' ' . esc_attr($block['className']) : '' ?>
+        <?= esc_attr(isset($background_type) && $background_type ? $background_type : 'light') ?>
+        <?= esc_attr(isset($background_type) && $background_type ? $background_type : 'light') ?><?= !empty($block['className']) ? ' ' . esc_attr($block['className']) : '' ?>
         "
         <?= block_style_attribute($block); ?>
-        <?php if (isset($extract_block_from_content) && $extract_block_from_content) echo "data-extract='$place'"; ?>>
+        <?= get_block_extract_attribute($extract_block_from_content ?? false, $place ?? '') ?>>
 
         <?php
         if (isset($background_image) && $background_image && $background_type === 'image') img_print_picture_tag(img: $background_image, is_cover: true, classes: "content-intro__bg bg-image gradient-overlay");
@@ -23,9 +24,12 @@ if (get_field('toggle_block')):
 
         <div class="content-intro__wrapper container">
 
-            <?php foreach (get_field("columns") as $column => $col) $$column = $col; ?>
+            <?php
+            foreach (get_field("columns") as $column => $col) $$column = $col;
+            $featured_image_position = get_valid_field_choice('columns.featured_image_position', $featured_image_position ?? '');
+            ?>
 
-            <div class="col col--image <?= isset($featured_image_position) && $featured_image_position ? $featured_image_position : "left" ?>">
+            <div class="col col--image <?= esc_attr(isset($featured_image_position) && $featured_image_position ? $featured_image_position : "left") ?>">
                 <?php
                 if (isset($featured_image) && $featured_image) {
                     $options = get_field_options("options");
