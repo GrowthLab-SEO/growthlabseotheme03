@@ -57,10 +57,21 @@ document.addEventListener("DOMContentLoaded", function () {
     return String(n).padStart(2, "0");
   }
 
+  // Parse inside an inert <template> so markup from the API (e.g. <img onerror>) never executes
   function stripHTML(html) {
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    return div.textContent.trim();
+    const tpl = document.createElement("template");
+    tpl.innerHTML = html;
+    return tpl.content.textContent.trim();
+  }
+
+  // Escape a value before interpolating it into HTML markup or attributes
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
   function monthNumber(name) {
@@ -151,22 +162,27 @@ document.addEventListener("DOMContentLoaded", function () {
           year: "numeric",
         });
 
-        const title = post.title?.rendered ?? "";
-        const excerpt = stripHTML(post.excerpt?.rendered ?? "").slice(0, 200);
-        const link = post.link ?? "#";
+        // Every value from the API is reduced to plain text and escaped before interpolation
+        const title = escapeHtml(stripHTML(post.title?.rendered ?? ""));
+        const excerpt = escapeHtml(
+          stripHTML(post.excerpt?.rendered ?? "").slice(0, 200),
+        );
+        const link = escapeHtml(post.link ?? "#");
         // Extract category
         const categoryTerms = post._embedded?.["wp:term"]?.find(terms => 
           terms.some(t => t.taxonomy === "category")
         ) ?? [];
-        const categoryName = categoryTerms.length > 0 ? categoryTerms[0].name : "";
-        const featuredUrl =
-          post._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? "";
+        const categoryName =
+          categoryTerms.length > 0 ? escapeHtml(stripHTML(categoryTerms[0].name)) : "";
+        const featuredUrl = escapeHtml(
+          post._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? "",
+        );
 
         let pictureHTML;
         if (featuredUrl) {
           pictureHTML = `<img class="post-card__pic" src="${featuredUrl}" alt="${title}" loading="lazy">`;
         } else if (DEFAULT_IMAGE) {
-          pictureHTML = `<img class="post-card__pic" src="${DEFAULT_IMAGE}" alt="${title}" loading="lazy">`;
+          pictureHTML = `<img class="post-card__pic" src="${escapeHtml(DEFAULT_IMAGE)}" alt="${title}" loading="lazy">`;
         } else {
           pictureHTML = `<div class="post-card__pic post-card__pic--placeholder"></div>`;
         }
@@ -186,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <line x1="8" y1="2" x2="8" y2="6"></line>
                                 <line x1="3" y1="10" x2="21" y2="10"></line>
                             </svg>
-                            ${dateStr}
+                            ${escapeHtml(dateStr)}
                         </span>
                         <p class="post-card__title">${title}</p>
                         <p class="post-card__content">${excerpt}</p>
