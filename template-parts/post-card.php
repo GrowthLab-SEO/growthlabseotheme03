@@ -35,7 +35,7 @@ if (!defined('ABSPATH')) {
                 <?php include get_template_directory() . "/assets/icons/icon-calendar.svg" ?>
                 <?= $args["meta"] ?></span>
 
-            <p class="post-card__title"><?= $args["title"] ?></p>
+            <?php print_title($args["title"], $args["title_tag"] ?? "p", "post-card__title"); ?>
 
             <p class="post-card__content"><?= $args["excerpt"] ?></p>
 

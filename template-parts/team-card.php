@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
         </div>
 
         <div class="team-card__inner">
-            <p class="team-card__title"><?= $args["title"] ?></p>
+            <?php print_title($args["title"], $args["title_tag"] ?? "p", "team-card__title"); ?>
 
             <p class="team-card__content formatted-text"><?php if ($args["content"] && !empty($args["content"])) echo $args["content"] ?></p>
 

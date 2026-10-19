@@ -109,6 +109,7 @@ if (get_field('toggle_block')):
                             if (!empty($custom_items)) {
                                 foreach ($custom_items as $item) {
                                     get_template_part('template-parts/default', 'card', array(
+                                        "title_tag" => $items_title_tag ?? "p",
                                         "classes" => "splide__slide posts-carousel__card",
                                         "picture" => $item['picture'] ?? '',
                                         "title" => $item['title'] ?? '',
@@ -125,6 +126,7 @@ if (get_field('toggle_block')):
                                     switch ($carousel_type) {
                                         case 'case-result':
                                             get_template_part('template-parts/result', 'card', array(
+                                                "title_tag" => $items_title_tag ?? "p",
                                                 "classes" => "splide__slide posts-carousel__card " . (isset($background_type) && $background_type ? $background_type : 'light'),
                                                 "numerical_amount" => ($post_fields['numerical_amount'] ?? ''),
                                                 "case_title" => ($post_fields['case_title'] ?? ''),
@@ -134,6 +136,7 @@ if (get_field('toggle_block')):
 
                                         case 'team':
                                             get_template_part('template-parts/team', 'card', array(
+                                                "title_tag" => $items_title_tag ?? "p",
                                                 "classes" => "splide__slide posts-carousel__card " . (isset($background_type) && $background_type ? $background_type : 'light'),
                                                 "picture" => ($post_fields['headshot'] ?? ''),
                                                 "title" => get_the_title(),
@@ -145,6 +148,7 @@ if (get_field('toggle_block')):
 
                                         case 'post':
                                             get_template_part('template-parts/post', 'card', array(
+                                                "title_tag" => $items_title_tag ?? "p",
                                                 "classes" => "splide__slide posts-carousel__card " . (isset($background_type) && $background_type ? $background_type : 'light'),
                                                 "picture" => get_the_post_thumbnail_url(),
                                                 "cat" =>  array_first(get_the_category())->name,
@@ -167,6 +171,7 @@ if (get_field('toggle_block')):
 
                                         default:
                                             get_template_part('template-parts/default', 'card', array(
+                                                "title_tag" => $items_title_tag ?? "p",
                                                 "classes" => "splide__slide posts-carousel__card " . (isset($background_type) && $background_type ? $background_type : 'light'),
                                                 "picture" => get_the_post_thumbnail_url(),
                                                 "title" => get_the_title(),

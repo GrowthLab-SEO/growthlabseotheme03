@@ -24,7 +24,7 @@ if (!defined('ABSPATH')) {
 
     <div class="default-card__inner tx-center">
 
-        <p class="default-card__title"><?= $args["title"] ?></p>
+        <?php print_title($args["title"], $args["title_tag"] ?? "p", "default-card__title"); ?>
         <p class="default-card__link">READ MORE</p>
 
     </div>

@@ -118,6 +118,7 @@ if (get_field('toggle_block')):
                     if ($uses_custom_items) {
                         foreach ($custom_grid as $item) {
                             get_template_part('template-parts/default', 'card', array(
+                                "title_tag" => $items_title_tag ?? "p",
                                 "classes" => "posts-grid__card " . $grid_type,
                                 "picture" => $item['picture'] ?? '',
                                 "title" => $item['title'] ?? '',
@@ -134,6 +135,7 @@ if (get_field('toggle_block')):
                             switch ($grid_type) {
                                 case 'case-result':
                                     get_template_part('template-parts/result', 'card', array(
+                                        "title_tag" => $items_title_tag ?? "p",
                                         "classes" => "posts-grid__card grid " . $grid_type,
                                         "numerical_amount" => ($post_fields['numerical_amount'] ?? ''),
                                         "case_title" => ($post_fields['case_title'] ?? ''),
@@ -143,6 +145,7 @@ if (get_field('toggle_block')):
 
                                 case 'team':
                                     get_template_part('template-parts/team', 'card-grid', array(
+                                        "title_tag" => $items_title_tag ?? "p",
                                         "classes" => "posts-grid__card grid " . $grid_type,
                                         "picture" => ($post_fields['headshot'] ?? ''),
                                         "name" => get_the_title(),
@@ -154,6 +157,7 @@ if (get_field('toggle_block')):
 
                                 case 'post':
                                     get_template_part('template-parts/post', 'card', array(
+                                        "title_tag" => $items_title_tag ?? "p",
                                         "classes" => "posts-grid__card grid " . $grid_type,
                                         "picture" => get_the_post_thumbnail_url(),
                                         "cat" =>  array_first(get_the_category())->name,
@@ -176,6 +180,7 @@ if (get_field('toggle_block')):
 
                                 default:
                                     get_template_part('template-parts/default', 'card', array(
+                                        "title_tag" => $items_title_tag ?? "p",
                                         "classes" => "posts-grid__card grid " . $grid_type,
                                         "picture" => get_the_post_thumbnail_url(),
                                         "title" => get_the_title(),

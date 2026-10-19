@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
     <div class="result-card__wrapper">
         <div class="result-card__inner">
 
-            <p class="result-card__title"><?= $args["case_title"] ?></p>
+            <?php print_title($args["case_title"], $args["title_tag"] ?? "p", "result-card__title"); ?>
 
             <?php if (!empty($args["numerical_amount"]) && $args["numerical_amount"]) : ?>
                 <span class="result-card__amount">$<?= number_format($args["numerical_amount"], 0, '.', ','); ?></span>

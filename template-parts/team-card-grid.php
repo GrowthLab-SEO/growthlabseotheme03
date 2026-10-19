@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
 
             <div class="team-card-grid__inner tx-center">
 
-                <p class="team-card-grid__title"><?= $args["name"] ?></p>
+                <?php print_title($args["name"], $args["title_tag"] ?? "p", "team-card-grid__title"); ?>
 
                 <p class="team-card-grid__role"><?= $args["role"] ?></p>
 
