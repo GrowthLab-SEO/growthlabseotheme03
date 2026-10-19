@@ -11,6 +11,7 @@
     $post_id = $post ? $post->ID : 0;
 
     $options = get_current_language_options();
+    $options = fill_acf_group_defaults($options, 'options', 'option');
     foreach ($options as $key => $value) $$key = $value;
     $phone_number = $contact_phone ?: $main_phone_number;
 
@@ -21,12 +22,11 @@
     <?php
     // Form
     if (!$form_section['hide_section'] && !get_field('hide_form_section')) {
-      foreach ($form_section as $form_field => $form_content) $$form_field = $form_content;
       $args = [
-        'title' => isset($contact_form_title) && $contact_form_title ? $contact_form_title : "",
-        'tag' => isset($contact_form_title_tag) && $contact_form_title_tag ? $contact_form_title_tag : "p",
-        'link' => isset($contact_form_link) && $contact_form_link ? $contact_form_link : "",
-        'form' => isset($contact_form) && $contact_form ? $contact_form : null,
+        'title' => !empty($form_section['contact_form_title']) ? $form_section['contact_form_title'] : "",
+        'tag' => !empty($form_section['contact_form_title_tag']) ? $form_section['contact_form_title_tag'] : "p",
+        'link' => !empty($form_section['contact_form_link']) ? $form_section['contact_form_link'] : "",
+        'form' => !empty($form_section['contact_form']) ? $form_section['contact_form'] : null,
       ];
       get_template_part('template-parts/footer', 'form', $args);
     }
@@ -76,12 +76,11 @@
     <?php
     //Copy
     if (!$copyright_section['hide_section'] && !get_field("hide_copyright_section")):
-      foreach ($copyright_section as $copy_field => $copy_content) $$copy_field = $copy_content;
     ?>
       <section class="footer-copyright">
         <div class="footer-copyright__wrapper container">
           <div class="footer-copyright__advertisement">
-            <?= $copyright ?>
+            <?= $copyright_section['copyright'] ?? '' ?>
           </div>
 
           <a href="https://growthlabseo.com/" target="_blank" class="footer-copyright__logo" aria-label="Growth Lab SEO">

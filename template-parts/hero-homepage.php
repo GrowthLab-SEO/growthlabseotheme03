@@ -6,15 +6,13 @@ if (!defined('ABSPATH')) {
 //Default Properties
 foreach ($args as $field => $content) $$field = $content;
 //Internal Fields
-foreach (get_field('hero_properties') as $key => $value) $$key = $value;
+foreach (fill_acf_group_defaults(get_field('hero_properties'), 'hero_properties') as $key => $value) $$key = $value;
 $cta_button = isset($hero_cta_button) && $hero_cta_button ? $hero_cta_button :   $hero_cta_button_default;
 
 //Hero pictures
-if (isset($hero_pictures)) foreach ($hero_pictures as $type => $picture) $$type = $picture;
-
-$bg_desktop = isset($background_desktop) && $background_desktop ? $background_desktop :  $hero_image_desktop_default;
-$bg_tablet = isset($background_tablet) && $background_tablet ? $background_tablet :  $hero_image_tablet_default;
-$bg_mobile = isset($background_mobile) && $background_mobile ? $background_mobile :  $hero_image_mobile_default;
+$bg_desktop = !empty($hero_pictures['background_desktop']) ? $hero_pictures['background_desktop'] :  $hero_image_desktop_default;
+$bg_tablet = !empty($hero_pictures['background_tablet']) ? $hero_pictures['background_tablet'] :  $hero_image_tablet_default;
+$bg_mobile = !empty($hero_pictures['background_mobile']) ? $hero_pictures['background_mobile'] :  $hero_image_mobile_default;
 
 if (!$bg_desktop) $bg_desktop = [];
 if (!$bg_tablet) $bg_tablet = [];
@@ -60,8 +58,8 @@ if (!$bg_mobile) $bg_mobile = [];
             <img src="<?= $url ?>" alt="hero badge" loading="eager" fetchpriority='high' decoding="async">
         </div>
     <?php endif ?>
-    <?php if ($use_custom_badge_image && isset($badge) && $badge) img_print_picture_tag(
-        img: $badge,
+    <?php if ($use_custom_badge_image && !empty($hero_pictures['badge'])) img_print_picture_tag(
+        img: $hero_pictures['badge'],
         classes: "hero__badge",
         max_size: "medium"
     ); ?>
