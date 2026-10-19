@@ -197,7 +197,7 @@ add_filter('wp_theme_json_data_theme', function ($theme_json) {
 function growthlabseotheme03_remove_custom_logo_link($html)
 {
     // Extract just the <img> tag from the logo HTML
-    preg_match('/<img[^>]>/', $html, $matches);
+    preg_match('/<img[^>]*>/', $html, $matches);
 
     if (!empty($matches[0])) {
         return $matches[0];
