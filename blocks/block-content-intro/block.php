@@ -25,13 +25,13 @@ if (get_field('toggle_block')):
         <div class="content-intro__wrapper container">
 
             <?php
-            foreach (get_field("columns") as $column => $col) $$column = $col;
-            $featured_image_position = get_valid_field_choice('columns.featured_image_position', $featured_image_position ?? '');
+            $columns = is_array($columns ?? null) ? $columns : [];
+            $featured_image_position = get_valid_field_choice('columns.featured_image_position', $columns['featured_image_position'] ?? '');
             ?>
 
             <div class="col col--image <?= esc_attr(isset($featured_image_position) && $featured_image_position ? $featured_image_position : "left") ?>">
                 <?php
-                if (isset($featured_image) && $featured_image) {
+                if (!empty($columns['featured_image'])) {
                     $options = get_field_options("options");
 
                     if ($options["logo_symbol"]) {
@@ -39,7 +39,7 @@ if (get_field('toggle_block')):
                     }
 
                     img_print_picture_tag(
-                        img: $featured_image,
+                        img: $columns['featured_image'],
                         max_size: $featured_image_position !== "bottom" ? "content" : "cover-desktop",
                         min_size: "featured-small",
                         classes: "col__image"
@@ -51,22 +51,22 @@ if (get_field('toggle_block')):
             <div class="col">
                 <?php
                 if (isset($pretitle) && $pretitle) print_title($pretitle, $pretitle_tag, "col__pretitle pretitle");
-                if (isset($title) && $title) echo "<div class='col__title'>$title</div>";
+                if (!empty($columns['title'])) echo "<div class='col__title'>{$columns['title']}</div>";
                 ?>
                 <div class="col__content formatted-text">
-                    <?= $content ?? "" ?>
+                    <?= $columns['content'] ?? "" ?>
                 </div>
             </div>
 
-            <?php foreach (get_field("cta_box") as $box => $data) $$box = $data; ?>
+            <?php $cta_box = is_array($cta_box ?? null) ? $cta_box : []; ?>
             <div class="inner-cta-box">
 
                 <?php
                 if (isset($featured_image_position) && $featured_image_position !== "bottom") :
-                    if ($content && isset($content)):
+                    if (!empty($cta_box['content'])):
                 ?>
                         <div class="inner-cta-box__content formatted-text">
-                            <?= $content ?>
+                            <?= $cta_box['content'] ?>
                         </div>
                 <?php
                     endif;
@@ -74,15 +74,15 @@ if (get_field('toggle_block')):
                 ?>
 
                 <div class="inner-cta-box__buttons">
-                    <?php if ($cta_link && isset($cta_link) && $cta_link["url"]): ?>
-                        <a href="<?= esc_url($cta_link["url"]) ?>" target="<?= esc_attr($cta_link["target"]) ?>" class="btn<?= $background_type && isset($background_type) && $background_type !== 'light' ? '--tertiary' : '--tertiary' ?>" aria-label="<?= esc_attr($cta_link["title"]) ?>">
-                            <span><?= esc_html($cta_link["title"]) ?></span>
+                    <?php if (!empty($cta_box['cta_link']['url'])): ?>
+                        <a href="<?= esc_url($cta_box['cta_link']["url"]) ?>" target="<?= esc_attr($cta_box['cta_link']["target"]) ?>" class="btn<?= $background_type && isset($background_type) && $background_type !== 'light' ? '--tertiary' : '--tertiary' ?>" aria-label="<?= esc_attr($cta_box['cta_link']["title"]) ?>">
+                            <span><?= esc_html($cta_box['cta_link']["title"]) ?></span>
                         </a>
                     <?php endif ?>
-                    <?php if ($cta_link_2 && isset($cta_link_2) && $cta_link_2["url"]): ?>
-                        <a href="<?= esc_url($cta_link_2["url"]) ?>" target="<?= esc_attr($cta_link_2["target"]) ?>" class="btn" aria-label="<?= esc_attr($cta_link_2["title"]) ?>">
-                            <?php if (str_contains($cta_link_2["url"], 'tel:')) include get_template_directory() . '/assets/icons/icon-phone.svg' ?>
-                            <span><?= esc_html($cta_link_2["title"]) ?></span>
+                    <?php if (!empty($cta_box['cta_link_2']['url'])): ?>
+                        <a href="<?= esc_url($cta_box['cta_link_2']["url"]) ?>" target="<?= esc_attr($cta_box['cta_link_2']["target"]) ?>" class="btn" aria-label="<?= esc_attr($cta_box['cta_link_2']["title"]) ?>">
+                            <?php if (str_contains($cta_box['cta_link_2']["url"], 'tel:')) include get_template_directory() . '/assets/icons/icon-phone.svg' ?>
+                            <span><?= esc_html($cta_box['cta_link_2']["title"]) ?></span>
                         </a>
                     <?php endif ?>
                 </div>

@@ -117,14 +117,12 @@ if (get_field('toggle_block')):
                     <?php
                     if ($uses_custom_items) {
                         foreach ($custom_grid as $item) {
-                            foreach ($item as $field => $data) $$field = $data;
-
                             get_template_part('template-parts/default', 'card', array(
                                 "classes" => "posts-grid__card " . $grid_type,
-                                "picture" => $picture ?? '',
-                                "title" => $title ?? '',
-                                "link_url" => $link['url'] ?? '',
-                                "link_target" => $link['target'] ?? '_self',
+                                "picture" => $item['picture'] ?? '',
+                                "title" => $item['title'] ?? '',
+                                "link_url" => $item['link']['url'] ?? '',
+                                "link_target" => $item['link']['target'] ?? '_self',
                             ));
                         }
                     } elseif ($query && $query->have_posts()) {

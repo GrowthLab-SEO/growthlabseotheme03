@@ -39,11 +39,10 @@ if (get_field('toggle_block')):
                 <?php
                 if (isset($items) && !empty($items)):
                     foreach ($items as $item):
-                        foreach ($item as $key => $value) $$key = $value;
-                        $item_wrapper = isset($link) && $link ? "a" : "div";
+                        $item_wrapper = !empty($item['link']) ? "a" : "div";
                 ?>
 
-                        <<?= $item_wrapper ?> class="item" <?= isset($link) && $link ? "href='" . esc_url($link['url']) . "' target='" . esc_attr($link['target']) . "'" : "" ?>>
+                        <<?= $item_wrapper ?> class="item" <?= !empty($item['link']) ? "href='" . esc_url($item['link']['url']) . "' target='" . esc_attr($item['link']['target']) . "'" : "" ?>>
                             <?php
                             if ($items_background_image && !empty($items_background_image)) {
                                 img_print_picture_tag(img: $items_background_image, is_cover: false, classes: "item__bg", max_size: "featured-small", min_size: "thumbnail");
@@ -54,9 +53,9 @@ if (get_field('toggle_block')):
                             ?>
 
                             <div class="item__icon">
-                                <?php if (isset($icon) && $icon) img_print_picture_tag(img: $icon, max_size: "thumbnail"); ?>
+                                <?php if (!empty($item['icon'])) img_print_picture_tag(img: $item['icon'], max_size: "thumbnail"); ?>
                             </div>
-                            <?php print_title($title, isset($title_tag) && $title_tag ? $title_tag : "h3", "item__title tx-center"); ?>
+                            <?php print_title($item['title'] ?? '', !empty($item['title_tag']) ? $item['title_tag'] : "h3", "item__title tx-center"); ?>
                         </<?= $item_wrapper ?>>
 
                 <?php

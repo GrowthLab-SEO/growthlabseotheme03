@@ -48,17 +48,16 @@ if (get_field('toggle_block')):
                         <?php
                         $i = 1;
                         foreach ($faq_items as $item) :
-                            foreach ($item as $key => $faq) $$key = $faq;
                         ?>
 
                             <div class="faq__item accordion">
                                 <div class="faq__question accordion__heading">
                                     <span><?= $i < 10 ? "0" . $i : "$i" ?></span>
-                                    <?php print_title($question, $question_tag) ?>
+                                    <?php print_title($item['question'] ?? '', $item['question_tag'] ?? '') ?>
                                 </div>
                                 <div class="faq__answer accordion__content">
                                     <div class="formatted-text accordion__inner">
-                                        <?= $answer ?>
+                                        <?= $item['answer'] ?? '' ?>
                                     </div>
                                 </div>
                             </div>
