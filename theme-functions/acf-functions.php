@@ -46,8 +46,13 @@ if (!function_exists('register_acf_blocks')) {
 
         // Force a rebuild during local development if the block cache is stale or if
         // the admin requests a cache clear. This helps ensure updated block.json
-        // metadata is picked up immediately.
-        if (is_admin() && (defined('WP_DEBUG') && WP_DEBUG || isset($_GET['clear_block_cache']))) {
+        // metadata is picked up immediately. The manual clear requires a valid nonce
+        // (see the "Clear block cache" admin bar link).
+        $clear_requested = isset($_GET['clear_block_cache'])
+            && current_user_can('manage_options')
+            && wp_verify_nonce($_GET['_wpnonce'] ?? '', 'clear_block_cache');
+
+        if (is_admin() && (defined('WP_DEBUG') && WP_DEBUG || $clear_requested)) {
             delete_transient($cache_key);
             delete_transient($hash_key);
         }
