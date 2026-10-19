@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 $location = $args['location'];
 $accordion = $args['accordion'] ?? false;
 $tp_url = $location['target_page_url'];
-$city = $tp_url ? "<a href='$tp_url' target='_blank' aria-label='" . esc_attr($location['city']) . "'>" : '';
+$city = $tp_url ? "<a href='" . esc_url($tp_url) . "' target='_blank' aria-label='" . esc_attr($location['city']) . "'>" : '';
 $city .= $location['city'];
 $city .= $tp_url ? "</a>" : '';
 ?>
@@ -43,9 +43,9 @@ $city .= $tp_url ? "</a>" : '';
 
                     <p class="location-card__address tx-center"><?= $location['address'] ?></p>
 
-                    <?php if ($location['cta_link']['url']): ?>
-                        <a href="<?= $location['cta_link']['url'] ?>" class="location-card__cta tx-center" aria-label="<?= esc_attr($location['cta_link']['title']) ?>">
-                            <?= $location['cta_link']['title'] ?>
+                    <?php if (!empty($location['cta_link']['url'])): ?>
+                        <a href="<?= esc_url($location['cta_link']['url']) ?>" target="<?= esc_attr($location['cta_link']['target'] ?: '_self') ?>" class="location-card__cta tx-center" aria-label="<?= esc_attr($location['cta_link']['title']) ?>">
+                            <?= esc_html($location['cta_link']['title']) ?>
                         </a>
                     <?php endif ?>
 

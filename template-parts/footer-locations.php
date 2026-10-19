@@ -30,9 +30,9 @@
                             </p>
                         <?php endif ?>
 
-                        <?php if (isset($cta_link) && $cta_link): ?>
-                            <a href="<?= $cta_link['url'] ?>" target="<?= $cta_link['target'] ?>" class="office__link">
-                                <?= $cta_link['title'] ?>
+                        <?php if (!empty($cta_link['url'])): ?>
+                            <a href="<?= esc_url($cta_link['url']) ?>" target="<?= esc_attr($cta_link['target']) ?>" class="office__link">
+                                <?= esc_html($cta_link['title']) ?>
                             </a>
                         <?php endif ?>
 
