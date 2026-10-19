@@ -39,16 +39,16 @@ if (!window.loadSplide) {
 
 (() => {
   const postsCarousels = document.querySelectorAll(".posts-carousel__carousel");
-  const thumbnailsCarousel = document.querySelector("#thumbnail-carousel");
   if (!postsCarousels.length) return;
 
   const initCarousel = (carousel) => {
     const carouselType = carousel.dataset.type;
     const splideElement = carousel.querySelector(".splide");
 
-    const container = getComputedStyle(document.documentElement)
-      .getPropertyValue("--container")
-      .trim();
+    // Each team carousel points to its own thumbnails carousel through data-thumbnails
+    const thumbnailsCarousel = carousel.dataset.thumbnails
+      ? document.getElementById(carousel.dataset.thumbnails)
+      : null;
 
     let perPageTablet =
       carouselType === "testimonial" || carouselType === "team"
@@ -101,10 +101,6 @@ if (!window.loadSplide) {
       });
 
       if (thumbnailsCarousel) {
-        const postsSize = getComputedStyle(thumbnailsCarousel)
-          .getPropertyValue("--size")
-          .trim();
-
         let thumbnails = new Splide(thumbnailsCarousel, {
           fixedWidth: 220,
           rewind: true,

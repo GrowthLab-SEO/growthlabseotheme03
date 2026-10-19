@@ -25,26 +25,42 @@ if (get_field('toggle_block')):
 
         default:
             $carousel_type = isset($select_or_create_items) && $select_or_create_items ? "any" : "";
-            $posts = isset($select_or_create_items) && $select_or_create_items ? $select_posts : [];
+            $posts = isset($select_or_create_items) && $select_or_create_items ? ($select_posts ?? []) : [];
             break;
     }
 
-    $args = array(
-        'post_type' => $carousel_type,
-        'posts_per_page' => -1,
-        'post__in' => $posts,
-        'post_status' => 'publish',
-        'orderby' => 'post__in',
-    );
+    // Selected post IDs (empty when nothing was selected) and custom items (only in custom mode without selection)
+    $posts = !empty($posts) ? array_map('intval', (array) $posts) : [];
+    $custom_items = $carousel_type === "" && !empty($custom_carousel) ? $custom_carousel : [];
 
-    $query = new WP_Query($args);
+    // Without selected posts or custom items the carousel is not rendered; editors see a notice instead
+    if (empty($posts) && empty($custom_items)) {
+        print_block_notice(__('Posts Carousel: no posts selected or created. This notice is only visible to editors.', 'growthlabseotheme03'));
+        return;
+    }
+
+    // Only query when posts were selected, so an empty selection never falls back to every post
+    $query = null;
+    if (!empty($posts)) {
+        $query = new WP_Query(array(
+            'post_type' => $carousel_type,
+            'posts_per_page' => count($posts),
+            'post__in' => $posts,
+            'post_status' => 'publish',
+            'orderby' => 'post__in',
+        ));
+    }
+
+    $posts_link_target = isset($posts_links_target) && $posts_links_target === '_blank' ? '_blank' : '_self';
+
+    // Links this carousel with its own thumbnails carousel (team type), so several carousels on a page don't clash
+    $thumbnails_id = wp_unique_id('posts-carousel-thumbnails-');
 
     $options = get_field_options("options");
 
 ?>
 
-    <section
-        id="<?= $block_id ?? "" ?>"
+    <section<?= get_block_id_attribute($block_id ?? '') ?>
         class="
         block 
         posts-carousel
@@ -76,21 +92,21 @@ if (get_field('toggle_block')):
 
 
                 <?php if (isset($cta_link) && $cta_link): ?>
-                    <a href="<?= $cta_link['url'] ?>" target="<?= $cta_link['target'] ?>" class="posts-carousel__link btn--tertiary" aria-label="<?= esc_attr($cta_link['title']) ?>">
-                        <span><?= $cta_link['title'] ?></span>
+                    <a href="<?= esc_url($cta_link['url']) ?>" target="<?= esc_attr($cta_link['target']) ?>" class="posts-carousel__link btn--tertiary" aria-label="<?= esc_attr($cta_link['title']) ?>">
+                        <span><?= esc_html($cta_link['title']) ?></span>
                     </a>
                 <?php endif ?>
             </div>
 
-            <div class="posts-carousel__carousel" data-type=<?= $carousel_type ?>>
+            <div class="posts-carousel__carousel" data-type="<?= esc_attr($carousel_type) ?>"<?= $carousel_type === "team" ? ' data-thumbnails="' . esc_attr($thumbnails_id) . '"' : '' ?>>
 
                 <div class="splide">
                     <div class="splide__track">
                         <div class="splide__list">
 
                             <?php
-                            if (isset($custom_carousel) && !empty($custom_carousel) && !$select_or_create_items && $carousel_type === "") {
-                                foreach ($custom_carousel as $item) {
+                            if (!empty($custom_items)) {
+                                foreach ($custom_items as $item) {
                                     foreach ($item as $field => $data) $$field = $data;
 
                                     get_template_part('template-parts/default', 'card', array(
@@ -101,7 +117,7 @@ if (get_field('toggle_block')):
                                         "link_target" => $link['target'] ?? '_self',
                                     ));
                                 }
-                            } elseif (isset($query) && $query->have_posts()) {
+                            } elseif ($query && $query->have_posts()) {
                                 while ($query->have_posts()) {
                                     $query->the_post();
 
@@ -124,7 +140,7 @@ if (get_field('toggle_block')):
                                                 "title" => get_the_title(),
                                                 "content" => get_the_excerpt(),
                                                 "link_url" => get_the_permalink(),
-                                                "link_target" => $link_target ?? '_self',
+                                                "link_target" => $posts_link_target,
                                             ));
                                             break;
 
@@ -137,7 +153,7 @@ if (get_field('toggle_block')):
                                                 "title" => get_the_title(),
                                                 "excerpt" => get_the_excerpt(),
                                                 "link_url" => get_the_permalink(),
-                                                "link_target" => $link_target ?? '_self',
+                                                "link_target" => $posts_link_target,
                                             ));
                                             break;
 
@@ -156,7 +172,7 @@ if (get_field('toggle_block')):
                                                 "picture" => get_the_post_thumbnail_url(),
                                                 "title" => get_the_title(),
                                                 "link_url" => get_the_permalink(),
-                                                "link_target" => $link_target ?? '_self',
+                                                "link_target" => $posts_link_target,
                                             ));
                                             break;
                                     }
@@ -178,14 +194,15 @@ if (get_field('toggle_block')):
 
             </div>
 
-            <?php if ($carousel_type === "team"): ?>
+            <?php if ($carousel_type === "team" && $query): ?>
                 <div
-                    id="thumbnail-carousel"
-                    class="splide"
+                    id="<?= esc_attr($thumbnails_id) ?>"
+                    class="posts-carousel__thumbnails splide"
                     style="--size:<?= count($posts) ?>">
                     <div class="splide__track">
                         <ul class="splide__list">
-                            <?php if (isset($query) && $query->have_posts()) :
+                            <?php if ($query->have_posts()) :
+                                $query->rewind_posts();
                                 $bg_item_url = get_template_directory_uri() . '/assets/img/thumbnail-bg.webp';
                                 while ($query->have_posts()) :
                                     $query->the_post();

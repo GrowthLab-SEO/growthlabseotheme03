@@ -27,7 +27,7 @@
   }
 
   &.team {
-    #thumbnail-carousel {
+    #{$parent}__thumbnails {
       display: none;
     }
 
@@ -45,7 +45,7 @@
         }
       }
 
-      #thumbnail-carousel {
+      #{$parent}__thumbnails {
         width: 100%;
         margin-top: -6rem;
         display: block;
