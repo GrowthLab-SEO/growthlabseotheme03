@@ -338,6 +338,16 @@ function growthlabseotheme03_scripts()
         'homeURL' => home_url(),
     ]);
 
+    // Styled select fields.
+    wp_enqueue_script(
+        'growthlabseotheme03-styled-select-fields',
+        get_template_directory_uri() . '/js/styled-select-fields-min.js',
+        array(),
+        filemtime(get_template_directory() . '/js/styled-select-fields-min.js'),
+        true
+    );
+    wp_script_add_data('growthlabseotheme03-styled-select-fields', 'strategy', 'defer');
+
     // Picture Optimization scripts.
     wp_enqueue_script(
         'growthlabseotheme03-picture-optimization',
