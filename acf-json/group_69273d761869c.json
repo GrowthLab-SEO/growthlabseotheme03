@@ -476,10 +476,10 @@
                 },
                 {
                     "key": "field_692a0961a0140",
-                    "label": "Google Map URL",
-                    "name": "google_map_url",
+                    "label": "CTA Link",
+                    "name": "cta_link",
                     "aria-label": "",
-                    "type": "url",
+                    "type": "link",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
@@ -488,9 +488,8 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "",
+                    "return_format": "array",
                     "allow_in_bindings": 0,
-                    "placeholder": "",
                     "parent_repeater": "field_692a0961a0136"
                 },
                 {
@@ -556,5 +555,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1780343818
+    "modified": 1792435608
 }
