@@ -1,5 +1,5 @@
 <?php
-// Definir colores por defecto
+// Define the default colors
 $default_colors = [
     'primary' => [
         'default' => '#0e5db8',

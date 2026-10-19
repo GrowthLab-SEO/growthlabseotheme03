@@ -195,7 +195,7 @@ function findConsecutiveGroups() {
           wrapper.appendChild(entry.target);
           observer.unobserve(entry.target);
 
-          // Una vez movido, si el wrapper tiene ya el resto de elementos, podemos activar la carga diferencial.
+          // Once moved, if the wrapper already holds the rest of the elements, deferred loading can be triggered.
           if (wrapper.children.length === group.length) {
             lazyLoadBgGradient();
           }
@@ -238,7 +238,7 @@ function lazyLoadBgGradient() {
 
   const init = () => bgGradientElements.forEach((el) => observer.observe(el));
 
-  // Si load ya disparó (script defer), init directo
+  // If load has already fired (deferred script), init right away
   if (document.readyState === "complete") {
     init();
   } else {
@@ -393,7 +393,7 @@ window.addEventListener("load", () => {
 
 // Playback Video
 (function () {
-  // ─── Detección de fuente ─────────────────────────────────────────────────────
+  // ─── Source detection ────────────────────────────────────────────────────────
 
   function isLocalVideo(videoId) {
     if (!videoId) return false;
@@ -447,8 +447,8 @@ window.addEventListener("load", () => {
     return "unknown";
   }
 
-  // ─── Resolución del video ID ─────────────────────────────────────────────────
-  // Acepta tanto data-videourl (URL completa) como data-videoid (ID directo)
+  // ─── Video ID resolution ─────────────────────────────────────────────────────
+  // Accepts both data-videourl (full URL) and data-videoid (plain ID)
 
   function resolveVideoId(trigger, source) {
     const raw = trigger.dataset.videourl || trigger.dataset.videoid || "";
@@ -456,7 +456,7 @@ window.addEventListener("load", () => {
     return raw;
   }
 
-  // ─── Constructores de player ─────────────────────────────────────────────────
+  // ─── Player builders ─────────────────────────────────────────────────────────
 
   function buildIframe(attrs) {
     const attrStr = Object.entries(attrs)
@@ -509,7 +509,7 @@ window.addEventListener("load", () => {
     }
   }
 
-  // ─── Modo lightbox ───────────────────────────────────────────────────────────
+  // ─── Lightbox mode ───────────────────────────────────────────────────────────
 
   function openLightbox(source, videoId) {
     if (document.getElementById("video-overlay")) return;
@@ -536,13 +536,13 @@ window.addEventListener("load", () => {
     });
     document.addEventListener("keydown", handleKeydown);
 
-    // Activar transición: display:flex requiere un frame para que el transition funcione
+    // Trigger the transition: display:flex needs one frame before the transition can run
     requestAnimationFrame(() =>
       requestAnimationFrame(() => {
         overlay.classList.add("active");
         container.classList.add("active");
 
-        // Autoplay diferido: esperar a que el iframe esté rendered
+        // Deferred autoplay: wait until the iframe has rendered
         if (iframe && source === "youtube") {
           iframe.addEventListener(
             "load",
@@ -578,7 +578,7 @@ window.addEventListener("load", () => {
     if (e.key === "Escape") closeOverlay();
   }
 
-  // ─── Modo inline ─────────────────────────────────────────────────────────────
+  // ─── Inline mode ─────────────────────────────────────────────────────────────
 
   function openInline(trigger, source, videoId) {
     // Look for the target inside the trigger's own block first, so several video blocks on a page don't clash
@@ -613,7 +613,7 @@ window.addEventListener("load", () => {
   // ─── Init ────────────────────────────────────────────────────────────────────
 
   function init() {
-    // Event delegation — cubre botones estáticos y dinámicos (AJAX, Gutenberg, etc.)
+    // Event delegation — covers static and dynamic buttons (AJAX, Gutenberg, etc.)
     document.addEventListener("click", (e) => {
       const trigger = e.target.closest("[data-videourl], [data-videoid]");
       if (!trigger) return;

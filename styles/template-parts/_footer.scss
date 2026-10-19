@@ -13,19 +13,19 @@ main:has(+ .site-footer .contact-form-footer) {
   overflow: visible;
   background-color: color-mix(in srgb, rgb(var(--primary-dark)) 45%, #000 55%);
   background-image:
-    /* Luz central difusa */
+    /* Soft central glow */
     radial-gradient(
       ellipse 80% 60% at 50% 60%,
       rgb(var(--primary-dark)) 0%,
       transparent 70%
     ),
-    /* Esquina superior izquierda más oscura */
+    /* Darker top-left corner */
     radial-gradient(
         ellipse 50% 50% at 0% 0%,
         color-mix(in srgb, rgb(var(--primary-dark)) 45%, #000 55%) 0%,
         transparent 60%
       ),
-    /* Esquina superior derecha más oscura */
+    /* Darker top-right corner */
     radial-gradient(
         ellipse 50% 50% at 100% 0%,
         color-mix(in srgb, rgb(var(--primary-dark)) 45%, #000 55%) 0%,

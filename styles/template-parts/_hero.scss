@@ -120,7 +120,7 @@
         color-mix(in srgb, rgb(var(--primary)) 40%, #000 100%) 0%,
         rgba(var(--primary-dark)) 20%,
         color-mix(in srgb, rgb(var(--primary-dark)) 30%, #000 100%) 70%,
-        rgba(var(--primary)) 100% /* azul brillante en punta derecha */
+        rgba(var(--primary)) 100% /* bright primary color at the right tip */
       );
       clip-path: polygon(0 0, 0% 100%, 100% 100%);
 
