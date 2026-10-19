@@ -119,21 +119,8 @@ add_action('wp_enqueue_scripts', function () {
     $registered_blocks = WP_Block_Type_Registry::get_instance()->get_all_registered();
     if (empty($registered_blocks)) return;
 
-    $blocks        = parse_blocks($post->post_content);
-    $blocks_in_use = array();
-
-    $find_blocks = function ($blocks) use (&$find_blocks, &$blocks_in_use) {
-        foreach ($blocks as $block) {
-            if (!empty($block['blockName'])) {
-                $blocks_in_use[] = $block['blockName'];
-            }
-            if (!empty($block['innerBlocks'])) {
-                $find_blocks($block['innerBlocks']);
-            }
-        }
-    };
-
-    $find_blocks($blocks);
+    // Flattened list (inner blocks included), parsed once per request
+    $blocks_in_use = array_filter(array_column(get_current_post_blocks(), 'blockName'));
 
     if (empty($blocks_in_use)) return;
 

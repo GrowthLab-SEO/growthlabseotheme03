@@ -34,10 +34,8 @@ add_action('wp_enqueue_scripts', function () {
     if (is_singular() && !empty($post->post_content)) {
         // Fast string check instead of full parsing
         if (strpos($post->post_content, '<!-- wp:') !== false) {
-            // Parse blocks and check if any need translation
-            $blocks = parse_blocks($post->post_content);
-
-            foreach ($blocks as $block) {
+            // Check if any block needs translation (blocks parsed once per request, inner blocks included)
+            foreach (get_current_post_blocks() as $block) {
                 // Check if block is a dynamic/interactive block that needs i18n
                 if (in_array($block['blockName'], [
                     'core/search',

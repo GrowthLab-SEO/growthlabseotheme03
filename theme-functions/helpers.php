@@ -472,6 +472,38 @@ if (!function_exists('get_post_fields_with_defaults')) {
     }
 }
 
+// Blocks of the current singular post, parsed once per request and flattened (inner blocks follow their parent).
+// Returns [] for non-singular requests or posts without blocks.
+if (!function_exists('get_current_post_blocks')) {
+    function get_current_post_blocks()
+    {
+        static $blocks = null;
+
+        if ($blocks !== null) return $blocks;
+
+        // The main query must be set up before the result can be cached
+        if (!did_action('wp')) return [];
+
+        $blocks = [];
+
+        global $post;
+        if (!is_singular() || empty($post->post_content)) return $blocks;
+        if (strpos($post->post_content, '<!-- wp:') === false) return $blocks;
+
+        $flatten = function ($items) use (&$flatten, &$blocks) {
+            foreach ($items as $block) {
+                $blocks[] = $block;
+                if (!empty($block['innerBlocks'])) {
+                    $flatten($block['innerBlocks']);
+                }
+            }
+        };
+        $flatten(parse_blocks($post->post_content));
+
+        return $blocks;
+    }
+}
+
 // Render a Gravity Forms form only if the plugin is active
 if (!function_exists('render_gravity_form')) {
     function render_gravity_form(...$args)
