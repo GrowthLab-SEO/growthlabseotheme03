@@ -390,9 +390,8 @@ function growthlabseotheme03_scripts()
             get_template_directory_uri() . '/js/posts-filters-min.js',
             array(),
             filemtime(get_template_directory() . '/js/posts-filters-min.js'),
-            true
+            ["strategy" => "defer", "in_footer" => true]
         );
-        wp_script_add_data('growthlabseotheme03-posts-filters', 'defer', true);
         wp_localize_script(
             'growthlabseotheme03-posts-filters',
             'postsFiltersData',
