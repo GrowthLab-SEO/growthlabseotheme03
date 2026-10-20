@@ -667,15 +667,12 @@ function import_theme_images_to_folder()
     }
 }
 
-// Run once from the "Import theme icons" admin bar link (yoursite.com/?import_theme_images=1 plus a nonce)
-if (
-    isset($_GET['import_theme_images'])
-    && current_user_can('manage_options')
-    && wp_verify_nonce($_GET['_wpnonce'] ?? '', 'import_theme_images')
-) {
+// Run once by visiting: yoursite.com/?import_theme_images=1 (uncomment temporarily). It must not stay available:
+// every run adds the icons to the media library again.
+/* if (isset($_GET['import_theme_images']) && current_user_can('manage_options')) {
     import_theme_images_to_folder();
     wp_die('Images imported to /uploads/theme-icons/!');
-}
+} */
 
 // Admin bar links for the theme maintenance actions (nonce protected)
 add_action('admin_bar_menu', function ($wp_admin_bar) {
@@ -691,13 +688,6 @@ add_action('admin_bar_menu', function ($wp_admin_bar) {
         'parent' => 'growthlabseotheme03-tools',
         'title'  => esc_html__('Clear block cache', 'growthlabseotheme03'),
         'href'   => wp_nonce_url(admin_url('index.php?clear_block_cache=1'), 'clear_block_cache'),
-    ]);
-
-    $wp_admin_bar->add_node([
-        'id'     => 'growthlabseotheme03-import-theme-images',
-        'parent' => 'growthlabseotheme03-tools',
-        'title'  => esc_html__('Import theme icons', 'growthlabseotheme03'),
-        'href'   => wp_nonce_url(home_url('/?import_theme_images=1'), 'import_theme_images'),
     ]);
 }, 100);
 

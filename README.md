@@ -83,7 +83,7 @@ Build tools (only needed to change SCSS/JS): Node.js with npm. No version is pin
 3. Activate **GrowthLab Theme 03** (Appearance > Themes), or a child theme of it.
 4. Make sure the field groups and post types are in the database: on WP Pusher deploys they are imported automatically (see below); otherwise go to **ACF > Field Groups** (and **ACF > Post Types**) and run **Sync available**.
 5. Fill in **Site Options**, set the custom logo (Customizer > Site Identity), assign the **Main Menu** location and pick colors/fonts in the Customizer.
-6. Optional: **Theme Tools > Import theme icons** in the admin bar copies `assets/icons/*.svg` to `uploads/theme-icons/` and adds them to the Media Library.
+6. Optional, once per site: `import_theme_images_to_folder()` in `functions.php` copies `assets/icons/*.svg` to `uploads/theme-icons/` and adds them to the Media Library. Its `?import_theme_images=1` trigger is commented out; enable it temporarily, run it once and comment it out again, since every run adds the icons again.
 
 ### ACF JSON load and save points
 
@@ -428,8 +428,7 @@ How it works (`theme-functions/helpers.php`):
 - `theme-functions/security-functions.php` removes the WordPress generator meta tag and disables XML-RPC.
 - **Theme Tools (admin bar):** visible to users with `manage_options`.
   - **Clear block cache** - `wp-admin/index.php?clear_block_cache=1` with a `clear_block_cache` nonce; rebuilds the cached list of `block.json` files.
-  - **Import theme icons** - `/?import_theme_images=1` with an `import_theme_images` nonce; copies `assets/icons/*.svg` to `uploads/theme-icons/` and creates attachments (existing ones are skipped).
-  Both actions check the capability and the nonce.
+  The action checks the capability and the nonce.
 - **Escaping:** templates and blocks escape URLs with `esc_url()`, attributes with `esc_attr()` and plain text with `esc_html()`, and print WYSIWYG/content fields through `wp_kses_post()`; select values go through `get_valid_field_choice()`; titles go through `print_title()` (`wp_kses_post()`). Link targets are only printed when set, and `_blank` links get `rel="noopener noreferrer"`. The `[phonenumber]` shortcode whitelists its wrapper tags and targets and escapes all attributes.
 - **ACF "unsafe HTML" is intentionally enabled.** `acf-functions.php` returns `true` for `acf/shortcode/allow_unsafe_html`, `acf/the_field/allow_unsafe_html` and `acf/the_sub_field/allow_unsafe_html`, and hides ACF's escaped-HTML admin notice. This lets text, textarea and WYSIWYG fields carry markup such as `<span>`, `<a>` and `<strong>` (e.g. highlighted words in titles). The theme's own output filters content fields with `wp_kses_post()`, but values printed with `the_field()`, `the_sub_field()` or the `[acf]` shortcode are not escaped by ACF. Only give block/options editing rights to trusted users.
 - SVG uploads are sanitized (see [SVG](#svg)).
