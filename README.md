@@ -183,7 +183,7 @@ growthlabseotheme03/
 │   ├── picture-optimization.php   <picture> generation with breakpoints, WebP and lazy loading
 │   ├── security-functions.php     Generator tag removed, XML-RPC disabled
 │   ├── svg-support.php            SVG uploads, sanitization, inline SVG output
-│   ├── theme-optimization.php     Head cleanup, emojis, dashicons, font preloads, lazy maps
+│   ├── theme-optimization.php     Head cleanup, emojis, dashicons, delayed form scripts, lazy maps
 │   └── tiny-mce.php               Classic/ACF WYSIWYG toolbar, fonts, sizes, line heights, colors
 ├── functions.php        Theme setup, theme.json overrides, inlined CSS, scripts, sidebars, Theme Tools
 ├── header.php / footer.php / sidebar.php / sidebar-blog.php
@@ -347,20 +347,22 @@ Customizer > **Fonts** has `font_primary` and `font_secondary` selects (`theme-f
 
 The selection is output as `--font-primary` / `--font-secondary` and as the `primary` / `secondary` font families in `theme.json`. The TinyMCE font menu lists the theme and Font Library fonts.
 
-Bundled font files in `fonts/` are only declared (`@font-face`) and preloaded while their family is selected as the primary or secondary font; selecting Font Library fonts loads none of them. A copy of the theme font families saved by the Site Editor in the global styles is dropped (`wp_theme_json_data_user` filter) so it cannot force all bundled fonts to load.
+Bundled font files in `fonts/` are only declared (`@font-face`) while their family is selected as the primary or secondary font; selecting Font Library fonts loads none of them. A copy of the theme font families saved by the Site Editor in the global styles is dropped (`wp_theme_json_data_user` filter) so it cannot force all bundled fonts to load.
 
 Font Library fonts are filtered the same way on the front end: `theme_print_selected_font_faces()` replaces WordPress' `wp_print_font_faces()` and prints `@font-face` rules only for the selected families (faces without a `font-display` get `swap`). The block editor still loads every installed font, so all of them can be previewed there.
+
+**Font preloads (header and hero only).** `theme_get_above_fold_font_variants()` in `theme-functions/fonts-selector.php` lists the role (primary/secondary), weight and style of the text the header and the hero render above the fold, measured on the theme's templates on desktop and mobile; variants can be limited to some hero styles (`hero_styles`) or viewports (`media`). `theme_print_font_preloads()` (priority 1 in `wp_head`) maps each variant to the file of the font selected in the Customizer, bundled or from the Font Library, picking the face the browser would use (nearest weight per the CSS rules, one file for variable fonts), with the same URL as its `@font-face` rule, and preloads at most 4 files in the list order (hero title first). Adjust them with the `theme_above_fold_font_variants` filter (an empty array disables them) and the limit with `theme_font_preload_limit`.
 
 **Adding a bundled font face:** put the `.woff2` file in `fonts/<family-folder>/` and add an entry to `theme_get_default_font_faces()`, keyed by the family name exactly as it is selected in the Customizer:
 
 ```php
 'Figtree' => [
-    ['weight' => '800', 'style' => 'normal', 'file' => 'figtree-v9-latin/figtree-v9-latin-800.woff2', 'display' => 'swap', 'preload' => false],
+    ['weight' => '800', 'style' => 'normal', 'file' => 'figtree-v9-latin/figtree-v9-latin-800.woff2', 'display' => 'swap'],
     // ...
 ],
 ```
 
-Set `preload` to `true` only for faces used above the fold. A new family must also be selectable: either install it through the Font Library or add it to the base list in `theme_get_all_fonts()` (and to `$default_fonts` if it should be the default).
+The faces to preload come from `theme_get_above_fold_font_variants()`, not from this list. A new family must also be selectable: either install it through the Font Library or add it to the base list in `theme_get_all_fonts()` (and to `$default_fonts` if it should be the default).
 
 ---
 
@@ -418,7 +420,7 @@ How it works (`theme-functions/helpers.php`):
 - Emojis disabled; a direct Dashicons enqueue is dequeued on the front end unless the admin bar is showing (it is not deregistered, so plugin styles that depend on it keep it); `wc-blocks-style` dequeued.
 - Google Maps: known Maps JS API handles are dequeued; map iframes in content become `.gmap-lazy` placeholders loaded by `main.js`. ACF fields named `google_maps_embed_code` are base64-encoded in the browser before saving (to avoid ModSecurity 403s) and decoded in `template-parts/google-maps.php`.
 - YouTube thumbnails: `get_youtube_thumbnail()` checks sizes with HEAD requests once and caches the result in a `gl_yt_thumb_*` transient (one month, or one day for the `hqdefault` fallback).
-- Fonts: the selected bundled fonts are preloaded (`<link rel="preload" as="font">` for faces with `preload => true`); `transparent-bg.webp` is preloaded too. Only the selected Font Library families get `@font-face` rules (see [Fonts](#fonts)).
+- Fonts: only the faces the header and hero use are preloaded (see [Fonts](#fonts)); `transparent-bg.webp` is lazy loaded with the `.bg-gradient` sections, not preloaded. Only the selected Font Library families get `@font-face` rules.
 - Featured Video and CTA Box background videos only load the player/video on demand.
 
 ---

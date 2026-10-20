@@ -35,7 +35,7 @@ if (!defined('ABSPATH')) {
         $top_callout = get_page_field("top_callout") ?: '';
     }
 
-    $hero_style = is_listing_page() ? 'default' : (get_page_field('hero_style') ?: 'default');
+    $hero_style = get_page_hero_style();
     ?>
 
     <header role="banner" class="site-header 
