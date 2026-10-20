@@ -153,7 +153,9 @@
       }
     }
 
-    & + * {
+    // Extra top space for the section after the hero; on full width pages that is the first block inside <main>
+    & + :not(main),
+    & + main > :first-child {
       padding-top: var(--sp-lg);
     }
 
