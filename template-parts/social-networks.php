@@ -31,8 +31,6 @@ $social_networks = array(
         "icon" => 'icon-linkedin.svg'
     ],
 );
-
-$icon_dir = get_template_directory() . '/assets/icons/';
 ?>
 
 <ul class="social-networks">
@@ -44,12 +42,12 @@ $icon_dir = get_template_directory() . '/assets/icons/';
         ?>
         <?php if (!empty($url)) : ?>
             <li>
-                <a href="<?= esc_url($url) ?>" target="_blank" rel="noopener noreferrer" aria-label="Visit our <?= esc_attr(ucwords(str_replace('_url', '', $field_key))) ?> page">
+                <a href="<?= esc_url($url) ?>" target="_blank" rel="noopener noreferrer" aria-label="Visit our <?= esc_attr($title) ?> page">
                     <?php
-                    $icon_path = $icon_dir . $icon_file;
-                    if (file_exists($icon_path)) {
-                        include $icon_path;
-                        echo "<span>$title</span>";
+                    $icon = get_theme_svg('assets/icons/' . $icon_file);
+                    if ($icon) {
+                        echo $icon;
+                        echo '<span>' . esc_html($title) . '</span>';
                     } else {
                         echo '<!-- Icon ' . esc_attr($icon_file) . ' not found -->';
                     }
