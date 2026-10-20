@@ -80,7 +80,7 @@ if (get_field('toggle_block')):
                     <?php endif ?>
                     <?php if (!empty($cta_box['cta_link_2']['url'])): ?>
                         <a href="<?= esc_url($cta_box['cta_link_2']["url"]) ?>" target="<?= esc_attr($cta_box['cta_link_2']["target"]) ?>" class="btn" aria-label="<?= esc_attr($cta_box['cta_link_2']["title"]) ?>">
-                            <?php if (str_contains($cta_box['cta_link_2']["url"], 'tel:')) include get_template_directory() . '/assets/icons/icon-phone.svg' ?>
+                            <?php if (str_contains($cta_box['cta_link_2']["url"], 'tel:')) echo get_theme_svg('assets/icons/icon-phone.svg') ?>
                             <span><?= esc_html($cta_box['cta_link_2']["title"]) ?></span>
                         </a>
                     <?php endif ?>

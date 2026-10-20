@@ -220,7 +220,7 @@ if (get_field('toggle_block')):
                                             if (!empty($post_fields['headshot'])) {
                                                 img_print_picture_tag(img: ($post_fields['headshot'] ?? ''), max_size: "medium", min_size: "medium", classes: "thumbnail__pic");
                                             } else {
-                                                include get_template_directory() . '/assets/icons/icon-file-image.svg';
+                                                echo get_theme_svg('assets/icons/icon-file-image.svg');
                                             }
                                             ?>
                                         </div>

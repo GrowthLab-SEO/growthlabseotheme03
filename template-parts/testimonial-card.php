@@ -8,17 +8,17 @@ if (!defined('ABSPATH')) {
     <div class="testimonial-card__wrapper">
 
         <hr>
-        <?php include get_template_directory() . '/assets/icons/icon-quote-2.svg'; ?>
+        <?php echo get_theme_svg('assets/icons/icon-quote-2.svg'); ?>
 
         <div class="testimonial-card__inner">
 
             <div class=" testimonial-card__stars">
                 <?php
                 $i = 1;
-                $star_url = get_template_directory() . '/assets/icons/icon-star-2.svg';
+                $star_svg = get_theme_svg('assets/icons/icon-star-2.svg');
                 while ($i <= 5) {
                     echo '<span class="star">';
-                    include $star_url;
+                    echo $star_svg;
                     echo '</span>';
                     $i++;
                 }
@@ -38,7 +38,7 @@ if (!defined('ABSPATH')) {
 
         </div>
 
-        <?php include get_template_directory() . '/assets/icons/icon-quote-2.svg'; ?>
+        <?php echo get_theme_svg('assets/icons/icon-quote-2.svg'); ?>
         <hr>
 
     </div>

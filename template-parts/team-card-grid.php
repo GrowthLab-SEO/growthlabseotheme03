@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
                 $bg_item_url = get_template_directory_uri() . '/assets/img/thumbnail-bg.webp';
                 img_print_picture_tag(img: $args["picture"], max_size: "cover-mobile", min_size: "featured-small", classes: "team-card-grid__pic");
             } else {
-                include get_template_directory() . '/assets/icons/icon-file-image.svg';
+                echo get_theme_svg('assets/icons/icon-file-image.svg');
             }
             ?>
             <img data-src="<?= $bg_item_url ?>" alt="thumbnail wrapper" class="team-card-grid__pic-wrapper lazy-image">

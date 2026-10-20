@@ -112,7 +112,7 @@ if (!defined('ABSPATH')) {
                     <?php endif; ?>
 
                     <a href="tel:+1<?= get_flat_number($phone_number) ?>" class="phone btn btn--primary" aria-label="Call us at <?= esc_attr($phone_number) ?>">
-                        <?php include(get_template_directory() . "/assets/icons/icon-phone.svg") ?>
+                        <?php echo get_theme_svg('assets/icons/icon-phone.svg') ?>
                         <span>
                             <?= $phone_number ?>
                         </span>

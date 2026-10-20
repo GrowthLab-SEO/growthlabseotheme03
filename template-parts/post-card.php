@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
         } elseif (get_field_options("options")["posts_default_image"] && !empty(get_field_options("options")["posts_default_image"])) {
             img_print_picture_tag(img: get_field_options("options")["posts_default_image"], max_size: "content", min_size: "featured-small", classes: "post-card__pic");
         } else {
-            include get_template_directory() . '/assets/icons/icon-file-image.svg';
+            echo get_theme_svg('assets/icons/icon-file-image.svg');
         }
         if ($args['link_url']) {
             echo "</a>";
@@ -32,7 +32,7 @@ if (!defined('ABSPATH')) {
 
         <div class="post-card__inner">
             <span class="post-card__meta">
-                <?php include get_template_directory() . "/assets/icons/icon-calendar.svg" ?>
+                <?php echo get_theme_svg('assets/icons/icon-calendar.svg') ?>
                 <?= $args["meta"] ?></span>
 
             <?php print_title($args["title"], $args["title_tag"] ?? "p", "post-card__title"); ?>
@@ -42,7 +42,7 @@ if (!defined('ABSPATH')) {
             <?php if ($args['link_url']): ?>
                 <a href="<?= $args['link_url'] ?>" target="<?= $args['link_target'] ?>" class="post-card__link" aria-label="Read more about <?= esc_attr($args['title']) ?>">
                     <span>Read More
-                        <?php include get_template_directory() . "/assets/icons/icon-arrow-right.svg" ?>
+                        <?php echo get_theme_svg('assets/icons/icon-arrow-right.svg') ?>
                     </span>
                 </a>
             <?php endif ?>

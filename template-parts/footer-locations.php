@@ -8,7 +8,7 @@
                 <div class="footer-locations__location">
                     <div class="office">
                         <?php
-                        include get_template_directory() . '/assets/icons/icon-location-2.svg';
+                        echo get_theme_svg('assets/icons/icon-location-2.svg');
                         ?>
 
                         <?php if (!empty($office['city'])): ?>
