@@ -265,7 +265,7 @@ if (!function_exists('get_current_language')) {
 
         $cached = [
             'slug'     => '',
-            'language' => 'English'
+            'language' => __('English', 'growthlabseotheme03')
         ];
 
         return $cached;

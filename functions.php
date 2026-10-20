@@ -124,24 +124,24 @@ if (!function_exists('growthlabseotheme03_setup')) {
         // Add custom image sizes to the media selector
         add_filter('image_size_names_choose', function ($sizes) {
             return array_merge([
-                'thumbnail'    => __('Miniatura'),
-                'medium'       => __('Mediano'),
-                'large'        => __('Grande'),
-                'full'         => __('Tamaño completo'),
-                'cover-desktop'  => __('Cover Desktop (1920×1080)'),
-                'cover-tablet'   => __('Cover Tablet (1280x960)'),
-                'cover-mobile'   => __('Cover Mobile (768×432)'),
-                'cover-tablet-portrait'   => __('Cover Tablet (960x1280)'),
-                'cover-mobile-portrait'   => __('Cover Mobile (768×1100)'),
-                'content'   => __('Contenido (800×600)'),
-                'featured-small' => __('Featured Small (480×360)'),
+                'thumbnail'    => __('Thumbnail'),
+                'medium'       => __('Medium'),
+                'large'        => __('Large'),
+                'full'         => __('Full Size'),
+                'cover-desktop'  => __('Cover Desktop (1920×1080)', 'growthlabseotheme03'),
+                'cover-tablet'   => __('Cover Tablet (1280x960)', 'growthlabseotheme03'),
+                'cover-mobile'   => __('Cover Mobile (768×432)', 'growthlabseotheme03'),
+                'cover-tablet-portrait'   => __('Cover Tablet (960x1280)', 'growthlabseotheme03'),
+                'cover-mobile-portrait'   => __('Cover Mobile (768×1100)', 'growthlabseotheme03'),
+                'content'   => __('Content (800×600)', 'growthlabseotheme03'),
+                'featured-small' => __('Featured Small (480×360)', 'growthlabseotheme03'),
             ], $sizes);
         });
 
         // Register Navigation Menus
         register_nav_menus(
             array(
-                'main' => esc_html__('Main Menu', get_text_domain())
+                'main' => esc_html__('Main Menu', 'growthlabseotheme03')
             )
         );
 
@@ -149,7 +149,7 @@ if (!function_exists('growthlabseotheme03_setup')) {
             foreach (get_languages_map() as $slug => $language) {
                 register_nav_menus(
                     array(
-                        'main_' . $slug => esc_html__("Main Menu $language", get_text_domain())
+                        'main_' . $slug => sprintf(esc_html__('Main Menu %s', 'growthlabseotheme03'), $language)
                     )
                 );
             }
@@ -171,16 +171,16 @@ add_filter('wp_theme_json_data_theme', function ($theme_json) {
 
     // ─── COLOR PALETTE ───────────────────────────────────────────────────────
     $data['settings']['color']['palette'] = [
-        ['name' => __('Primary Color',        get_text_domain()), 'slug' => 'primary-color',        'color' => get_theme_mod('primary_color',        $default_colors['primary']['default'])],
-        ['name' => __('Primary Color Dark',   get_text_domain()), 'slug' => 'primary-color-dark',   'color' => get_theme_mod('primary_color_dark',   $default_colors['primary']['dark'])],
-        ['name' => __('Primary Color Light',  get_text_domain()), 'slug' => 'primary-color-light',  'color' => get_theme_mod('primary_color_light',  $default_colors['primary']['light'])],
-        ['name' => __('Secondary Color',      get_text_domain()), 'slug' => 'secondary-color',      'color' => get_theme_mod('secondary_color',      $default_colors['secondary']['default'])],
-        ['name' => __('Secondary Color Dark', get_text_domain()), 'slug' => 'secondary-color-dark', 'color' => get_theme_mod('secondary_color_dark', $default_colors['secondary']['dark'])],
-        ['name' => __('Secondary Color Light', get_text_domain()), 'slug' => 'secondary-color-light', 'color' => get_theme_mod('secondary_color_light', $default_colors['secondary']['light'])],
-        ['name' => __('Tertiary Color',       get_text_domain()), 'slug' => 'tertiary-color',       'color' => get_theme_mod('tertiary_color',       $default_colors['tertiary']['default'])],
-        ['name' => __('Tertiary Color Dark',  get_text_domain()), 'slug' => 'tertiary-color-dark',  'color' => get_theme_mod('tertiary_color_dark',  $default_colors['tertiary']['dark'])],
-        ['name' => __('Tertiary Color Light', get_text_domain()), 'slug' => 'tertiary-color-light', 'color' => get_theme_mod('tertiary_color_light', $default_colors['tertiary']['light'])],
-        ['name' => __('Text Color',           get_text_domain()), 'slug' => 'text-color',           'color' => get_theme_mod('text_color',           $default_colors['text'])],
+        ['name' => __('Primary Color',        'growthlabseotheme03'), 'slug' => 'primary-color',        'color' => get_theme_mod('primary_color',        $default_colors['primary']['default'])],
+        ['name' => __('Primary Color Dark',   'growthlabseotheme03'), 'slug' => 'primary-color-dark',   'color' => get_theme_mod('primary_color_dark',   $default_colors['primary']['dark'])],
+        ['name' => __('Primary Color Light',  'growthlabseotheme03'), 'slug' => 'primary-color-light',  'color' => get_theme_mod('primary_color_light',  $default_colors['primary']['light'])],
+        ['name' => __('Secondary Color',      'growthlabseotheme03'), 'slug' => 'secondary-color',      'color' => get_theme_mod('secondary_color',      $default_colors['secondary']['default'])],
+        ['name' => __('Secondary Color Dark', 'growthlabseotheme03'), 'slug' => 'secondary-color-dark', 'color' => get_theme_mod('secondary_color_dark', $default_colors['secondary']['dark'])],
+        ['name' => __('Secondary Color Light', 'growthlabseotheme03'), 'slug' => 'secondary-color-light', 'color' => get_theme_mod('secondary_color_light', $default_colors['secondary']['light'])],
+        ['name' => __('Tertiary Color',       'growthlabseotheme03'), 'slug' => 'tertiary-color',       'color' => get_theme_mod('tertiary_color',       $default_colors['tertiary']['default'])],
+        ['name' => __('Tertiary Color Dark',  'growthlabseotheme03'), 'slug' => 'tertiary-color-dark',  'color' => get_theme_mod('tertiary_color_dark',  $default_colors['tertiary']['dark'])],
+        ['name' => __('Tertiary Color Light', 'growthlabseotheme03'), 'slug' => 'tertiary-color-light', 'color' => get_theme_mod('tertiary_color_light', $default_colors['tertiary']['light'])],
+        ['name' => __('Text Color',           'growthlabseotheme03'), 'slug' => 'text-color',           'color' => get_theme_mod('text_color',           $default_colors['text'])],
     ];
 
     // ─── FONTS ───────────────────────────────────────────────────────────────
@@ -498,9 +498,9 @@ function growthlabseotheme03_widgets_init()
 
     register_sidebar(
         array(
-            'name'          => esc_html__('Default Sidebar', get_text_domain()),
+            'name'          => esc_html__('Default Sidebar', 'growthlabseotheme03'),
             'id'            => 'sidebar-default',
-            'description'   => esc_html__('Add widgets here to appear in the page sidebar.', get_text_domain()),
+            'description'   => esc_html__('Add widgets here to appear in the page sidebar.', 'growthlabseotheme03'),
             'before_widget' => '<div id="%1$s" class="widget %2$s">',
             'after_widget'  => '</div>',
             'before_title'  => '<p class="widget-title">',
@@ -510,9 +510,9 @@ function growthlabseotheme03_widgets_init()
 
     register_sidebar(
         array(
-            'name'          => esc_html__('Blog Sidebar', get_text_domain()),
+            'name'          => esc_html__('Blog Sidebar', 'growthlabseotheme03'),
             'id'            => 'sidebar-blog',
-            'description'   => esc_html__('Add widgets here to appear in the Blog sidebar.', get_text_domain()),
+            'description'   => esc_html__('Add widgets here to appear in the Blog sidebar.', 'growthlabseotheme03'),
             'before_widget' => '<div id="%1$s" class="widget %2$s">',
             'after_widget'  => '</div>',
             'before_title'  => '<p class="widget-title">',
@@ -524,9 +524,9 @@ function growthlabseotheme03_widgets_init()
         foreach (get_languages_map() as $slug => $language) {
             register_sidebar(
                 array(
-                    'name'          => esc_html__("{$language} Sidebar", get_text_domain()),
+                    'name'          => sprintf(esc_html__('%s Sidebar', 'growthlabseotheme03'), $language),
                     'id'            => "sidebar-default-{$slug}",
-                    'description'   => esc_html__('Add widgets here to appear in the page sidebar.', get_text_domain()),
+                    'description'   => esc_html__('Add widgets here to appear in the page sidebar.', 'growthlabseotheme03'),
                     'before_widget' => '<div id="%1$s" class="widget %2$s">',
                     'after_widget'  => '</div>',
                     'before_title'  => '<p class="widget-title">',
@@ -536,9 +536,9 @@ function growthlabseotheme03_widgets_init()
 
             register_sidebar(
                 array(
-                    'name'          => esc_html__("{$language} Blog Sidebar", get_text_domain()),
+                    'name'          => sprintf(esc_html__('%s Blog Sidebar', 'growthlabseotheme03'), $language),
                     'id'            => "sidebar-blog-{$slug}",
-                    'description'   => esc_html__('Add widgets here to appear in the Blog sidebar.', get_text_domain()),
+                    'description'   => esc_html__('Add widgets here to appear in the Blog sidebar.', 'growthlabseotheme03'),
                     'before_widget' => '<div id="%1$s" class="widget %2$s">',
                     'after_widget'  => '</div>',
                     'before_title'  => '<p class="widget-title">',
@@ -633,20 +633,20 @@ add_action('admin_bar_menu', function ($wp_admin_bar) {
 
     $wp_admin_bar->add_node([
         'id'    => 'growthlabseotheme03-tools',
-        'title' => esc_html__('Theme Tools', get_text_domain()),
+        'title' => esc_html__('Theme Tools', 'growthlabseotheme03'),
     ]);
 
     $wp_admin_bar->add_node([
         'id'     => 'growthlabseotheme03-clear-block-cache',
         'parent' => 'growthlabseotheme03-tools',
-        'title'  => esc_html__('Clear block cache', get_text_domain()),
+        'title'  => esc_html__('Clear block cache', 'growthlabseotheme03'),
         'href'   => wp_nonce_url(admin_url('index.php?clear_block_cache=1'), 'clear_block_cache'),
     ]);
 
     $wp_admin_bar->add_node([
         'id'     => 'growthlabseotheme03-import-theme-images',
         'parent' => 'growthlabseotheme03-tools',
-        'title'  => esc_html__('Import theme icons', get_text_domain()),
+        'title'  => esc_html__('Import theme icons', 'growthlabseotheme03'),
         'href'   => wp_nonce_url(home_url('/?import_theme_images=1'), 'import_theme_images'),
     ]);
 }, 100);
