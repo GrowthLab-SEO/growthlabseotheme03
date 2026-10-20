@@ -275,7 +275,9 @@ function growthlabseotheme03_request_uses_splide()
 
 function inline_main_critical_css()
 {
-    global $block_critical_css;
+    // CSS files of the blocks used on the page, grouped by block type (collected on wp_enqueue_scripts)
+    global $block_critical_css_files;
+    $block_css_files = !empty($block_critical_css_files) ? $block_critical_css_files : array();
 
     // Dynamic Fonts
     $fonts_css = theme_get_fonts_css();
@@ -283,27 +285,68 @@ function inline_main_critical_css()
     // Dynamic Color Scheme
     $color_scheme = theme_get_customizer_css();
 
-    $critical_css = file_get_contents(get_template_directory() . "/styles/main-min.css");
-    $critical_css .= file_get_contents(get_stylesheet_directory() . '/style.css');
-    $critical_css = $fonts_css . $color_scheme . $critical_css;
+    $main_css_file = get_template_directory() . "/styles/main-min.css";
+    $style_css_file = get_stylesheet_directory() . '/style.css';
 
     // Add Splide critical CSS only when carousels are present
     $splide_css_file = get_template_directory() . '/styles/vendor/splide/splide-core.min.css';
-    if (file_exists($splide_css_file) && growthlabseotheme03_request_uses_splide()) {
-        $critical_css .= "\n/* Splide Critical CSS */\n" . file_get_contents($splide_css_file);
+    $include_splide = file_exists($splide_css_file) && growthlabseotheme03_request_uses_splide();
+
+    // Cache the final CSS, keyed by everything that affects it
+    $files = array($main_css_file, $style_css_file);
+    if ($include_splide) $files[] = $splide_css_file;
+    foreach ($block_css_files as $type_files) {
+        $files = array_merge($files, $type_files);
     }
 
-    // Add block critical CSS if any
-    if (!empty($block_critical_css)) {
-        $critical_css .= "\n/* Block Critical CSS */\n" . $block_critical_css;
+    $file_mtimes = array();
+    foreach ($files as $file) {
+        $file_mtimes[$file] = @filemtime($file);
     }
 
-    $critical_css = preg_replace('/\{theme-path\}/', get_template_directory_uri(), $critical_css);
-    // Minify CSS: remove comments, extra spaces, and newlines
-    $critical_css = preg_replace('/\/\*.*?\*\//s', '', $critical_css); // Remove CSS comments
-    $critical_css = preg_replace('/\s/', ' ', $critical_css); // Replace multiple spaces with single space
-    $critical_css = preg_replace('/\s*([{}:;,])\s*/', '$1', $critical_css); // Remove spaces around braces, colons, semicolons, commas
-    $critical_css = trim($critical_css); // Trim leading/trailing whitespace
+    $cache_key = 'growthlabseotheme03_critical_css_' . md5(serialize(array(
+        get_template_directory_uri(),
+        $file_mtimes,
+        $block_css_files,
+        $include_splide,
+        md5($fonts_css . $color_scheme),
+    )));
+
+    $critical_css = get_transient($cache_key);
+
+    if (false === $critical_css) {
+        $critical_css = file_get_contents($main_css_file);
+        $critical_css .= file_get_contents($style_css_file);
+        $critical_css = $fonts_css . $color_scheme . $critical_css;
+
+        if ($include_splide) {
+            $critical_css .= "\n/* Splide Critical CSS */\n" . file_get_contents($splide_css_file);
+        }
+
+        // Add block critical CSS if any
+        $block_critical_css = '';
+        foreach ($block_css_files as $type => $type_files) {
+            // Wrap type CSS in a comment for debugging
+            $block_critical_css .= "/* Block type: {$type} */\n";
+            foreach ($type_files as $file) {
+                $block_critical_css .= file_get_contents($file) . "\n";
+            }
+        }
+
+        if (!empty($block_critical_css)) {
+            $critical_css .= "\n/* Block Critical CSS */\n" . $block_critical_css;
+        }
+
+        $critical_css = preg_replace('/\{theme-path\}/', get_template_directory_uri(), $critical_css);
+        // Minify CSS: remove comments, extra spaces, and newlines
+        $critical_css = preg_replace('/\/\*.*?\*\//s', '', $critical_css); // Remove CSS comments
+        $critical_css = preg_replace('/\s/', ' ', $critical_css); // Replace multiple spaces with single space
+        $critical_css = preg_replace('/\s*([{}:;,])\s*/', '$1', $critical_css); // Remove spaces around braces, colons, semicolons, commas
+        $critical_css = trim($critical_css); // Trim leading/trailing whitespace
+
+        // An expiration keeps the transient out of the autoloaded options
+        set_transient($cache_key, $critical_css, WEEK_IN_SECONDS);
+    }
 
     echo '<style id="main-css">' . $critical_css . '</style>';
 }
