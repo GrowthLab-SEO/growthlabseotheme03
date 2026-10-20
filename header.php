@@ -51,7 +51,7 @@ if (!defined('ABSPATH')) {
                         echo img_generate_picture_tag(img: $image, max_size: "medium", alt_text: get_bloginfo('name'), is_priority: true);
                     }
                     ?>
-                    <span>Site Logo</span>
+                    <span><?= esc_html__('Site Logo', 'growthlabseotheme03') ?></span>
                 </a>
             </div>
 
@@ -82,13 +82,13 @@ if (!defined('ABSPATH')) {
             ?>
 
             <?php if (!empty($menu_args)) : ?>
-                <button class="site-header__mobile-btn" role="button" aria-label="Mobile Menu Button">
+                <button class="site-header__mobile-btn" role="button" aria-label="<?= esc_attr__('Mobile Menu Button', 'growthlabseotheme03') ?>">
                     <div>
                         <hr>
                         <hr>
                         <hr>
                     </div>
-                    <span>Menu</span>
+                    <span><?= esc_html__('Menu', 'growthlabseotheme03') ?></span>
                 </button>
             <?php endif ?>
 
@@ -96,7 +96,7 @@ if (!defined('ABSPATH')) {
 
                 <?php if (!empty($menu_args)) : ?>
 
-                    <div class="site-header__close-btn" role="button" aria-label="Close Menu Button">
+                    <div class="site-header__close-btn" role="button" aria-label="<?= esc_attr__('Close Menu Button', 'growthlabseotheme03') ?>">
                         <hr>
                         <hr>
                     </div>
@@ -112,7 +112,7 @@ if (!defined('ABSPATH')) {
                         <span class="text"><?= wp_kses_post($top_callout) ?></span>
                     <?php endif; ?>
 
-                    <a href="<?= get_phone_href($phone_number) ?>" class="phone btn btn--primary" aria-label="Call us at <?= esc_attr($phone_number) ?>">
+                    <a href="<?= get_phone_href($phone_number) ?>" class="phone btn btn--primary" aria-label="<?= esc_attr(sprintf(/* translators: %s: phone number */ __('Call us at %s', 'growthlabseotheme03'), $phone_number)) ?>">
                         <?php echo get_theme_svg('assets/icons/icon-phone.svg') ?>
                         <span>
                             <?= esc_html($phone_number) ?>

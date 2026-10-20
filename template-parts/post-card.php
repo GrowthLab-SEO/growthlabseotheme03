@@ -45,8 +45,8 @@ $link_target_attr = $link_target ? ' target="' . esc_attr($link_target) . '"' . 
             <p class="post-card__content"><?= wp_kses_post($args["excerpt"] ?? '') ?></p>
 
             <?php if ($args['link_url']): ?>
-                <a href="<?= esc_url($args['link_url']) ?>"<?= $link_target_attr ?> class="post-card__link" aria-label="Read more about <?= esc_attr($args['title']) ?>">
-                    <span>Read More
+                <a href="<?= esc_url($args['link_url']) ?>"<?= $link_target_attr ?> class="post-card__link" aria-label="<?= esc_attr(sprintf(/* translators: %s: post title */ __('Read more about %s', 'growthlabseotheme03'), $args['title'])) ?>">
+                    <span><?= esc_html__('Read More', 'growthlabseotheme03') ?>
                         <?php echo get_theme_svg('assets/icons/icon-arrow-right.svg') ?>
                     </span>
                 </a>

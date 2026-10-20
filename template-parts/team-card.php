@@ -25,8 +25,8 @@ $link_target = $args['link_target'] ?? '';
 
             <?php if ($args['link_url']): ?>
                 <div class="team-card__btn">
-                    <a href="<?= esc_url($args['link_url']) ?>"<?= $link_target ? ' target="' . esc_attr($link_target) . '"' . ($link_target === '_blank' ? ' rel="noopener noreferrer"' : '') : '' ?> class="btn btn--tertiary-light" aria-label="Meet <?= esc_attr($args['title']) ?>">
-                        <span>meet <?= wp_kses_post($args["title"]) ?></span>
+                    <a href="<?= esc_url($args['link_url']) ?>"<?= $link_target ? ' target="' . esc_attr($link_target) . '"' . ($link_target === '_blank' ? ' rel="noopener noreferrer"' : '') : '' ?> class="btn btn--tertiary-light" aria-label="<?= esc_attr(sprintf(/* translators: %s: team member name */ __('Meet %s', 'growthlabseotheme03'), $args['title'])) ?>">
+                        <span><?= sprintf(/* translators: %s: team member name */ esc_html__('meet %s', 'growthlabseotheme03'), wp_kses_post($args["title"])) ?></span>
                     </a>
                 </div>
             <?php endif ?>

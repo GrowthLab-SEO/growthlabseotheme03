@@ -50,7 +50,7 @@ $city .= $tp_url ? "</a>" : '';
                     <?php endif ?>
 
                     <?php if (!empty($location["phone"])): ?>
-                        <a href="<?= get_phone_href($location["phone"]) ?>" class="location-card__btn btn--primary" aria-label="Call us at <?= esc_attr($location['phone']) ?>">
+                        <a href="<?= get_phone_href($location["phone"]) ?>" class="location-card__btn btn--primary" aria-label="<?= esc_attr(sprintf(/* translators: %s: phone number */ __('Call us at %s', 'growthlabseotheme03'), $location['phone'])) ?>">
                             <span>
                                 <?= esc_html($location["phone"]) ?>
                             </span>

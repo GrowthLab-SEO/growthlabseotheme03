@@ -27,19 +27,20 @@ $newest_post = get_posts(array(
 $year_start = !empty($oldest_post) ? (int) get_the_date('Y', $oldest_post[0]) : (int) date('Y');
 $year_end   = !empty($newest_post) ? (int) get_the_date('Y', $newest_post[0]) : (int) date('Y');
 
+// The value stays in English: js/posts-filters.js maps it to the month number
 $months = array(
-    1  => 'January',
-    2  => 'February',
-    3  => 'March',
-    4  => 'April',
-    5  => 'May',
-    6  => 'June',
-    7  => 'July',
-    8  => 'August',
-    9  => 'September',
-    10 => 'October',
-    11 => 'November',
-    12 => 'December',
+    1 => array('value' => 'January', 'label' => __('January', 'growthlabseotheme03')),
+    2 => array('value' => 'February', 'label' => __('February', 'growthlabseotheme03')),
+    3 => array('value' => 'March', 'label' => __('March', 'growthlabseotheme03')),
+    4 => array('value' => 'April', 'label' => __('April', 'growthlabseotheme03')),
+    5 => array('value' => 'May', 'label' => __('May', 'growthlabseotheme03')),
+    6 => array('value' => 'June', 'label' => __('June', 'growthlabseotheme03')),
+    7 => array('value' => 'July', 'label' => __('July', 'growthlabseotheme03')),
+    8 => array('value' => 'August', 'label' => __('August', 'growthlabseotheme03')),
+    9 => array('value' => 'September', 'label' => __('September', 'growthlabseotheme03')),
+    10 => array('value' => 'October', 'label' => __('October', 'growthlabseotheme03')),
+    11 => array('value' => 'November', 'label' => __('November', 'growthlabseotheme03')),
+    12 => array('value' => 'December', 'label' => __('December', 'growthlabseotheme03')),
 );
 
 $extra_classes = isset($args['classes']) ? esc_attr($args['classes']) : '';
@@ -64,7 +65,7 @@ $extra_classes = isset($args['classes']) ? esc_attr($args['classes']) : '';
                     type="text"
                     id="pf-search"
                     name="search"
-                    placeholder="Title, keywords, content…"
+                    placeholder="<?= esc_attr__('Title, keywords, content…', 'growthlabseotheme03') ?>"
                     autocomplete="off" />
             </div>
         </div>
@@ -74,7 +75,7 @@ $extra_classes = isset($args['classes']) ? esc_attr($args['classes']) : '';
             <div class="posts-filters__group">
                 <div class="posts-filters__select-wrap">
                     <select class="posts-filters__select" id="pf-category" name="category">
-                        <option value="">All categories</option>
+                        <option value=""><?= esc_html__('All categories', 'growthlabseotheme03') ?></option>
                         <?php foreach ($categories as $cat): ?>
                             <option value="<?= esc_attr($cat->term_id) ?>">
                                 <?= esc_html($cat->name) ?> (<?= (int) $cat->count ?>)
@@ -93,10 +94,10 @@ $extra_classes = isset($args['classes']) ? esc_attr($args['classes']) : '';
         <div class="posts-filters__group">
             <div class="posts-filters__select-wrap">
                 <select class="posts-filters__select" id="pf-month" name="month">
-                    <option value="">All months</option>
-                    <?php foreach ($months as $num => $name): ?>
-                        <option value="<?= esc_attr($name) ?>">
-                            <?= esc_html($name) ?>
+                    <option value=""><?= esc_html__('All months', 'growthlabseotheme03') ?></option>
+                    <?php foreach ($months as $month): ?>
+                        <option value="<?= esc_attr($month['value']) ?>">
+                            <?= esc_html($month['label']) ?>
                         </option>
                     <?php endforeach ?>
                 </select>
@@ -111,7 +112,7 @@ $extra_classes = isset($args['classes']) ? esc_attr($args['classes']) : '';
         <div class="posts-filters__group">
             <div class="posts-filters__select-wrap">
                 <select class="posts-filters__select" id="pf-year" name="year">
-                    <option value="">All years</option>
+                    <option value=""><?= esc_html__('All years', 'growthlabseotheme03') ?></option>
                     <?php for ($y = $year_end; $y >= $year_start; $y--): ?>
                         <option value="<?= $y ?>"><?= $y ?></option>
                     <?php endfor ?>
@@ -126,10 +127,10 @@ $extra_classes = isset($args['classes']) ? esc_attr($args['classes']) : '';
         <!-- Actions -->
         <div class="posts-filters__actions">
             <button type="submit" class="posts-filters__btn posts-filters__btn--apply">
-                Apply filters
+                <?= esc_html__('Apply filters', 'growthlabseotheme03') ?>
             </button>
             <button type="button" class="posts-filters__btn posts-filters__btn--reset" id="pfReset">
-                Clear
+                <?= esc_html__('Clear', 'growthlabseotheme03') ?>
             </button>
         </div>
 

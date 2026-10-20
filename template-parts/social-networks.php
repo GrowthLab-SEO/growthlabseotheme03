@@ -42,7 +42,7 @@ $social_networks = array(
         ?>
         <?php if (!empty($url)) : ?>
             <li>
-                <a href="<?= esc_url($url) ?>" target="_blank" rel="noopener noreferrer" aria-label="Visit our <?= esc_attr($title) ?> page">
+                <a href="<?= esc_url($url) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= esc_attr(sprintf(/* translators: %s: social network name */ __('Visit our %s page', 'growthlabseotheme03'), $title)) ?>">
                     <?php
                     $icon = get_theme_svg('assets/icons/' . $icon_file);
                     if ($icon) {

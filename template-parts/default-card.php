@@ -29,7 +29,7 @@ $link_target = $args['link_target'] ?? '';
     <div class="default-card__inner tx-center">
 
         <?php print_title($args["title"], $args["title_tag"] ?? "p", "default-card__title"); ?>
-        <p class="default-card__link">READ MORE</p>
+        <p class="default-card__link"><?= esc_html__('READ MORE', 'growthlabseotheme03') ?></p>
 
     </div>
 
