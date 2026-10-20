@@ -2,8 +2,10 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+
+$link_target = $args['link_target'] ?? '';
 ?>
-<div class="team-card <?= $args["classes"] ?>">
+<div class="team-card <?= esc_attr($args["classes"] ?? '') ?>">
     <div class="team-card__wrapper">
 
         <div class='team-card__pic-wrapper'>
@@ -19,12 +21,12 @@ if (!defined('ABSPATH')) {
         <div class="team-card__inner">
             <?php print_title($args["title"], $args["title_tag"] ?? "p", "team-card__title"); ?>
 
-            <p class="team-card__content formatted-text"><?php if ($args["content"] && !empty($args["content"])) echo $args["content"] ?></p>
+            <p class="team-card__content formatted-text"><?php if ($args["content"] && !empty($args["content"])) echo wp_kses_post($args["content"]) ?></p>
 
             <?php if ($args['link_url']): ?>
                 <div class="team-card__btn">
-                    <a href="<?= $args['link_url'] ?>" target="<?= $args['link_target'] ?>" class="btn btn--tertiary-light" aria-label="Meet <?= esc_attr($args['title']) ?>">
-                        <span>meet <?= $args["title"] ?></span>
+                    <a href="<?= esc_url($args['link_url']) ?>"<?= $link_target ? ' target="' . esc_attr($link_target) . '"' . ($link_target === '_blank' ? ' rel="noopener noreferrer"' : '') : '' ?> class="btn btn--tertiary-light" aria-label="Meet <?= esc_attr($args['title']) ?>">
+                        <span>meet <?= wp_kses_post($args["title"]) ?></span>
                     </a>
                 </div>
             <?php endif ?>

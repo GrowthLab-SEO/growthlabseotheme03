@@ -18,14 +18,15 @@
         ';
     ?>
 
- <div class="splide__arrows pagination-buttons <?= $args["classes"] ?>">
+ <?php $nav_link = !empty($args['nav_link']) && is_array($args['nav_link']) ? $args['nav_link'] : null; ?>
+ <div class="splide__arrows pagination-buttons <?= esc_attr($args["classes"] ?? '') ?>">
      <button class="splide__arrow splide__arrow--prev arrow arrow--prev">
          <?= $prev_arrow ?>
      </button>
 
-     <?php if ($args['nav_link']): ?>
-         <a href="<?= $args['nav_link']['url'] ?>" target="<?= $args['nav_link']['target'] ?>" class="cta-btn btn btn--tertiary" aria-label="<?= esc_attr($args['nav_link']['title']) ?>">
-             <span><?= $args['nav_link']['title'] ?></span>
+     <?php if ($nav_link): ?>
+         <a href="<?= esc_url($nav_link['url'] ?? '') ?>"<?= !empty($nav_link['target']) ? ' target="' . esc_attr($nav_link['target']) . '"' . ($nav_link['target'] === '_blank' ? ' rel="noopener noreferrer"' : '') : '' ?> class="cta-btn btn btn--tertiary" aria-label="<?= esc_attr($nav_link['title'] ?? '') ?>">
+             <span><?= esc_html($nav_link['title'] ?? '') ?></span>
          </a>
      <?php endif ?>
 

@@ -5,14 +5,15 @@ if (!defined('ABSPATH')) {
 
 // Default image of the current language, falling back to the base options
 $default_image = (get_current_language_options()['posts_default_image'] ?? null) ?: (get_field_options('options')['posts_default_image'] ?? null);
+$link_target = $args['link_target'] ?? '';
 ?>
 
-<div class="default-card <?php echo $args["classes"];
+<div class="default-card <?php echo esc_attr($args["classes"] ?? '');
                             if (isset($args["content"]) && $args["content"]) echo " content" ?>">
 
     <?php
     if ($args['link_url'] && $args['link_url'] !== '') {
-        echo "<a href=" . $args['link_url'] . " class='default-card__wrapper' target=" . $args['link_target'] . " aria-label='" . esc_attr($args['title']) . "'>";
+        echo '<a href="' . esc_url($args['link_url']) . '" class="default-card__wrapper"' . ($link_target ? ' target="' . esc_attr($link_target) . '"' . ($link_target === '_blank' ? ' rel="noopener noreferrer"' : '') : '') . ' aria-label="' . esc_attr($args['title']) . '">';
     } else {
         echo "<div class='default-card__wrapper'>";
     }

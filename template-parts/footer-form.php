@@ -1,3 +1,4 @@
+<?php $form_link = !empty($args['link']) && is_array($args['link']) ? $args['link'] : null; ?>
 <section class="contact-form-footer">
     <div class="contact-form-footer__wrapper container">
         <div class="contact-form-footer__inner">
@@ -7,9 +8,9 @@
                 print_title($args['title'], $args['tag'], "contact-form-footer__title");
                 ?>
 
-                <?php if ($args['link'] !== ""): ?>
-                    <a href="<?= $args['link']['url']; ?>" target="<?= $args['link']['target']; ?>" class="contact-form-footer__link formatted-text">
-                        <?= $args['link']['title']; ?>
+                <?php if ($form_link): ?>
+                    <a href="<?= esc_url($form_link['url'] ?? '') ?>"<?= !empty($form_link['target']) ? ' target="' . esc_attr($form_link['target']) . '"' . ($form_link['target'] === '_blank' ? ' rel="noopener noreferrer"' : '') : '' ?> class="contact-form-footer__link formatted-text">
+                        <?= esc_html($form_link['title'] ?? '') ?>
                     </a>
                 <?php endif ?>
             </div>

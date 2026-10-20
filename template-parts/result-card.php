@@ -3,7 +3,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 ?>
-<div class="result-card <?= $args["classes"] ?>">
+<div class="result-card <?= esc_attr($args["classes"] ?? "") ?>">
     <div class="result-card__wrapper">
         <div class="result-card__inner">
 
@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
             <?php endif ?>
 
             <?php if (isset($args["case_description"]) && $args["case_description"]): ?>
-                <p class="result-card__description"><?= $args["case_description"] ?></p>
+                <p class="result-card__description"><?= wp_kses_post($args["case_description"]) ?></p>
             <?php endif ?>
         </div>
     </div>

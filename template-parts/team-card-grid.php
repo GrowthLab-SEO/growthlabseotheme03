@@ -4,9 +4,10 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<div class="team-card-grid <?= $args["classes"] ?>">
+<?php $link_target = $args['link_target'] ?? ''; ?>
+<div class="team-card-grid <?= esc_attr($args["classes"] ?? '') ?>">
     <?php if ($args['link_url'] && $args['link_url'] !== ''): ?>
-        <a href="<?= $args['link_url'] ?>" target="<?= $args['link_target'] ?>" class="team-card-grid__wrapper" aria-label="<?= esc_attr($args['name']) ?>">
+        <a href="<?= esc_url($args['link_url']) ?>"<?= $link_target ? ' target="' . esc_attr($link_target) . '"' . ($link_target === '_blank' ? ' rel="noopener noreferrer"' : '') : '' ?> class="team-card-grid__wrapper" aria-label="<?= esc_attr($args['name']) ?>">
             <?php
             // The decorative background frame is only shown behind a picture
             $bg_item_url = '';
@@ -25,7 +26,7 @@ if (!defined('ABSPATH')) {
 
                 <?php print_title($args["name"], $args["title_tag"] ?? "p", "team-card-grid__title"); ?>
 
-                <p class="team-card-grid__role"><?= $args["role"] ?></p>
+                <p class="team-card-grid__role"><?= wp_kses_post($args["role"] ?? '') ?></p>
 
             </div>
         </a>

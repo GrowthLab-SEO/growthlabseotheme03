@@ -108,14 +108,14 @@ if (!defined('ABSPATH')) {
 
             <?php if ($phone_number): ?>
                 <div class="site-header__callout">
-                    <?php if ($top_callout): ?>
-                        <span class="text"><?= $top_callout ?></span>
+                    <?php if (!empty($top_callout)): ?>
+                        <span class="text"><?= wp_kses_post($top_callout) ?></span>
                     <?php endif; ?>
 
-                    <a href="tel:+1<?= get_flat_number($phone_number) ?>" class="phone btn btn--primary" aria-label="Call us at <?= esc_attr($phone_number) ?>">
+                    <a href="<?= get_phone_href($phone_number) ?>" class="phone btn btn--primary" aria-label="Call us at <?= esc_attr($phone_number) ?>">
                         <?php echo get_theme_svg('assets/icons/icon-phone.svg') ?>
                         <span>
-                            <?= $phone_number ?>
+                            <?= esc_html($phone_number) ?>
                         </span>
                     </a>
                 </div>

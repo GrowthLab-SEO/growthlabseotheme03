@@ -77,11 +77,11 @@
       <section class="footer-copyright">
         <div class="footer-copyright__wrapper container">
           <div class="footer-copyright__advertisement">
-            <?= $copyright_section['copyright'] ?? '' ?>
+            <?= wp_kses_post($copyright_section['copyright'] ?? '') ?>
           </div>
 
           <a href="https://growthlabseo.com/" target="_blank" rel="noopener noreferrer" class="footer-copyright__logo" aria-label="Growth Lab SEO">
-            <img src="<?= get_template_directory_uri() . "/assets/img/Growth-Lab-Logo.png" ?>" alt="Growth Lab SEO Logo" width="270" height="50">
+            <img src="<?= esc_url(get_template_directory_uri() . "/assets/img/Growth-Lab-Logo.png") ?>" alt="Growth Lab SEO Logo" width="270" height="50">
           </a>
 
         </div>

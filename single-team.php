@@ -21,8 +21,8 @@ foreach (get_post_fields_with_defaults() as $key => $value) $$key = $value;
                         if ($highlighted_points && !empty($highlighted_points)) :
                             foreach ($highlighted_points as $point) : ?>
                                 <li class="single-team__point">
-                                    <p class="h4"><?= $point['heading'] ?></p>
-                                    <?= $point['content'] ?>
+                                    <p class="h4"><?= wp_kses_post($point['heading'] ?? '') ?></p>
+                                    <?= wp_kses_post($point['content'] ?? '') ?>
                                 </li>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -32,7 +32,7 @@ foreach (get_post_fields_with_defaults() as $key => $value) $$key = $value;
                 <main role="main" class="single__main">
                     <div class="single-team__heading">
                         <h2 class="single-team__title h3"><?php the_title(); ?></h2>
-                        <p class="single-team__role pretitle h5"><?= $role; ?></p>
+                        <p class="single-team__role pretitle h5"><?= wp_kses_post($role ?? '') ?></p>
                     </div>
                     <div class="single-team__content formatted-text">
                         <?php the_content(); ?>
