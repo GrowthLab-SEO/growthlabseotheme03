@@ -18,11 +18,11 @@ if (get_field('toggle_block')):
         ?>
 
         <?php
-        $options = get_field_options("options");
+        $logo_symbol = (get_current_language_options()['logo_symbol'] ?? null) ?: (get_field_options('options')['logo_symbol'] ?? null);
         if (isset($side_image) && !empty($side_image)) {
             img_print_picture_tag(img: $side_image, max_size: "content", min_size: "featured-small", classes: "faq__side-image");
-        } elseif ($options["logo_symbol"]) {
-            img_print_picture_tag(img: $options["logo_symbol"], max_size: "medium", classes: "faq__symbol");
+        } elseif ($logo_symbol) {
+            img_print_picture_tag(img: $logo_symbol, max_size: "medium", classes: "faq__symbol");
         }
         ?>
 

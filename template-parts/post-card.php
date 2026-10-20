@@ -2,6 +2,9 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+
+// Default image of the current language, falling back to the base options
+$default_image = (get_current_language_options()['posts_default_image'] ?? null) ?: (get_field_options('options')['posts_default_image'] ?? null);
 ?>
 <article class="post-card <?= $args["classes"] ?>">
     <div class="post-card__wrapper">
@@ -17,8 +20,8 @@ if (!defined('ABSPATH')) {
         }
         if (isset($args['picture']) && $args['picture']) {
             img_print_picture_tag(img: $args["picture"], max_size: "content", min_size: "featured-small", classes: "post-card__pic");
-        } elseif (get_field_options("options")["posts_default_image"] && !empty(get_field_options("options")["posts_default_image"])) {
-            img_print_picture_tag(img: get_field_options("options")["posts_default_image"], max_size: "content", min_size: "featured-small", classes: "post-card__pic");
+        } elseif ($default_image) {
+            img_print_picture_tag(img: $default_image, max_size: "content", min_size: "featured-small", classes: "post-card__pic");
         } else {
             echo get_theme_svg('assets/icons/icon-file-image.svg');
         }

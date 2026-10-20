@@ -33,8 +33,7 @@ if (get_field('toggle_block')):
         <div class="cta-box__wrapper container">
 
             <?php
-            $options = get_field_options("options");
-            $logo_symbol = is_array($options) ? ($options["logo_symbol"] ?? null) : null;
+            $logo_symbol = (get_current_language_options()['logo_symbol'] ?? null) ?: (get_field_options('options')['logo_symbol'] ?? null);
 
             if (!empty($side_image)) {
                 img_print_picture_tag(img: $side_image, max_size: "content", min_size: "featured-small", classes: "cta-box__side-image");

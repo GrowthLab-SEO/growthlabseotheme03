@@ -57,7 +57,7 @@ if (get_field('toggle_block')):
     // Links this carousel with its own thumbnails carousel (team type), so several carousels on a page don't clash
     $thumbnails_id = wp_unique_id('posts-carousel-thumbnails-');
 
-    $options = get_field_options("options");
+    $logo_symbol = (get_current_language_options()['logo_symbol'] ?? null) ?: (get_field_options('options')['logo_symbol'] ?? null);
 
 ?>
 
@@ -74,7 +74,7 @@ if (get_field('toggle_block')):
         <?php
         if (isset($background_image) && $background_image && isset($background_type) && $background_type === 'image') img_print_picture_tag(img: $background_image, is_cover: true, classes: "posts-carousel__bg bg-image");
 
-        if (isset($options["logo_symbol"]) && $options["logo_symbol"]) img_print_picture_tag(img: $options["logo_symbol"], classes: "posts-carousel__symbol");
+        if ($logo_symbol) img_print_picture_tag(img: $logo_symbol, classes: "posts-carousel__symbol");
         ?>
 
         <div class="posts-carousel__wrapper container">

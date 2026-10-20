@@ -32,10 +32,10 @@ if (get_field('toggle_block')):
             <div class="col col--image <?= esc_attr(isset($featured_image_position) && $featured_image_position ? $featured_image_position : "left") ?>">
                 <?php
                 if (!empty($columns['featured_image'])) {
-                    $options = get_field_options("options");
+                    $logo_symbol = (get_current_language_options()['logo_symbol'] ?? null) ?: (get_field_options('options')['logo_symbol'] ?? null);
 
-                    if ($options["logo_symbol"]) {
-                        img_print_picture_tag(img: $options["logo_symbol"], max_size: "medium", classes: "col__symbol");
+                    if ($logo_symbol) {
+                        img_print_picture_tag(img: $logo_symbol, max_size: "medium", classes: "col__symbol");
                     }
 
                     img_print_picture_tag(
