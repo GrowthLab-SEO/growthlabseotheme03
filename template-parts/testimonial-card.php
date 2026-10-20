@@ -12,12 +12,17 @@ if (!defined('ABSPATH')) {
 
         <div class="testimonial-card__inner">
 
-            <div class=" testimonial-card__stars">
+            <?php $rating = 5; ?>
+            <div class="testimonial-card__stars" role="img" aria-label="<?= esc_attr(sprintf(
+                /* translators: %d: number of stars of the testimonial rating */
+                __('Rated %d out of 5', 'growthlabseotheme03'),
+                $rating
+            )) ?>">
                 <?php
                 $i = 1;
                 $star_svg = get_theme_svg('assets/icons/icon-star-2.svg');
-                while ($i <= 5) {
-                    echo '<span class="star">';
+                while ($i <= $rating) {
+                    echo '<span class="star" aria-hidden="true">';
                     echo $star_svg;
                     echo '</span>';
                     $i++;
