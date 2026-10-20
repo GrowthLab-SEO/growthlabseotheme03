@@ -55,7 +55,7 @@ if (!$bg_mobile) $bg_mobile = [];
             <div class="content tx-center">
                 <?= $trust_badge_text ?>
             </div>
-            <img src="<?= $url ?>" alt="hero badge" loading="eager" fetchpriority='high' decoding="async">
+            <img src="<?= esc_url($url) ?>" alt="" loading="eager" fetchpriority='high' decoding="async">
         </div>
     <?php endif ?>
     <?php if ($use_custom_badge_image && !empty($hero_pictures['badge'])) img_print_picture_tag(
