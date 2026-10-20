@@ -1,461 +1,443 @@
-# GrowthLab Theme 01
+# GrowthLab Theme 03
 
-**Custom WordPress theme** developed for GrowthLab SEO. Modular theme, optimized for performance and SEO, with complete Advanced Custom Fields (ACF) integration and support for dynamic Gutenberg blocks.
+Custom WordPress base theme built by GrowthLab SEO for client sites. It is a classic PHP theme (with a `theme.json` for editor settings) whose page sections are ACF PRO blocks, plus a Customizer-driven color scheme and font selector.
+
+- **Theme name / text domain:** `GrowthLab Theme 03` / `growthlabseotheme03`
+- **Repository:** https://github.com/GrowthLab-SEO/growthlabseotheme03
+- **License:** GPL-3.0-or-later
 
 ---
 
-## 📋 System Requirements
+## Contents
 
-- **PHP:** 8.3 or higher
+1. [Overview](#overview)
+2. [Requirements](#requirements)
+3. [Installation and child themes](#installation-and-child-themes)
+4. [Development workflow](#development-workflow)
+5. [Project structure](#project-structure)
+6. [Blocks](#blocks)
+7. [Theme helpers reference](#theme-helpers-reference)
+8. [Customizer: colors and fonts](#customizer-colors-and-fonts)
+9. [Multilingual setup](#multilingual-setup)
+10. [Media and performance](#media-and-performance)
+11. [Security notes](#security-notes)
+12. [Troubleshooting](#troubleshooting)
+13. [License](#license)
+
+---
+
+## Overview
+
+- **Classic theme + `theme.json`.** Templates are PHP (`header.php`, `page.php`, `home.php`, ...). `theme.json` sets the layout sizes (content 780px, wide 1240px), fluid font sizes, spacing and border controls. The color palette and font families in `theme.json` are replaced at runtime by the Customizer values (`wp_theme_json_data_theme` filter in `functions.php`), and the core default palette, gradients, font sizes and spacing sizes are disabled.
+- **ACF PRO blocks.** Every section block lives in `blocks/<block>/` (`block.json` + `block.php` template + SCSS/JS) and is registered automatically. Field groups, the Site Options page fields and the custom post types (Case Results `case-result`, Team Members `team`, Testimonials `testimonial`) are stored as ACF JSON in `acf-json/`.
+- **Site Options.** An ACF options page, **Site Options** (`site_options`, `manage_options` only), holds the logo symbol, header/callout settings, phone/email, offices, social links, default hero images and the footer sections (form, menu, locations, social networks, copyright). Per-page options (hero style, custom header, footer section toggles, sidebar) live in the "Page - Options" and "Page - Sidebar" field groups.
+- **Heroes.** The page's `hero_style` field picks the hero template part: `home`, `home_2` ... `home_6` (`template-parts/hero-homepage*.php`), `default` (`hero-default.php`) or `nohero`.
+
+### Theme 03 identity
+
+Defaults defined in `theme-functions/fonts-selector.php` and `theme-functions/color-scheme.php` (all can be changed in the Customizer):
+
+| Setting | Default |
+| --- | --- |
+| Primary font | Figtree (sans-serif fallback) |
+| Secondary font | Khand (serif fallback) |
+| Primary / dark / light | `#0e5db8` / `#031b3a` / `#2b7de0` |
+| Secondary / dark / light | `#f4f8fd` / `#b0d3f9` / `#FFFFFF` |
+| Tertiary / dark / light | `#0b3293` / `#071d3a` / `#869db7` |
+| Text | `#232323` |
+
+Theme 01, 02 and 03 share the same core features; they differ mainly in colors, fonts and styling.
+
+---
+
+## Requirements
+
+From the `style.css` header:
+
+- **PHP:** 8.3 or higher (the code uses named arguments, union types and `str_*` functions)
 - **WordPress:** 6.9 or higher (tested up to 7.1)
-- **MySQL:** 5.7 or higher
-- **Node.js:** 16.0 or higher (for asset building)
-- **npm:** 7.0 or higher
 
-**Required Plugins:**
+Plugins:
 
-- Advanced Custom Fields Pro (ACF)
-- LuckyWP ACF Menu Field (for ACF Menus)
-- Gravity Forms (for forms)
-- Yoast SEO or similar (recommended)
-- EWWW Image Optimizer (recommended)
+| Plugin | Status | Why |
+| --- | --- | --- |
+| Advanced Custom Fields PRO | Required | Blocks, repeaters, options page, field groups and CPTs from `acf-json/`. Without ACF the blocks and options do not work. |
+| Gravity Forms | Required for forms | Contact Form block and footer form. Rendered through `render_gravity_form()`, which outputs nothing if Gravity Forms is inactive. |
+| ACF Gravity Forms add-on (provides the ACF `forms` field type) | Required for forms | The `contact_form` fields in the Contact Form block and Site Options use the `forms` field type. |
+| LuckyWP ACF Menu Field | Required | Provides the ACF `menu` field type used in Page - Options (custom header menu, footer links menu), Page - Sidebar and the Content Box Grid block. |
+| WP Pusher | Recommended | Deployment. The ACF JSON auto-sync runs on its `wppusher_theme_was_updated` / `wppusher_theme_was_installed` hooks. |
+| EWWW Image Optimizer (or any tool that writes `image.jpg.webp` siblings) | Recommended | The picture helpers add a WebP `<source>` only when a `<file>.webp` exists next to the original. |
+
+Build tools (only needed to change SCSS/JS): Node.js with npm. No version is pinned in `package.json`; the build dependencies need Node 14 or newer, so use a current LTS.
 
 ---
 
-## 🚀 Installation
+## Installation and child themes
 
-### Local Development
+### Installing
 
-1. Clone the repository:
+1. Deploy the theme to `wp-content/themes/growthlabseotheme03/` (WP Pusher, Git clone or upload). The compiled CSS/JS is committed, so no build step is needed on the server.
+2. Install and activate the plugins listed above.
+3. Activate **GrowthLab Theme 03** (Appearance > Themes), or a child theme of it.
+4. Make sure the field groups and post types are in the database: on WP Pusher deploys they are imported automatically (see below); otherwise go to **ACF > Field Groups** (and **ACF > Post Types**) and run **Sync available**.
+5. Fill in **Site Options**, set the custom logo (Customizer > Site Identity), assign the **Main Menu** location and pick colors/fonts in the Customizer.
+6. Optional: **Theme Tools > Import theme icons** in the admin bar copies `assets/icons/*.svg` to `uploads/theme-icons/` and adds them to the Media Library.
+
+### ACF JSON load and save points
+
+Defined in `theme-functions/acf-functions.php`:
+
+- **Load:** ACF's default load path is removed and field groups are loaded from the parent theme's `acf-json/` and, when a child theme is active, also from the child theme's `acf-json/`.
+- **Save:** field groups are saved to the **active** theme's `acf-json/` (`get_stylesheet_directory()`), i.e. the child theme when one is active. The folder is created automatically on the first save.
+
+### ACF sync on WP Pusher deploys
+
+An ACF sync closure in `theme-functions/acf-functions.php` runs on `wppusher_theme_was_updated` and `wppusher_theme_was_installed`:
+
+- It only runs when this theme's folder is the active stylesheet or template, and only if ACF is loaded.
+- It hashes the parent's `acf-json/group_*.json`, `post_type_*.json` and `taxonomy_*.json` files and compares the hash with the `acf_json_parent_sync_hash` option. If nothing changed, it stops.
+- Otherwise it imports, in order: ACF post types, ACF taxonomies and JSON field groups. Existing database posts are updated in place (their IDs are reused), and groups marked `"active": false` stay disabled.
+- **Skipped:** field groups that a child theme overrides (a file with the same key in the child's `acf-json/`), field groups that are not loaded from JSON, unreadable or invalid JSON files (counted as warnings), and anything left when the 30-second time budget runs out.
+- JSON saving is turned off during the import so the sync does not rewrite files.
+- The result is written to the PHP error log as `[ACF sync:growthlabseotheme03] ... synced: N, skipped: N, warnings: N`.
+- The new hash is stored **before** importing, so items cut off by the time limit are not retried until the JSON changes again; finish them with **ACF > Field Groups > Sync available**.
+- Multisite is not supported.
+
+### Child themes
+
+- Blocks in the child theme's `blocks/*/block.json` are registered too; a child block with the same `name` as a parent block replaces it. Use the `growthlabseotheme03-blocks` category in `block.json`.
+- The child theme's `style.css` is inlined in `<head>` after the parent's `styles/main-min.css` (see [Inlined CSS](#media-and-performance)).
+- With a child theme active, `<body>` gets the `theme-child-<slug>` and `theme-parent-<slug>` classes.
+- Functions wrapped in `function_exists()` checks (most helpers, block registration, ACF JSON paths, font and color functions) can be overridden by declaring the same function in the child theme's `functions.php`, which loads before the parent's.
+
+---
+
+## Development workflow
+
+### Setup and build
 
 ```bash
-git clone https://github.com/GrowthLabDevAdmin/growthlabseotheme01.git
 cd wp-content/themes/growthlabseotheme03
-```
-
-2. Install Node dependencies:
-
-```bash
 npm install
-```
-
-3. Compile assets (CSS/JS):
-
-```bash
 npx gulp
 ```
 
-4. Activate the theme from WordPress Admin:
+`gulpfile.js` exports a single `default` task. It builds everything once, in parallel, and then **keeps watching** for changes (stop it with Ctrl+C). There are no other named tasks.
 
-- Dashboard → Appearance → Themes → Activate "GrowthLab Theme 01"
+| Source | Output | Notes |
+| --- | --- | --- |
+| `styles/**/*.scss` (non-partials) | `styles/**/<name>-min.css` + `.map` | Sass compressed, Autoprefixer. Produces `styles/main-min.css`, `styles/page-templates/*-min.css` and `styles/vendor/tiny-mce/tiny-mce-styles-min.css`. Partials (`_*.scss`) are pulled in via `@use`. |
+| `blocks/**/*.scss` | `blocks/**/block-min.css` + `.map` | Same pipeline. Block styles `@use` the global variables and mixins, so changes in `styles/` also rebuild the block CSS. |
+| `js/**/*.js` (except `*-min.js` / `*.min.js`) | `js/**/<name>-min.js` + `.map` | Terser. Includes `js/vendor/` files. |
+| `blocks/**/*.js` (except `*-min.js` / `*.min.js`) | `blocks/**/block-min.js` + `.map` | Terser. |
 
-### Production
+The theme only loads the `-min` files. **Compiled files and source maps are committed**: run the build and commit the generated files together with the source change.
 
-- Upload theme files to `/wp-content/themes/growthlabseotheme03/`
-- Activate theme from WordPress Admin
-- Import ACF JSON (if needed): Dashboard → ACF → Tools → Import
-- Clear cache from plugins and CDN
+### Conventions
 
+- **Commit messages:** commitlint-style `type: Description` in English, for example `feat: Add items title tag option to posts grid`, `fix: ...`, `perf: ...`, `chore: ...`, `docs: ...`. One commit per logical change. (This is a team convention; there is no commitlint/husky setup in the repo.)
+- **Code comments:** in English.
+- **CSS:** BEM-style class names (`block__element`, `block--modifier`). Breakpoints are defined twice and do not fully match: `$GLOBALS['breakpoints']` in `functions.php` (used by the picture helpers: tablet 768px, ldpi 1024px, mdpi 1280px, hdpi 1920px) and the SCSS variables in `styles/globals/_variables.scss` (mobile 480px, tablet 768px, ldpi 1024px, mdpi 1200px, hdpi 1440px).
+- **New theme functions file:** add it to `theme-functions/` and to the `$includes` array in `functions.php`.
+- **Theme 01/02/03 parity:** shared features should be ported to the other two themes.
 
-# 📁 Project Structure
+---
+
+## Project structure
 
 ```text
 growthlabseotheme03/
-├── blocks/                      # Dynamic Gutenberg blocks
-│   ├── block-contact-form/      # Contact form block
-│   ├── block-cta-box/           # CTA block
-│   ├── block-faq/               # FAQ block
-│   ├── block-locations/         # Locations block
-│   ├── block-logos-carousel/    # Logos carousel
-│   ├── block-posts-carousel/    # Posts carousel
-│   ├── block-posts-grid/        # Posts grid
-│   ├── block-selling-points/    # Selling points
-│   ├── block-trust-cards/       # Trust cards
-│   └── block-content-intro/     # Content intro
-├── theme-functions/             # Custom functions
-│   ├── [acf-functions.php]        # ACF integrations
-│   ├── color-scheme.php         # Dynamic color scheme
-│   ├── [helpers.php]              # Helper functions
-│   ├── [picture-optimization.php] # Image optimization
-│   ├── [security-functions.php]   # Security & headers
-│   ├── [svg-support.php]          # SVG support & validation
-│   ├── [theme-optimization.php]   # Performance optimizations
-│   └── [tiny-mce.php]             # Editor configuration
-├── template-parts/              # Reusable components
-│   ├── [hero-default.php]         # Default hero
-│   ├── [hero-homepage.php]        # Homepage hero
-│   ├── [location-card.php]        # Location card
-│   ├── [posts-pagination.php]     # Posts pagination
-│   ├── [social-networks.php]      # Social media links
-│   ├── testimonial-card.php     # Testimonial card
-│   └── [more components...]
-├── styles/                      # Compiled SCSS
-│   ├── main.scss                # Main SCSS
-│   ├── main-min.css             # Minified CSS (production)
-│   ├── globals/                 # Variables, mixins, globals
-│   ├── template-parts/          # Component styles
-│   └── page-templates/          # Template styles
-├── assets/                      # Static assets
-│   ├── icons/                   # SVG icons
-│   └── img/                     # Images
-├── fonts/                       # Web fonts
-│   ├── fraunces-v38-latin/      # Fraunces font
-│   └── open-sans-v44-latin/     # Open Sans font
-├── js/                          # JavaScript
-│   ├── main.js                  # Main JS
-│   ├── main-min.js              # Minified JS
-│   └── vendor/                  # Libraries (Splide, etc.)
-├── page-templates/              # Page templates
-│   └── template-full-width.php  # Full-width template
-├── acf-json/                    # ACF exports (synchronization)
-├── [functions.php]                # Main entry point
-├── [header.php]                   # Header
-├── [footer.php]                   # Footer
-├── [index.php]                    # Fallback template
-├── [home.php]                     # Blog template
-├── [single.php]                   # Single post template
-├── [page.php]                     # Page template
-├── [archive.php]                  # Archive template
-├── [404.php]                      # 404 template
-├── [gulpfile.js]                  # Gulp configuration
-├── [package.json]                 # Node dependencies
-└── [README.md]                    # This file
+├── acf-json/            ACF field groups (group_*.json) and post types (post_type_*.json)
+├── assets/
+│   ├── icons/           SVG icons (included inline by templates; importable to the Media Library)
+│   └── img/             Theme images (backgrounds, placeholders)
+├── blocks/              ACF blocks, one folder each (block.json, block.php, block.scss, block.js, compiled -min files)
+├── fonts/               Bundled default fonts (figtree-v9-latin, khand-v22-latin, woff2)
+├── js/
+│   ├── main.js                    Header/menu, accordions, block extraction, lazy maps, video player
+│   ├── picture-optimization.js    Lazy loading for <picture>/<img class="lazy-image">
+│   ├── posts-filters.js           Blog/archive filters (REST API)
+│   ├── styled-select-fields.js    Custom-styled <select> fields
+│   └── vendor/                    Splide, IMask, TinyMCE line-height plugin
+├── languages/           Translation files (.mo/.po) for the growthlabseotheme03 text domain
+├── page-templates/
+│   └── template-full-width.php    "Template Full Width" (content only, no sidebar wrapper)
+├── styles/
+│   ├── main.scss                  Global styles -> main-min.css (inlined in <head>)
+│   ├── globals/                   Variables, mixins, normalize, forms, picture optimization
+│   ├── template-parts/            Component partials (header, footer, cards, hero, sidebar...)
+│   ├── page-templates/            template-default, template-blog, template-team-member
+│   └── vendor/                    Splide core CSS, TinyMCE editor styles
+├── template-parts/      Heroes, cards (post, team, result, testimonial, location, default), footer parts,
+│                        posts filters/pagination, Google Maps, social networks, Splide navigation
+├── theme-functions/
+│   ├── acf-functions.php          Block registration and CSS inlining, options page, ACF JSON paths and sync,
+│   │                              ACF color picker palette, unsafe HTML filters, Google Maps field encoding
+│   ├── color-scheme.php           Default colors, Customizer color settings, CSS variables
+│   ├── fonts-selector.php         Default fonts, Customizer font settings, bundled @font-face rules
+│   ├── helpers.php                General helpers (see reference below), [phonenumber] shortcode
+│   ├── picture-optimization.php   <picture> generation with breakpoints, WebP and lazy loading
+│   ├── security-functions.php     Generator tag removed, XML-RPC disabled
+│   ├── svg-support.php            SVG uploads, sanitization, inline SVG output
+│   ├── theme-optimization.php     Head cleanup, emojis, dashicons, i18n script, font preloads, lazy maps
+│   └── tiny-mce.php               Classic/ACF WYSIWYG toolbar, fonts, sizes, line heights, colors
+├── functions.php        Theme setup, theme.json overrides, inlined CSS, scripts, sidebars, Theme Tools
+├── header.php / footer.php / sidebar.php / sidebar-blog.php
+├── index.php / page.php / single.php / single-team.php / home.php / archive.php / 404.php
+├── theme.json           Editor settings (layout, font sizes, spacing, borders)
+├── gulpfile.js / package.json / package-lock.json
+├── style.css            Theme header only
+└── LICENSE              GPL-3.0
 ```
 
-# 🎨 Available Blocks
-The theme includes 10+ dynamic blocks ready to use in the Gutenberg editor:
+Templates and assets worth knowing:
 
-Block               Description        	                            Location
-Contact Form	Contact form with Gravity Forms	            blocks/block-contact-form/
-CTA Box	        Call-to-action box	                        blocks/block-cta-box/
-FAQ	            Accordion with FAQs	                        blocks/block-faq/
-Locations	    Interactive locations map	                blocks/block-locations/
-Logos Carousel	Client logos carousel	                    blocks/block-logos-carousel/
-Posts Carousel	Posts/testimonials/Results carousel	        blocks/block-posts-carousel/
-Posts Grid	    Filterable posts grid	                    blocks/block-posts-grid/
-Selling Points	Featured selling points	                    blocks/block-selling-points/
-Trust Cards	    Trust cards	                                blocks/block-trust-cards/
-Content Intro	Content introduction	                    blocks/block-content-intro/
+- `home.php` (blog) shows the posts filters; `home.php`, `archive.php` and `single.php` use the blog sidebar. Blog/archive pages load `template-blog-min.css` and `posts-filters-min.js` (9 posts per page, REST API).
+- Pages and single posts load `template-default-min.css` (except the Full Width template); single team members also load `template-team-member-min.css`.
+- Registered image sizes: `cover-desktop` 1920x1080, `cover-tablet` 1280x960, `cover-mobile` 768x432, `cover-tablet-portrait` 960x1280 (crop), `cover-mobile-portrait` 768x1100 (crop), `content` 800x600, `featured-small` 480x360. `medium_large`, `1536x1536` and `2048x2048` are removed and thumbnail cropping is disabled.
+- Menus: `main` (Main Menu) plus `main_<slug>` per extra language. Sidebars: `sidebar-default`, `sidebar-blog` plus `sidebar-default-<slug>` and `sidebar-blog-<slug>` per extra language.
 
-# Each block includes:
+---
 
-ACF support
-Modular SCSS styles
-Optional JavaScript (sliders, interactivity)
-JSON registration
-⚙️ Configuration & Usage
-ACF (Advanced Custom Fields)
-All ACF fields are automatically synchronized in /acf-json/.
+## Blocks
 
-# To import/synchronize:
+All blocks are in the **GrowthLab Theme 03 Blocks** category (`growthlabseotheme03-blocks`), use `renderTemplate: block.php`, support custom class names, wide alignment and spacing (margin, padding, block gap), and default to full alignment.
 
-Dashboard → ACF → Tools → Import
-Select JSON files from /acf-json/
-ACF will auto-detect and synchronize
-Global Options (ACF Options):
+| Folder | Block (`name` / title) | What it does | Notable options |
+| --- | --- | --- | --- |
+| `block-contact-form` | `acf/contact-form` / Contact Form | Title, content and a Gravity Forms form, with optional side image | Background light/dark/image, reverse columns, form picker (`forms` field) |
+| `block-content-box-grid` | `acf/content-box-grid` / Content Box Grid | Grid of content boxes, or one box per item of a WordPress menu | Pretitle/title tags, "is a menu" toggle + `menu` field, per-item title link and tag |
+| `block-content-intro` | `acf/content-intro` / Content Intro | Two columns (featured image + content) with an inner CTA box (up to two links; `tel:` links get a phone icon) | Background light/dark/image, image position (`columns.featured_image_position`), Site Options logo symbol |
+| `block-cta-box` | `acf/cta-box` / CTA Box | Call-to-action box with title, optional text and buttons | Box style simple/full, background light/dark/image/video (video lazy-loaded, respects reduced motion), side image or logo symbol |
+| `block-faq` | `acf/faq` / FAQ | Numbered accordion of questions/answers split into two columns, plus CTA | Background light/dark/image, side image, per-item question tag |
+| `block-featured-video` | `acf/featured-video` / Featured Video | Video with cover and play button, lazy-loaded on click | YouTube URL or uploaded file, inline or lightbox, cover image or cached YouTube thumbnail; editors see a notice for non-video YouTube URLs |
+| `block-locations` | `acf/office-locations` / Office Locations | Grid of office location cards | Show all offices from Site Options (current language) or a custom list, accordion items, CTA link |
+| `block-logos-carousel` | `acf/logos-carousel` / Logos Carousel | Splide carousel of logos, optionally linked | Background light/dark, fewer logos per view when placed in a sidebar |
+| `block-posts-carousel` | `acf/posts-carousel` / Posts Carousel | Splide carousel of Case Results, Team Members (with synced thumbnails carousel), Blog Posts, Testimonials, selected posts of any type, or custom items | Carousel type, items title tag, links target, background light/dark/image; editors see a notice when nothing is selected |
+| `block-posts-grid` | `acf/posts-grid` / Posts Grid | Grid of the same content types, paginated | Grid type, show all vs. selection, items title tag; 12 per page (all for testimonials and case results, which are ordered by amount); several grids on one page paginate independently; editors see a notice when nothing is selected |
+| `block-selling-points` | `acf/selling-points` / Selling Points | Title/subtitle/text with icon items (optionally linked) and CTA | Background light/dark/image, items background image (falls back to `assets/img/figure_selling_points.webp`) |
+| `block-two-columns` | `acf/two-columns` / Two Columns | Text column and image column | Background light/dark/img, reverse order, top logo separator |
 
-options / options_es — Site-wide settings
-hero_properties — Hero properties per page
-form_section — Form section configuration
-locations_section — Locations section configuration
+Every block also has the common fields `toggle_block` (the block renders nothing when off), `block_id` (HTML id), `extract_block_from_content` and `place` (before/after).
 
-# Dynamic Colors
-The theme supports a dynamic color scheme controlled from the WordPress Customizer:
+### Shared block conventions
 
-Primary Color — Main color (dark blue)
-Primary Color Dark — Dark variant
-Primary Color Light — Light variant
-Secondary Color — Secondary color (beige)
-Tertiary Color — Tertiary color (gold)
-Text Color — Text color
-Colors are automatically injected into CSS via --primary, --secondary, etc.
+A typical `block.php`:
 
-# 🖼️ Images & Media
-Registered Image Sizes
-The theme automatically registers these sizes:
+```php
+if (get_field('toggle_block')):
+    foreach (get_block_fields($block) as $key => $value) $$key = $value;
+    $background_type = get_valid_field_choice('background_type', $background_type ?? '');
+?>
+    <section<?= get_block_id_attribute($block_id ?? '') ?>
+        class="block my-block <?= esc_attr($background_type ?: 'light') ?><?= !empty($block['className']) ? ' ' . esc_attr($block['className']) : '' ?>"
+        <?= block_style_attribute($block); ?>
+        <?= get_block_extract_attribute($extract_block_from_content ?? false, $place ?? '') ?>>
+        <?php print_title($title, $title_tag, 'my-block__title'); ?>
+    </section>
+<?php endif; ?>
+```
 
-<!--
-'cover-desktop'    => 1920x1080 (no crop)
-'cover-tablet'     => 1280x720 (no crop)
-'cover-mobile'     => 800x533 (no crop)
-'featured-small'   => 400x267 (no crop)
--->
+- **Field extraction:** `get_block_fields($block)` returns the block's values with every field of its field groups present; fields never saved (e.g. added after the block was inserted) get their ACF default (`[]` for repeaters/galleries/relationships/checkboxes, sub-field defaults for groups, booleans for true/false, `null` when there is no default). They are extracted into variables with `$$key`.
+- **Repeaters and groups** are read as arrays (`$item['title'] ?? ''`, `$columns['featured_image']`), not with `have_rows()`/`get_sub_field()`.
+- **Wrapper attributes:** `get_block_id_attribute()` prints an escaped `id`; `block_style_attribute($block)` turns the editor's spacing settings into a `style` attribute; `get_block_extract_attribute()` adds `data-extract="before|after"`.
+- **Moving a block out of the content:** with `extract_block_from_content` on, `main.js` moves the block before or after the page content wrapper (`.page__inner`). This only applies on pages using the default template.
+- **Select/radio values:** pass them through `get_valid_field_choice('field', $value)` (or `'group.sub_field'`) before printing them in attributes; unknown values fall back to the field default.
+- **Headings:** use `print_title($title, $tag, $classes)`; the tag is limited to h1-h6/p/span/div and the title is filtered with `wp_kses_post()`.
+- **Escaping:** `esc_url()` for URLs, `esc_attr()` for attributes (including link targets and classes), `esc_html()` for plain text such as link titles. WYSIWYG content is printed as-is (see [Security notes](#security-notes)).
+- **Editor notices:** `print_block_notice($message)` shows a dashed notice only to users who can `edit_posts` (visitors get nothing). Used by Posts Carousel and Posts Grid when nothing is selected, and by Featured Video for invalid YouTube URLs.
+- **Assets:** `block.json` declares `file:./block-min.css` (and `file:./block-min.js` when needed). Block scripts are moved to the footer with `defer`.
 
-# Optimization & Lazy Loading
-Responsive images with automatic <picture> element
-Progressive WebP support (if available)
-Lazy loading by default on outputs
-Metadata caching for better performance
+### Adding a block
 
-Helper function:
+1. Create `blocks/block-<name>/` with `block.json` (`"name": "acf/<name>"`, `"category": "growthlabseotheme03-blocks"`, `"style": ["file:./block-min.css"]`, `acf.renderTemplate: "block.php"`), `block.php` and `block.scss` (plus `block.js` if needed).
+2. Run `npx gulp` to generate the `-min` files.
+3. Create the field group in ACF with location "Block is equal to <title>" and include the common fields (`toggle_block`, `block_id`, `extract_block_from_content`, `place`). Its JSON is saved to `acf-json/`.
+4. Commit the block folder (including compiled files) and the new `acf-json` file.
 
-<!-- <?php
+There is nothing to register in PHP: `register_acf_blocks()` finds every `blocks/*/block.json`.
+
+---
+
+## Theme helpers reference
+
+`theme-functions/helpers.php`:
+
+| Function | Description |
+| --- | --- |
+| `get_text_domain()` | Returns the theme text domain (`growthlabseotheme03`). |
+| `get_field_options($field_name, $format_value = true)` | `get_field($name, 'option')` with a per-request static cache. |
+| `get_block_fields($block)` | Block field values merged over the ACF defaults of its field groups. |
+| `get_acf_field_default($field)` | Default value of an ACF field as templates expect it. |
+| `fill_acf_group_defaults($value, $selector, $post_id = false)` | Merges a group value (e.g. `options`, `hero_properties`) over its sub-field defaults. |
+| `get_post_fields_with_defaults($post_id = false)` | A post's ACF values merged over the defaults of its field groups. |
+| `get_valid_field_choice($field_name, $value)` | Returns `$value` if it is a valid choice of the select/radio field, otherwise the default. |
+| `get_block_id_attribute($block_id)` | ` id="..."` (escaped) or an empty string. |
+| `get_block_extract_attribute($enabled, $place)` | ` data-extract="before|after"` or an empty string. |
+| `block_style_attribute($block = [])` | Builds the ` style="..."` attribute from the block's spacing/style supports. |
+| `print_title($title, $tag = 'p', $classes = '', $is_hero = false)` / `get_wrapped_title(...)` | Wraps a title in a safe tag (invalid tags fall back to `h1` for heroes, `p` otherwise). |
+| `print_block_notice($message)` | Editor-only notice in place of a block. |
+| `get_posts_grid_page_arg()` | Pagination query arg per posts grid (`''` for the first grid, then `grid-2-page`, `grid-3-page`...). |
+| `get_current_post_blocks()` | Flattened blocks of the current singular post, parsed once per request. |
+| `get_languages_map()` / `get_current_language()` / `get_current_language_suffix()` / `get_current_language_options()` / `filterContentByLanguage($lang)` | Language detection (see [Multilingual setup](#multilingual-setup)). |
+| `render_gravity_form(...$args)` | Calls `gravity_form()` only if Gravity Forms is active. |
+| `get_flat_number($phone)` | Strips everything but digits (used for `tel:` links). |
+| `format_number_abbreviated($number)` | 1500 -> `1.5K`, 2000000 -> `2M`, etc. |
+| `get_yt_code($url)` | 11-character ID of a single YouTube video, or `false` (channels, playlists, etc.). |
+| `get_youtube_thumbnail($video_id, $size = 'hqdefault')` | Best available thumbnail URL from `$size` down, cached in a transient. |
+| `[phonenumber]` shortcode | Main phone number from the current language's Site Options as a `tel:+1...` link. Attributes: `target`, `link_id`, `link_class`, `wrapper`, `text` (fallback). |
+
+Images (`theme-functions/picture-optimization.php`, `svg-support.php`):
+
+| Function | Description |
+| --- | --- |
+| `img_print_picture_tag(...)` / `img_generate_picture_tag(...)` | Echo/return a responsive `<picture>`. Named arguments: `img`, `mobile_img`, `tablet_img`, `max_size` (default `full`), `min_size`, `classes`, `id`, `alt_text`, `is_cover`, `img_attr`, `is_priority`. SVGs are delegated to `image_to_svg()`. |
+| `image_to_svg($image, $classes = '')` | Inlines a local SVG file (wrapped in a `<div>`), or returns an `<img>` for other files. |
+
+```php
 img_print_picture_tag(
-    img: $image_array,
-    tablet_img: $tablet_image,
-    mobile_img: $mobile_image,
+    img: $background_image,
     is_cover: true,
-    classes: 'my-class',
-    is_priority: false
+    classes: 'my-block__bg bg-image'
 );
-?> -->
 
-# 🔒 Security & SVG
-SVG Validation
-The theme automatically validates and sanitizes SVG uploads:
-
-Rejects SVGs with <script> tags
-Whitelist of allowed elements (path, circle, rect, g, polygon)
-Whitelist of attributes (viewBox, width, height, fill, stroke, etc.)
-Location: svg-support.php
-
-Output Escaping
-All dynamic outputs must be escaped by type:
-
-<!-- 
-<?= esc_html($plain_text) ?>           // Plain text
-<?= esc_attr($attribute_value) ?>      // HTML attributes
-<?= esc_url($link) ?>                  // URLs
-<?= wp_kses_post($html_content) ?>
- -->
-
-# ⚡ Performance & Optimization
-Critical CSS
-The theme injects critical CSS inline in <head> to improve First Contentful Paint (FCP):
-
-<!-- <?php
-inline_main_critical_css(); // In functions.php
-?> -->
-
-In development: Comment this function for faster CSS reloading.
-In production: Activate to inject minified CSS.
-
-JavaScript
-jQuery moved to footer (safe with Gravity Forms)
-jQuery Migrate disabled
-Splide.js for carousels (4.1.4)
-Defer and async on scripts where applicable
-Active Optimizations
-✅ Disable WordPress emojis (reduce load)
-✅ Disable dashicons on frontend
-✅ Remove RSS feeds (if not used)
-✅ Lazy load Google Maps
-✅ Web font preloading
-✅ Disable unused core blocks
-
-# 🛠️ Development
-Asset Compilation
-
-# Install dependencies
-npm install
-
-### Gulp Task Runner
-
-The theme uses **Gulp** to automate asset compilation, minification, and optimization. All build tasks are configured in `gulpfile.js`.
-
-### Available Gulp Commands
-
-```bash
-# Run all tasks (compile SCSS, minify CSS/JS, optimize images)
-npx gulp
-
-# Watch for file changes and auto-compile (recommended for development)
-npx gulp watch
-
-# Only compile SCSS to CSS
-npx gulp sass
-
-# Only minify CSS files
-npx gulp minify-css
-
-# Only minify JavaScript files
-npx gulp minify-js
-
-# Only optimize images
-npx gulp images
-
-# Clean generated files (removes all minified/compiled assets)
-npx gulp clean
-
-# Run all tasks once (no watch)
-npx gulp default
+img_print_picture_tag(img: $image, max_size: 'content', min_size: 'featured-small', classes: 'my-block__image');
 ```
 
-# Gulpfile Configuration
-Location: gulpfile.js (root directory)
+Colors and fonts: `theme_get_customizer_css()`, `hex_to_rgb()`, `theme_get_fonts_css()`, `theme_get_all_fonts()`, `theme_get_default_font_faces()`, `theme_get_selected_default_font_faces()`, `get_theme_color_palette_for_acf()`.
 
-What it does:
+---
 
-1. SCSS Compilation (gulp sass)
+## Customizer: colors and fonts
 
-Compiles all .scss files in styles/ to .css
-Generates source maps for debugging
-Auto-prefixes CSS for browser compatibility
-Output: styles/main-min.css
+### Colors
 
-2. CSS Minification (gulp minify-css)
+Customizer > **Colors** has ten settings (`theme-functions/color-scheme.php`): `primary_color`, `primary_color_dark`, `primary_color_light`, the same three for `secondary` and `tertiary`, and `text_color`. Defaults come from `$default_colors`.
 
-Minifies compiled CSS files
-Reduces file size for production
-Preserves comments with /*!
-JavaScript Minification (gulp minify-js)
+The same values feed:
 
-3. Minifies JS files in js/ and blocks/*/
-Generates .min.js versions
-Preserves code functionality
+- **CSS variables** inlined in `<head>`: `--primary`, `--primary-dark`, `--primary-light`, `--secondary`, `--secondary-dark`, `--secondary-light`, `--tertiary`, `--tertiary-dark`, `--tertiary-light`, `--text`. Values are RGB triplets (e.g. `14, 93, 184`), so use them as `rgb(var(--primary))` or `rgba(var(--primary), 0.5)`.
+- **Block editor palette** (`theme.json` via `wp_theme_json_data_theme`): slugs `primary-color`, `primary-color-dark`, ... `text-color`.
+- **ACF color picker palette** (`get_theme_color_palette_for_acf()` in `acf-functions.php`).
+- **Classic editor / ACF WYSIWYG** text color map and `editor-color-palette` (`tiny-mce.php`).
 
-4. Watch Mode (gulp watch)
+To change the theme defaults, edit `$default_colors` in `color-scheme.php`; everything above follows.
 
-Monitors file changes in:
-    styles/**/*.scss
-    js/**/*.js
-    blocks/**/*.{js,scss}
-Auto-runs appropriate tasks on changes
-Speeds up development workflow
+### Fonts
 
-# Development Workflow with Gulp
+Customizer > **Fonts** has `font_primary` and `font_secondary` selects (`theme-functions/fonts-selector.php`). The choices are:
 
-Step 1: Initial Setup
+1. Fonts installed through the WordPress **Font Library** (listed first), and
+2. The theme's bundled defaults, Figtree and Khand.
 
-Navigate to theme directory
-    cd wp-content/themes/growthlabseotheme03
+The selection is output as `--font-primary` / `--font-secondary` and as the `primary` / `secondary` font families in `theme.json`. The TinyMCE font menu lists the theme and Font Library fonts.
 
-Install dependencies (one time)
-    npm install
+Bundled font files in `fonts/` are only declared (`@font-face`) and preloaded while their family is selected as the primary or secondary font; selecting Font Library fonts loads none of them. A copy of the theme font families saved by the Site Editor in the global styles is dropped (`wp_theme_json_data_user` filter) so it cannot force all bundled fonts to load.
 
-Run Gulp to compile all assets
-    npx gulp
+**Adding a bundled font face:** put the `.woff2` file in `fonts/<family-folder>/` and add an entry to `theme_get_default_font_faces()`, keyed by the family name exactly as it is selected in the Customizer:
 
-Step 2: Start Development (Watch Mode)
-    npx gulp watch (or just npx gulp)
+```php
+'Figtree' => [
+    ['weight' => '800', 'style' => 'normal', 'file' => 'figtree-v9-latin/figtree-v9-latin-800.woff2', 'display' => 'swap', 'preload' => false],
+    // ...
+],
+```
 
-Step 3: Make Changes
-    Edit .scss files → Gulp auto-compiles to .css
-    Edit .js files → Gulp auto-minifies
+Set `preload` to `true` only for faces used above the fold. A new family must also be selectable: either install it through the Font Library or add it to the base list in `theme_get_all_fonts()` (and to `$default_fonts` if it should be the default).
 
-Step 4: Check Changes
-    Reload browser (F5) to see CSS/JS changes
-    Browser caching may require Ctrl+F5 or cache plugin clear
+---
 
-Step 5: Prepare for Production
-    All minified files are ready for deployment
+## Multilingual setup
 
-Gulp Task Dependencies
+The theme does not use a translation plugin. Languages are configured in **Site Options > Site Options by Language** (`options_by_language` repeater), where each row has:
 
-The gulpfile is organized with task dependencies:
+- `language` - display name (e.g. `Spanish`)
+- `url_language_slug` - URL prefix (e.g. `es`)
+- `options` - that language's copy of the site options
 
-    default (or 'gulp')
-    ├── sass (SCSS → CSS)
-    ├── minify-css (CSS → minified)
-    ├── minify-js (JS → minified)
-    ├── images (IMG → optimized)
-    └── clean (removes old files)
+How it works (`theme-functions/helpers.php`):
 
-    watch
-    ├── Monitors styles/**/*.scss → runs sass
-    ├── Monitors js/**/*.js → runs minify-js
-    ├── Monitors blocks/**/*.scss → runs sass
-    └── Monitors assets/img/** → runs images
+- `get_current_language()` checks whether the request path is `/<slug>` or starts with `/<slug>/` for each configured slug. If none match, the language is `English` with an empty slug.
+- `get_current_language_options()` returns the matching row's `options`, falling back to the main `options` group. The header, footer, social networks, Office Locations block ("show all") and `[phonenumber]` use it.
+- For every configured language the theme registers a `main_<slug>` menu location and `sidebar-default-<slug>` / `sidebar-blog-<slug>` sidebars; `header.php`, `sidebar.php` and `sidebar-blog.php` pick them by the current slug. The logo links to `home_url('/<slug>')`.
+- `header.php` prints `<html lang="en">` for every language.
 
-File Structure for Gulp Processing
+**String translations:** `load_theme_textdomain('growthlabseotheme03', get_template_directory() . '/languages')` runs in `after_setup_theme`. Put compiled translations in `languages/` named by locale (e.g. `languages/es_ES.mo`, with the `.po` source). The folder currently only contains `.gitkeep`.
 
-INPUT (Source)                      OUTPUT (Generated)
-────────────────────────────────────────────────────
-styles/main.scss                    → styles/main-min.css
-styles/template-parts/_*.scss       → (compiled into main.scss)
-js/main.js                          → js/main-min.js
-blocks/block-*/block.js             → blocks/block-*/block-min.js
-blocks/block-*/block.scss           → blocks/block-*/block-min.css
+---
 
+## Media and performance
 
-# SCSS Structure
-globals — Variables, mixins, reset
-template-parts — Component styles
-page-templates — Template styles
-Each block includes modular block.scss.
+### SVG
 
-Naming Conventions
+- SVG uploads are allowed (`theme-functions/svg-support.php`) only for files named `*.svg`; the Media Library gets their dimensions from the root `<svg>` `width`/`height` or `viewBox`.
+- Every uploaded or sideloaded SVG (detected by extension or content) is sanitized with DOMDocument before WordPress stores it: entity declarations, compressed files and non-SVG documents are rejected; comments, processing instructions, unknown elements, `on*` handlers, external `href`s (only `#id` and embedded raster `data:image/...` are kept), `javascript:` values and unsafe CSS (`@import`, external `url()`, etc.) are removed. Files that cannot be made safe are rejected with an error.
+- `image_to_svg()` and the picture helpers inline local SVGs; `the_content` also inlines local SVG `<img>` tags (skipped when the content has more than 20 images).
 
-CSS Classes (BEM):
+### Picture optimization
 
-.block-name { }
-.block-name__element { }
-.block-name--modifier { }
+- `img_print_picture_tag()` builds `<picture>` elements with `<source>` per breakpoint (`$GLOBALS['breakpoints']`: tablet 768px, ldpi 1024px, mdpi 1280px, hdpi 1920px), choosing registered sizes between `min_size` and `max_size`, with separate mobile/tablet images and a cover mode.
+- A WebP `<source>` is added when the image is WebP or a `<file>.webp` sibling exists on disk.
+- Non-priority images use `data-src`/`data-srcset` with the `lazy-image` class and per-breakpoint aspect-ratio CSS variables; `js/picture-optimization.js` loads them with an IntersectionObserver (100px margin), watches for dynamically added images (e.g. Splide clones) and has a timed fallback. `is_priority: true` outputs an eager image with `fetchpriority="high"` (used for the header logo).
 
-SCSS Variables:
-<!-- $tablet: 768px; -->
+### CSS loading
 
-# 🔄 Recommended Workflow
-For New Blocks
-Create folder in blocks/block-name/
-Create files:
-block.json — Block registration
-block.php — Template
-block.scss — Styles
-block.js — JavaScript (if needed)
-Register in functions.php or similar
-Add to ACF if it needs dynamic fields
-For New Functions
-Create file in theme-functions/my-function.php
-Include in $includes array in functions.php
-Document with PHPDoc
+- `inline_main_critical_css()` (`functions.php`) prints one `<style id="main-css">` in `<head>` with the font CSS, the color variables, `styles/main-min.css`, the active theme's `style.css`, the Splide core CSS (only when the request renders a Logos/Posts Carousel in the content, a synced pattern or a sidebar block widget) and the CSS of the theme blocks used on the page. `{theme-path}` in the CSS is replaced with the theme URL.
+- On singular pages the stylesheets of the blocks in use are dequeued (their `block-min.css` is inlined instead) and the assets of unused theme blocks are dequeued.
+- Page-template stylesheets (`styles/page-templates/*-min.css`) are enqueued as regular files.
+- Theme asset URLs are versioned with the file modification time.
 
-# 📝 Security Checklist
- Validate/sanitize all inputs (ACF, forms, etc.)
- Escape all outputs (esc_html, esc_url, etc.)
- Use wp_kses_post for HTML content
- Verify nonces in AJAX
- Use current_user_can() for permissions
- Don't store sensitive data in JavaScript
- Update dependencies regularly (npm audit)
+### JavaScript
 
-# 🐛 Common Issues
-CSS doesn't update in development
-Solution: Clear browser cache (Ctrl+F5 or Cmd+Shift+R) and WP cache plugin.
+- `main-min.js`, `styled-select-fields-min.js`, `picture-optimization-min.js` and `posts-filters-min.js` load deferred in the footer; block scripts are moved to the footer with `defer`. `main-min.js` is also preloaded.
+- jQuery is moved to the footer and jQuery Migrate is removed. Gravity Forms CSS and theme editor styles are disabled and its init scripts go to the footer.
+- Splide (`js/vendor/splide/splide-min.js`) is injected on demand by the carousel block scripts (`window.loadSplide`, which retries after a failed load), when a carousel scrolls into view.
+- IMask (`js/vendor/imask/imask-min.js`) is enqueued on the front end and masks Gravity Forms phone inputs (`.ginput_container_phone input`) as `(000) 000-0000`.
+- `wp-i18n` is dequeued unless the page contains `core/search`, `core/query` or `core/navigation`.
 
-Blocks don't appear in editor
-Solution:
-Verify ACF is activated
-Reload editor page (F5)
-Check block.json in each block
+### Other optimizations
 
-Images don't optimize
-Solution:
-Verify img_print_picture_tag() is being used
-Check that image sizes are registered
-Run media optimization (recommended: EWWW Image Optimizer plugin)
+- Head cleanup: RSD, wlwmanifest, shortlink, REST API link, oEmbed discovery/host JS and feed links are removed.
+- Emojis disabled; Dashicons deregistered on the front end for users without `update_core`; `wc-blocks-style` dequeued.
+- Google Maps: known Maps JS API handles are dequeued; map iframes in content become `.gmap-lazy` placeholders loaded by `main.js`. ACF fields named `google_maps_embed_code` are base64-encoded in the browser before saving (to avoid ModSecurity 403s) and decoded in `template-parts/google-maps.php`.
+- YouTube thumbnails: `get_youtube_thumbnail()` checks sizes with HEAD requests once and caches the result in a `gl_yt_thumb_*` transient (one month, or one day for the `hqdefault` fallback).
+- Fonts: the selected bundled fonts are preloaded (`<link rel="preload" as="font">` for faces with `preload => true`); `transparent-bg.webp` is preloaded too.
+- Featured Video and CTA Box background videos only load the player/video on demand.
 
-404 doesn't work
-Solution:
-Check rewrite rules (.htaccess on Apache, config on Nginx)
-Verify 404.php exists in theme root
-Check redirect plugins (may intercept 404)
+---
 
-# 📚 Resources & Documentation
-ACF Pro: https://www.advancedcustomfields.com/
-Gravity Forms: https://www.gravityforms.com/
-Splide JS: https://splidejs.com/
-WordPress Theme Handbook: https://developer.wordpress.org/themes/
-WordPress Security: https://developer.wordpress.org/plugins/security/
+## Security notes
 
-# 📋 Improvement Areas (Roadmap)
- Add linters (ESLint, Stylelint, PHPCS)
- Set up CI/CD (GitHub Actions)
- Add unit tests (PHPUnit / Jest)
- Document individual blocks (README in each folder)
- Create demo site
- Add theme.json for Full Site Editing (FSE)
- Improve accessibility (WCAG 2.1 AA)
- Add fallback for CSS :has() selector on older browsers
+- `theme-functions/security-functions.php` removes the WordPress generator meta tag and disables XML-RPC.
+- **Theme Tools (admin bar):** visible to users with `manage_options`.
+  - **Clear block cache** - `wp-admin/index.php?clear_block_cache=1` with a `clear_block_cache` nonce; rebuilds the cached list of `block.json` files.
+  - **Import theme icons** - `/?import_theme_images=1` with an `import_theme_images` nonce; copies `assets/icons/*.svg` to `uploads/theme-icons/` and creates attachments (existing ones are skipped).
+  Both actions check the capability and the nonce.
+- **Escaping:** templates escape URLs with `esc_url()`, attributes with `esc_attr()` and plain text with `esc_html()`; select values go through `get_valid_field_choice()`; titles go through `print_title()` (`wp_kses_post()`). The `[phonenumber]` shortcode whitelists its wrapper tags and targets and escapes all attributes.
+- **ACF "unsafe HTML" is intentionally enabled.** `acf-functions.php` returns `true` for `acf/shortcode/allow_unsafe_html`, `acf/the_field/allow_unsafe_html` and `acf/the_sub_field/allow_unsafe_html`, and hides ACF's escaped-HTML admin notice. This lets text, textarea and WYSIWYG fields carry markup such as `<span>`, `<a>` and `<strong>` (e.g. highlighted words in titles). Block templates also print WYSIWYG/content fields from `get_fields()` without filtering. **Implication:** whoever can edit those fields can output arbitrary HTML, including scripts, on the front end. Only give block/options editing rights to trusted users.
+- SVG uploads are sanitized (see [SVG](#svg)).
 
-# 📄 License
-Proprietary — Exclusive use of GrowthLab SEO. Consult with development team for permissions or distribution.
+---
 
-# 👥 Support & Contact
-Development Team: GrowthLab SEO Development Team
-Email: arturo@growthlabseo.com
-GitHub Issues: https://github.com/GrowthLabDevAdmin/growthlabseotheme01/issues
+## Troubleshooting
 
-Version: 1.0.0
-Last Updated: December 4, 2025
-Author: GrowthLab SEO Development Team
+**A new or renamed block does not appear in the inserter.**
+The list of block folders is cached in a transient for 24 hours. It is rebuilt automatically when a `block.json` path or modification time changes, on every admin request when `WP_DEBUG` is on, and on theme switch. If it is still missing, use **Theme Tools > Clear block cache** in the admin bar, then reload the editor. Also check that `block.json` has a `name` and that ACF PRO is active.
+
+**ACF shows "Sync available" for field groups or post types.**
+The JSON in `acf-json/` is newer than the database copy (for example after a Git pull without WP Pusher, or when the deploy sync hit its time limit). Run **Sync** in ACF > Field Groups (and ACF > Post Types). On a child theme, edits are saved to the child's `acf-json/`, and those groups are skipped by the deploy sync.
+
+**CSS or JS changes do not show up.**
+The theme only loads the `-min` files: run `npx gulp` and commit the compiled output. Global and block CSS is inlined in `<head>`, so clear any page cache after deploying.
+
+**A block's "extract" setting does nothing.**
+Block extraction only works on pages using the default template (`.page-template-default`), not on the Full Width template or posts.
+
+**A Posts Carousel/Grid or Featured Video shows a dashed notice.**
+That notice is only visible to editors: select posts/create items, or use a single-video YouTube URL. Visitors see nothing.
+
+---
+
+## License
+
+GPL-3.0-or-later. See [`LICENSE`](LICENSE).
