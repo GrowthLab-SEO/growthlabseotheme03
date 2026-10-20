@@ -16,9 +16,20 @@ $city .= $tp_url ? "</a>" : '';
 <?= esc_attr($args["classes"] ?? "") ?>">
 
     <div class="location-card__container">
-        <?php if ($accordion) print_title($city, $location['city_tag'] ?? 'p', "location-card__city accordion__heading"); ?>
+        <?php
+        if ($accordion) {
+            $panel_id = wp_unique_id('location-card-panel-');
+            // The city heading is the accordion toggle
+            echo preg_replace(
+                '/^<([a-z0-9]+)/',
+                '<$1 role="button" tabindex="0" aria-expanded="false" aria-controls="' . esc_attr($panel_id) . '"',
+                (string) get_wrapped_title($city, $location['city_tag'] ?? 'p', "location-card__city accordion__heading"),
+                1
+            );
+        }
+        ?>
 
-        <div class="location-card__wrapper accordion__content">
+        <div class="location-card__wrapper accordion__content"<?= $accordion ? ' id="' . esc_attr($panel_id) . '"' : '' ?>>
 
             <div class="location-card__inner accordion__inner">
                 <div class="location-card__row">
