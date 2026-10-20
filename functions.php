@@ -501,10 +501,16 @@ function growthlabseotheme03_register_imask()
                     IMask(input, { mask: '(000) 000-0000' });
                 });
             }
-            document.addEventListener('DOMContentLoaded', function () {
+            // The script can run after DOMContentLoaded (it is loaded with the delayed form scripts)
+            function init() {
                 maskPhoneInputs();
                 if (window.jQuery) jQuery(document).on('gform_post_render', maskPhoneInputs);
-            });
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
             document.addEventListener('gform/post_render', maskPhoneInputs);
         })();
     ");
