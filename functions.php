@@ -462,10 +462,6 @@ add_action('wp_enqueue_scripts', 'growthlabseotheme03_scripts');
 add_action('wp_head', function () {
     $image_path = get_template_directory_uri() . '/assets/img/transparent-bg.webp';
     echo '<link rel="preload" as="image" href="' . esc_url($image_path) . '" />';
-
-    // Preload main.js
-    $main_js_url = get_template_directory_uri() . '/js/main-min.js';
-    echo '<link rel="preload" as="script" href="' . esc_url($main_js_url) . '" />';
 }, 1);
 
 // Add theme and parent/child theme classes to body
