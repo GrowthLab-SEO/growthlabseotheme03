@@ -50,7 +50,6 @@ if (get_field('toggle_block')):
 
             <div class="col">
                 <?php
-                if (isset($pretitle) && $pretitle) print_title($pretitle, $pretitle_tag, "col__pretitle pretitle");
                 if (!empty($columns['title'])) echo "<div class='col__title'>{$columns['title']}</div>";
                 ?>
                 <div class="col__content formatted-text">
@@ -75,7 +74,7 @@ if (get_field('toggle_block')):
 
                 <div class="inner-cta-box__buttons">
                     <?php if (!empty($cta_box['cta_link']['url'])): ?>
-                        <a href="<?= esc_url($cta_box['cta_link']["url"]) ?>" target="<?= esc_attr($cta_box['cta_link']["target"]) ?>" class="btn<?= $background_type && isset($background_type) && $background_type !== 'light' ? '--tertiary' : '--tertiary' ?>" aria-label="<?= esc_attr($cta_box['cta_link']["title"]) ?>">
+                        <a href="<?= esc_url($cta_box['cta_link']["url"]) ?>" target="<?= esc_attr($cta_box['cta_link']["target"]) ?>" class="btn--tertiary" aria-label="<?= esc_attr($cta_box['cta_link']["title"]) ?>">
                             <span><?= esc_html($cta_box['cta_link']["title"]) ?></span>
                         </a>
                     <?php endif ?>
