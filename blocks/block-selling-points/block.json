@@ -1,5 +1,6 @@
 {
   "name": "acf/selling-points",
+  "textdomain": "growthlabseotheme03",
   "title": "Selling Points",
   "style": ["file:./block-min.css"],
   "category": "growthlabseotheme03-blocks",

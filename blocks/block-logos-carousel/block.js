@@ -58,14 +58,14 @@ if (!window.loadSplide) {
         pagination: true,
         mediaQuery: "min",
         breakpoints: {
-          [tablet]: {
+          [window.themeBreakpoints?.tablet ?? 768]: {
             perPage: inSidebar ? 2 : 3,
           },
-          [ldpi]: {
+          [window.themeBreakpoints?.ldpi ?? 1024]: {
             perPage: inSidebar ? 3 : 4,
             pagination: false,
           },
-          [hdpi]: {
+          [window.themeBreakpoints?.hdpi ?? 1440]: {
             perPage: inSidebar ? 3 : 5,
             pagination: false,
           },

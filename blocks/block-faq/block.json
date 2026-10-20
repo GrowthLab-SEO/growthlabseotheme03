@@ -1,8 +1,9 @@
 {
   "name": "acf/faq",
+  "textdomain": "growthlabseotheme03",
   "title": "FAQ",
   "style": ["file:./block-min.css"],
-  "script": ["file:./block-min.js"],
+  "viewScript": ["file:./block-min.js"],
   "category": "growthlabseotheme03-blocks",
   "icon": "block-default",
   "keywords": ["growthlabseo", "cta", "content", "faq", "accordion"],

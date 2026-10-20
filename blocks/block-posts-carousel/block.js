@@ -90,12 +90,12 @@ if (!window.loadSplide) {
         speed: 400,
         mediaQuery: "min",
         breakpoints: {
-          [tablet]: {
+          [window.themeBreakpoints?.tablet ?? 768]: {
             perPage: perPageTablet,
             focus: focusFor(perPageTablet),
             trimSpace: trimFor(perPageTablet),
           },
-          [ldpi]: {
+          [window.themeBreakpoints?.ldpi ?? 1024]: {
             perPage: perPageLdpi,
             focus: focusFor(perPageLdpi),
             trimSpace: trimFor(perPageLdpi),
