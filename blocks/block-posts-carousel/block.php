@@ -87,13 +87,13 @@ if (get_field('toggle_block')):
 
                 <?php if (isset($text_content) && $text_content): ?>
                     <div class="posts-carousel__text-content formatted-text tx-center">
-                        <?= $text_content ?>
+                        <?= wp_kses_post($text_content) ?>
                     </div>
                 <?php endif ?>
 
 
                 <?php if (isset($cta_link) && $cta_link): ?>
-                    <a href="<?= esc_url($cta_link['url']) ?>" target="<?= esc_attr($cta_link['target']) ?>" class="posts-carousel__link btn--tertiary" aria-label="<?= esc_attr($cta_link['title']) ?>">
+                    <a href="<?= esc_url($cta_link['url']) ?>"<?= !empty($cta_link['target']) ? ' target="' . esc_attr($cta_link['target']) . '"' . ($cta_link['target'] === '_blank' ? ' rel="noopener noreferrer"' : '') : '' ?> class="posts-carousel__link btn--tertiary" aria-label="<?= esc_attr($cta_link['title']) ?>">
                         <span><?= esc_html($cta_link['title']) ?></span>
                     </a>
                 <?php endif ?>
@@ -215,7 +215,7 @@ if (get_field('toggle_block')):
                             ?>
                                     <li class="splide__slide thumbnail">
                                         <div class="thumbnail__wrapper">
-                                            <img data-src="<?= $bg_item_url ?>" alt="" class="thumbnail__bg lazy-image">
+                                            <img data-src="<?= esc_url($bg_item_url) ?>" alt="" class="thumbnail__bg lazy-image">
                                             <?php
                                             if (!empty($post_fields['headshot'])) {
                                                 img_print_picture_tag(img: ($post_fields['headshot'] ?? ''), max_size: "medium", min_size: "medium", classes: "thumbnail__pic");

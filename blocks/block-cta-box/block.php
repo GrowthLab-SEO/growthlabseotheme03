@@ -45,13 +45,13 @@ if (get_field('toggle_block')):
             <div class="cta-box__inner">
 
                 <div class="cta-box__title">
-                    <?= isset($title) && $title ? $title : ""; ?>
+                    <?= isset($title) && $title ? wp_kses_post($title) : ""; ?>
                 </div>
 
                 <div class="cta-box__main">
                     <?php if ($box_style === "full" && isset($text_content) && $text_content): ?>
                         <div class="cta-box__content tx-center formatted-text">
-                            <?= $text_content ?>
+                            <?= wp_kses_post($text_content) ?>
                         </div>
                     <?php endif ?>
 
@@ -65,7 +65,7 @@ if (get_field('toggle_block')):
                                 $cta_link = $button['link'];
                                 $btn_style = $i === 0 ? "tertiary" : "tertiary-light";
                             ?>
-                                <a href="<?= esc_url($cta_link['url']) ?>" target="<?= esc_attr($cta_link['target']) ?>" class="btn--<?= $btn_style ?>" aria-label="<?= esc_attr($cta_link['title']) ?>">
+                                <a href="<?= esc_url($cta_link['url']) ?>"<?= !empty($cta_link['target']) ? ' target="' . esc_attr($cta_link['target']) . '"' . ($cta_link['target'] === '_blank' ? ' rel="noopener noreferrer"' : '') : '' ?> class="btn--<?= $btn_style ?>" aria-label="<?= esc_attr($cta_link['title']) ?>">
                                     <span><?= esc_html($cta_link['title']) ?></span>
                                 </a>
                             <?php

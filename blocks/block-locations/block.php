@@ -18,7 +18,7 @@ if (get_field('toggle_block')):
                 <?php
                 if (isset($pretitle) && $pretitle) print_title($pretitle, $pretitle_tag, "locations__pretitle pretitle");
                 if (isset($title) && $title) print_title($title, $title_tag, "locations__title tx-center");
-                echo $main_content;
+                echo wp_kses_post($main_content);
                 ?>
             </div>
 
@@ -53,7 +53,7 @@ if (get_field('toggle_block')):
             </div>
 
             <?php if (!empty($cta_link['url'])): ?>
-                <a href="<?= esc_url($cta_link['url']) ?>" target="<?= esc_attr($cta_link['target']) ?>" class="locations__btn btn--primary-dark" aria-label="<?= esc_attr($cta_link['title']) ?>">
+                <a href="<?= esc_url($cta_link['url']) ?>"<?= !empty($cta_link['target']) ? ' target="' . esc_attr($cta_link['target']) . '"' . ($cta_link['target'] === '_blank' ? ' rel="noopener noreferrer"' : '') : '' ?> class="locations__btn btn--primary-dark" aria-label="<?= esc_attr($cta_link['title']) ?>">
                     <span><?= esc_html($cta_link['title']) ?></span>
                 </a>
             <?php endif; ?>

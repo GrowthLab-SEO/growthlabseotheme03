@@ -50,10 +50,10 @@ if (get_field('toggle_block')):
 
             <div class="col">
                 <?php
-                if (!empty($columns['title'])) echo "<div class='col__title'>{$columns['title']}</div>";
+                if (!empty($columns['title'])) echo "<div class='col__title'>" . wp_kses_post($columns['title']) . "</div>";
                 ?>
                 <div class="col__content formatted-text">
-                    <?= $columns['content'] ?? "" ?>
+                    <?= wp_kses_post($columns['content'] ?? "") ?>
                 </div>
             </div>
 
@@ -65,7 +65,7 @@ if (get_field('toggle_block')):
                     if (!empty($cta_box['content'])):
                 ?>
                         <div class="inner-cta-box__content formatted-text">
-                            <?= $cta_box['content'] ?>
+                            <?= wp_kses_post($cta_box['content']) ?>
                         </div>
                 <?php
                     endif;
@@ -74,12 +74,12 @@ if (get_field('toggle_block')):
 
                 <div class="inner-cta-box__buttons">
                     <?php if (!empty($cta_box['cta_link']['url'])): ?>
-                        <a href="<?= esc_url($cta_box['cta_link']["url"]) ?>" target="<?= esc_attr($cta_box['cta_link']["target"]) ?>" class="btn--tertiary" aria-label="<?= esc_attr($cta_box['cta_link']["title"]) ?>">
+                        <a href="<?= esc_url($cta_box['cta_link']["url"]) ?>"<?= !empty($cta_box['cta_link']["target"]) ? ' target="' . esc_attr($cta_box['cta_link']["target"]) . '"' . ($cta_box['cta_link']["target"] === '_blank' ? ' rel="noopener noreferrer"' : '') : '' ?> class="btn--tertiary" aria-label="<?= esc_attr($cta_box['cta_link']["title"]) ?>">
                             <span><?= esc_html($cta_box['cta_link']["title"]) ?></span>
                         </a>
                     <?php endif ?>
                     <?php if (!empty($cta_box['cta_link_2']['url'])): ?>
-                        <a href="<?= esc_url($cta_box['cta_link_2']["url"]) ?>" target="<?= esc_attr($cta_box['cta_link_2']["target"]) ?>" class="btn" aria-label="<?= esc_attr($cta_box['cta_link_2']["title"]) ?>">
+                        <a href="<?= esc_url($cta_box['cta_link_2']["url"]) ?>"<?= !empty($cta_box['cta_link_2']["target"]) ? ' target="' . esc_attr($cta_box['cta_link_2']["target"]) . '"' . ($cta_box['cta_link_2']["target"] === '_blank' ? ' rel="noopener noreferrer"' : '') : '' ?> class="btn" aria-label="<?= esc_attr($cta_box['cta_link_2']["title"]) ?>">
                             <?php if (str_contains($cta_box['cta_link_2']["url"], 'tel:')) echo get_theme_svg('assets/icons/icon-phone.svg') ?>
                             <span><?= esc_html($cta_box['cta_link_2']["title"]) ?></span>
                         </a>

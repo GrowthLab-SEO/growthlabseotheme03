@@ -31,7 +31,7 @@ if (get_field('toggle_block')):
 
             <?php if (isset($subtitle) && $text_content): ?>
                 <div class="selling-points__content formatted-text tx-center">
-                    <?= $text_content ?>
+                    <?= wp_kses_post($text_content) ?>
                 </div>
             <?php endif ?>
 
@@ -40,9 +40,10 @@ if (get_field('toggle_block')):
                 if (isset($items) && !empty($items)):
                     foreach ($items as $item):
                         $item_wrapper = !empty($item['link']) ? "a" : "div";
+                        $item_target = $item['link']['target'] ?? '';
                 ?>
 
-                        <<?= $item_wrapper ?> class="item" <?= !empty($item['link']) ? "href='" . esc_url($item['link']['url']) . "' target='" . esc_attr($item['link']['target']) . "'" : "" ?>>
+                        <<?= $item_wrapper ?> class="item" <?= !empty($item['link']) ? 'href="' . esc_url($item['link']['url'] ?? '') . '"' . ($item_target ? ' target="' . esc_attr($item_target) . '"' . ($item_target === '_blank' ? ' rel="noopener noreferrer"' : '') : '') : "" ?>>
                             <?php
                             if ($items_background_image && !empty($items_background_image)) {
                                 img_print_picture_tag(img: $items_background_image, is_cover: false, classes: "item__bg", max_size: "featured-small", min_size: "thumbnail");
@@ -65,7 +66,7 @@ if (get_field('toggle_block')):
             </div>
 
             <?php if ($cta_link): ?>
-                <a href="<?= esc_url($cta_link['url']) ?>" target="<?= esc_attr($cta_link['target']) ?>" class="cta-btn btn--tertiary" aria-label="<?= esc_attr($cta_link['title']) ?>">
+                <a href="<?= esc_url($cta_link['url']) ?>"<?= !empty($cta_link['target']) ? ' target="' . esc_attr($cta_link['target']) . '"' . ($cta_link['target'] === '_blank' ? ' rel="noopener noreferrer"' : '') : '' ?> class="cta-btn btn--tertiary" aria-label="<?= esc_attr($cta_link['title']) ?>">
                     <span><?= esc_html($cta_link['title']) ?></span>
                 </a>
             <?php endif ?>
