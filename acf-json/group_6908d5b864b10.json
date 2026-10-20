@@ -68,11 +68,11 @@
         },
         {
             "key": "field_69d06a92b5271",
-            "label": "Top Callout First Line",
-            "name": "top_callout_first_line",
+            "label": "Top Callout",
+            "name": "top_callout",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enclose text in \"strong\" HTML tags to highlight it.",
             "required": 0,
             "conditional_logic": [
                 [
@@ -123,60 +123,6 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
-        },
-        {
-            "key": "field_69d06abeb5273",
-            "label": "Top Callout Second Line",
-            "name": "top_callout_second_line",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_69d0742e58374",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_69d09a762735c",
-            "label": "CTA Button",
-            "name": "cta_button",
-            "aria-label": "",
-            "type": "link",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_69d0742e58374",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "return_format": "array",
-            "allow_in_bindings": 0
         },
         {
             "key": "field_69d06adeb5274",
@@ -949,5 +895,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1780350777
+    "modified": 1792458432
 }

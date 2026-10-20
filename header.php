@@ -33,9 +33,7 @@ if (!defined('ABSPATH')) {
     if (get_field('custom_header', $post_id)) {
         $logo_link = get_field('logo_link', $post_id) ?? '#';
         $phone_number = get_field("contact_phone", $post_id) ?? null;
-        $top_callout_first_line = get_field("top_callout_first_line", $post_id) ?: '';
-        $top_callout_second_line = get_field("top_callout_second_line", $post_id) ?: '';
-        $cta_button = get_field("cta_button", $post_id) ?? null;
+        $top_callout = get_field("top_callout", $post_id) ?: '';
     }
     ?>
 
