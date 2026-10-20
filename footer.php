@@ -7,9 +7,6 @@
   <footer id="site-footer" role="contentinfo" class="site-footer">
 
     <?php
-    global $post;
-    $post_id = $post ? $post->ID : 0;
-
     $options = get_current_language_options();
     $options = fill_acf_group_defaults($options, 'options', 'option');
     foreach ($options as $key => $value) $$key = $value;
@@ -21,7 +18,7 @@
 
     <?php
     // Form
-    if (!$form_section['hide_section'] && !get_field('hide_form_section')) {
+    if (!$form_section['hide_section'] && !get_page_field('hide_form_section')) {
       $args = [
         'title' => !empty($form_section['contact_form_title']) ? $form_section['contact_form_title'] : "",
         'tag' => !empty($form_section['contact_form_title_tag']) ? $form_section['contact_form_title_tag'] : "p",
@@ -34,7 +31,7 @@
 
     <?php
     // Menu
-    if (!$menu_section['hide_section'] && !get_field('hide_menu_section')) {
+    if (!$menu_section['hide_section'] && !get_page_field('hide_menu_section')) {
       if (isset($menu_section['menu']) && $menu_section['menu']) {
         wp_nav_menu(
           array(
@@ -53,7 +50,7 @@
 
     <?php
     // Locations
-    if (!$locations_section['hide_section'] && !get_field('hide_locations_section')) {
+    if (!$locations_section['hide_section'] && !get_page_field('hide_locations_section')) {
       $args = [
         'offices' => $offices
       ];
@@ -63,7 +60,7 @@
 
     <?php
     // Social
-    if (!$social_networks_section['hide_section'] && !get_field('hide_social_networks_section')) : ?>
+    if (!$social_networks_section['hide_section'] && !get_page_field('hide_social_networks_section')) : ?>
 
       <section class="footer-social">
         <div class="footer-social__wrapper">
@@ -75,7 +72,7 @@
 
     <?php
     //Copy
-    if (!$copyright_section['hide_section'] && !get_field("hide_copyright_section")):
+    if (!$copyright_section['hide_section'] && !get_page_field("hide_copyright_section")):
     ?>
       <section class="footer-copyright">
         <div class="footer-copyright__wrapper container">
