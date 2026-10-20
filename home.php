@@ -3,7 +3,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 get_header();
-$post_id = get_option('page_for_posts');
+$post_id = (int) get_option('page_for_posts');
+// Blog listings follow the sidebar setting of the posts page
+$hide_sidebar = $post_id && get_field("hide_sidebar", $post_id);
 ?>
 
 <section class="blog__inner">
@@ -20,7 +22,7 @@ $post_id = get_option('page_for_posts');
 
                     the_post();
 
-                    $card_class = !get_field("hide_sidebar", $post_id) ? "blog__card--horizontal post-card--horizontal" : "";
+                    $card_class = !$hide_sidebar ? "blog__card--horizontal post-card--horizontal" : "";
 
                     get_template_part('template-parts/post', 'card', array(
                         "classes" => "blog__card " . $card_class,
@@ -28,6 +30,7 @@ $post_id = get_option('page_for_posts');
                         "cat" =>  get_the_category()[0]->name ?? '',
                         "meta" => get_the_date(),
                         "title" => get_the_title(),
+                        "title_tag" => get_current_language_options()["posts_default_title_tag"] ?? "p",
                         "excerpt" => get_the_excerpt(),
                         "link_url" => get_the_permalink(),
                         "link_target" => '_self',
@@ -45,7 +48,7 @@ $post_id = get_option('page_for_posts');
         </main>
 
         <?php
-        if (!get_field("hide_sidebar", $post_id)) {
+        if (!$hide_sidebar) {
             $args = array('ID' => $post_id, 'classes' => 'blog__sidebar');
             get_sidebar('blog', $args);
         }
