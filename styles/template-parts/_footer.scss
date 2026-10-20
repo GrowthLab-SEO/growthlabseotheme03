@@ -2,8 +2,9 @@
 @use "globals/mixins" as m;
 @use "./location-card";
 
+// Full width pages wrap their blocks in <main>, so there the last block is the one before the footer
 section:has(+ .site-footer .contact-form-footer),
-main:has(+ .site-footer .contact-form-footer) {
+main:has(+ .site-footer .contact-form-footer) > section:last-child {
   padding-bottom: var(--sp-lg);
 }
 

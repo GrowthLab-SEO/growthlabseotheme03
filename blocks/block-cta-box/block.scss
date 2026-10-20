@@ -80,7 +80,7 @@
       padding-top: var(--sp-md);
     }
 
-    &:not(:has(+ .site-footer .contact-form-footer)) {
+    &:not(:has(+ .site-footer .contact-form-footer)):not(main:has(+ .site-footer .contact-form-footer) > :last-child) {
       padding-bottom: 0 !important;
     }
 
