@@ -138,6 +138,9 @@ if (!function_exists('growthlabseotheme03_setup')) {
             ], $sizes);
         });
 
+        // Border, color, spacing and typography controls for core blocks (same as theme-02)
+        add_theme_support('appearance-tools');
+
         // Register Navigation Menus
         register_nav_menus(
             array(
