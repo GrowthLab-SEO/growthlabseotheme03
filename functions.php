@@ -451,16 +451,39 @@ function growthlabseotheme03_scripts()
             'postsFiltersData',
             array(
                 'restUrl' => get_rest_url(null, 'wp/v2'),
-                'perPage' => 9,
-                'defaultImage' => function_exists('get_field_options')
-                    ? (get_field_options('options')['posts_default_image']['url'] ?? '')
+                // Same page size as the server-rendered listing, so pagination doesn't change after filtering
+                'perPage' => (int) get_option('posts_per_page'),
+                // Default image of the current language, falling back to the base options
+                'defaultImage' => function_exists('get_current_language_options')
+                    ? ((get_current_language_options()['posts_default_image']['url'] ?? '') ?: (get_field_options('options')['posts_default_image']['url'] ?? ''))
                     : '',
+                'i18n' => array(
+                    'noPosts'       => __('No posts found for the selected filters.', 'growthlabseotheme03'),
+                    'loadError'     => __('Could not load posts. Please try again.', 'growthlabseotheme03'),
+                    'readMore'      => __('Read More', 'growthlabseotheme03'),
+                    /* translators: %s: post title */
+                    'readMoreAbout' => __('Read more about %s', 'growthlabseotheme03'),
+                    /* translators: %s: active filter (search text, category, month or year) */
+                    'removeFilter'  => __('Remove %s', 'growthlabseotheme03'),
+                    'prev'          => __('Prev', 'growthlabseotheme03'),
+                    'next'          => __('Next', 'growthlabseotheme03'),
+                ),
             )
         );
     }
 }
 
 add_action('wp_enqueue_scripts', 'growthlabseotheme03_scripts');
+
+// Blog filters: "pf_month" (1-12) filters the posts REST endpoint by month across every year. The date range
+// parameters of the endpoint can only express a month within a given year.
+add_filter('rest_post_query', function ($args, $request) {
+    $month = (int) $request->get_param('pf_month');
+    if ($month >= 1 && $month <= 12) {
+        $args['date_query'][] = array('month' => $month);
+    }
+    return $args;
+}, 10, 2);
 
 // IMask for Gravity Forms phone fields. Phone inputs are masked on load and again whenever Gravity Forms re-renders a
 // form (AJAX submissions, multi-page forms); data-imask prevents masking an input twice.
