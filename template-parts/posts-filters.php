@@ -60,6 +60,7 @@ $extra_classes = isset($args['classes']) ? esc_attr($args['classes']) : '';
                         <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
                 </div>
+                <label class="screen-reader-text" for="pf-search"><?= esc_html__('Search posts', 'growthlabseotheme03') ?></label>
                 <input
                     class="posts-filters__input"
                     type="text"
@@ -74,6 +75,7 @@ $extra_classes = isset($args['classes']) ? esc_attr($args['classes']) : '';
         <?php if (!empty($categories)): ?>
             <div class="posts-filters__group">
                 <div class="posts-filters__select-wrap">
+                    <label class="screen-reader-text" for="pf-category"><?= esc_html__('Category', 'growthlabseotheme03') ?></label>
                     <select class="posts-filters__select" id="pf-category" name="category">
                         <option value=""><?= esc_html__('All categories', 'growthlabseotheme03') ?></option>
                         <?php foreach ($categories as $cat): ?>
@@ -93,6 +95,7 @@ $extra_classes = isset($args['classes']) ? esc_attr($args['classes']) : '';
         <!-- Month -->
         <div class="posts-filters__group">
             <div class="posts-filters__select-wrap">
+                <label class="screen-reader-text" for="pf-month"><?= esc_html__('Month', 'growthlabseotheme03') ?></label>
                 <select class="posts-filters__select" id="pf-month" name="month">
                     <option value=""><?= esc_html__('All months', 'growthlabseotheme03') ?></option>
                     <?php foreach ($months as $month): ?>
@@ -111,6 +114,7 @@ $extra_classes = isset($args['classes']) ? esc_attr($args['classes']) : '';
         <!-- Year -->
         <div class="posts-filters__group">
             <div class="posts-filters__select-wrap">
+                <label class="screen-reader-text" for="pf-year"><?= esc_html__('Year', 'growthlabseotheme03') ?></label>
                 <select class="posts-filters__select" id="pf-year" name="year">
                     <option value=""><?= esc_html__('All years', 'growthlabseotheme03') ?></option>
                     <?php for ($y = $year_end; $y >= $year_start; $y--): ?>
