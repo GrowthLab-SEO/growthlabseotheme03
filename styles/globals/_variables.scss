@@ -1,19 +1,19 @@
 /* 
 Color scheme is defined in theme-functions/color-scheme.php by dynamic selection. The default color scheme is as follows:
 
---primary:           #15253f; // rgb(21, 37, 63)
---primary-dark:      #08182f; // rgb(8, 24, 47)
---primary-light:     #2C3D5B; // rgb(44, 61, 91)
+--primary:           #0e5db8; // rgb(14, 93, 184)
+--primary-dark:      #031b3a; // rgb(3, 27, 58)
+--primary-light:     #2b7de0; // rgb(43, 125, 224)
 
---secondary:         #F4F3EE; // rgb(244, 243, 238)
---secondary-dark:    #E7E5DF; // rgb(231, 229, 223)
+--secondary:         #f4f8fd; // rgb(244, 248, 253)
+--secondary-dark:    #b0d3f9; // rgb(176, 211, 249)
 --secondary-light:   #FFFFFF; // rgb(255, 255, 255)
 
---tertiary:          #BC9061; // rgb(188, 144, 97)
---tertiary-dark:     #9D7A55; // rgb(157, 122, 85)
---tertiary-light:    #DCAB77; // rgb(220, 171, 119)
+--tertiary:          #0b3293; // rgb(11, 50, 147)
+--tertiary-dark:     #071d3a; // rgb(7, 29, 58)
+--tertiary-light:    #869db7; // rgb(134, 157, 183)
 
---text:        #15253f; // rgb(21, 37, 63)
+--text:        #232323; // rgb(35, 35, 35)
 */
 
 :root {
@@ -22,19 +22,19 @@ Color scheme is defined in theme-functions/color-scheme.php by dynamic selection
   --font-primary: "Figtree", sans-serif;
 
   //Colors
-  --primary: 21, 37, 63;
-  --primary-dark: 8, 24, 47;
-  --primary-light: 44, 61, 91;
+  --primary: 14, 93, 184;
+  --primary-dark: 3, 27, 58;
+  --primary-light: 43, 125, 224;
 
-  --secondary: 244, 243, 238;
-  --secondary-dark: 231, 229, 223;
+  --secondary: 244, 248, 253;
+  --secondary-dark: 176, 211, 249;
   --secondary-light: 255, 255, 255;
 
-  --tertiary: 188, 144, 97;
-  --tertiary-dark: 157, 122, 85;
-  --tertiary-light: 220, 171, 119;
+  --tertiary: 11, 50, 147;
+  --tertiary-dark: 7, 29, 58;
+  --tertiary-light: 134, 157, 183;
 
-  --text: 21, 37, 63; */
+  --text: 35, 35, 35; */
 
   //Spacing
   --container: 1240px;
