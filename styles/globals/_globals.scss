@@ -863,3 +863,15 @@ iframe {
   outline-offset: 2px;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
 }
+
+// 404 page
+.error-404 {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  padding-block: 200px;
+
+  &__title {
+    text-transform: uppercase;
+  }
+}
