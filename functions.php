@@ -526,12 +526,6 @@ add_action('gform_enqueue_scripts', function ($form) {
     }
 });
 
-// Preload background image to prevent CLS
-add_action('wp_head', function () {
-    $image_path = get_template_directory_uri() . '/assets/img/transparent-bg.webp';
-    echo '<link rel="preload" as="image" href="' . esc_url($image_path) . '" />';
-}, 1);
-
 // Add theme and parent/child theme classes to body
 add_filter('body_class', function ($classes) {
     if (is_child_theme()) {
