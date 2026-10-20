@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 ?>
 
 <div class="default-card <?php echo $args["classes"];
-                            if (isset($args["content"]) && $args["content"]) "content" ?>">
+                            if (isset($args["content"]) && $args["content"]) echo " content" ?>">
 
     <?php
     if ($args['link_url'] && $args['link_url'] !== '') {
