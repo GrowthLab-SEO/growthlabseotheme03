@@ -140,7 +140,7 @@ Source maps point to the source files with paths relative to the stylesheet/scri
 
 - **Commit messages:** commitlint-style `type: Description` in English, for example `feat: Add items title tag option to posts grid`, `fix: ...`, `perf: ...`, `chore: ...`, `docs: ...`. One commit per logical change. (This is a team convention; there is no commitlint/husky setup in the repo.)
 - **Code comments:** in English.
-- **CSS:** BEM-style class names (`block__element`, `block--modifier`). Breakpoints are defined twice and do not fully match: `$GLOBALS['breakpoints']` in `functions.php` (used by the picture helpers: tablet 768px, ldpi 1024px, mdpi 1280px, hdpi 1920px) and the SCSS variables in `styles/globals/_variables.scss` (mobile 480px, tablet 768px, ldpi 1024px, mdpi 1200px, hdpi 1440px). `js/main.js` uses the SCSS values and shares them as `window.themeBreakpoints` for the block scripts (which fall back to the same numbers).
+- **CSS:** BEM-style class names (`block__element`, `block--modifier`). Breakpoints are defined twice and do not fully match: `$GLOBALS['breakpoints']` in `functions.php` (used by the picture helpers: tablet 768px, ldpi 1024px, mdpi 1280px, hdpi 1920px) and the SCSS variables in `styles/globals/_variables.scss` (mobile 480px, tablet 768px, ldpi 1024px, mdpi 1200px, hdpi 1440px). `styles/globals/_picture-optimization.scss` uses the `functions.php` values. `js/main.js` uses the SCSS values and shares them as `window.themeBreakpoints` for the block scripts (which fall back to the same numbers).
 - **Translatable strings:** use the literal `growthlabseotheme03` text domain (not `get_text_domain()`, which translation tools can't read) and `sprintf()` placeholders for dynamic parts. Texts used by the JS files are passed from PHP: `siteData.i18n` (`main.js`), `styledSelectData` (`styled-select-fields.js`) and `postsFiltersData.i18n` (`posts-filters.js`).
 - **New theme functions file:** add it to `theme-functions/` and to the `$includes` array in `functions.php`.
 - **Theme 01/02/03 parity:** shared features should be ported to the other two themes.
@@ -306,7 +306,7 @@ Images (`theme-functions/picture-optimization.php`, `svg-support.php`):
 
 | Function | Description |
 | --- | --- |
-| `img_print_picture_tag(...)` / `img_generate_picture_tag(...)` | Echo/return a responsive `<picture>`. Named arguments: `img`, `mobile_img`, `tablet_img`, `max_size` (default `full`), `min_size`, `classes`, `id`, `alt_text`, `is_cover`, `img_attr`, `is_priority`. SVGs are delegated to `image_to_svg()`. |
+| `img_print_picture_tag(...)` / `img_generate_picture_tag(...)` | Echo/return a responsive `<picture>`. Named arguments: `img`, `mobile_img`, `tablet_img`, `max_size` (default `full`), `min_size`, `classes`, `id`, `alt_text`, `is_cover`, `img_attr` (preferably an array, its values are escaped), `is_priority`, `fetch_priority` (`false` for priority images that aren't the LCP element, e.g. the logo). SVGs are delegated to `image_to_svg()`. |
 | `image_to_svg($image, $classes = '')` | Inlines a local SVG file (wrapped in a `<div>`), or returns an `<img>` for other files. Accepts an ACF image array or a URL; the inlined SVG keeps the image's alt text (`role="img"` + `aria-label`, or `aria-hidden` when decorative). |
 
 ```php
@@ -395,9 +395,14 @@ How it works (`theme-functions/helpers.php`):
 
 ### Picture optimization
 
-- `img_print_picture_tag()` builds `<picture>` elements with `<source>` per breakpoint (`$GLOBALS['breakpoints']`: tablet 768px, ldpi 1024px, mdpi 1280px, hdpi 1920px), choosing registered sizes between `min_size` and `max_size`, with separate mobile/tablet images and a cover mode.
-- A WebP `<source>` is added when the image is WebP or a `<file>.webp` sibling exists on disk.
-- Non-priority images use `data-src`/`data-srcset` with the `lazy-image` class and per-breakpoint aspect-ratio CSS variables; `js/picture-optimization.js` loads them with an IntersectionObserver (100px margin) only when they approach the viewport and watches for dynamically added images (e.g. Splide clones); browsers without IntersectionObserver load every image at once. `is_priority: true` outputs an eager image with `fetchpriority="high"` (used for the header logo).
+- `img_print_picture_tag()` builds a `<picture>` with one `<source>` per breakpoint (`$GLOBALS['breakpoints']` in `functions.php`: tablet 768px, ldpi 1024px, mdpi 1280px, hdpi 1920px). Each breakpoint gets the widest generated size that fits it, never smaller than `min_size` (what phones get) nor larger than `max_size`; phones never get a larger file than desktops. Breakpoints that would repeat the file of the next smaller one are dropped.
+- Image sizes are read from the attachment metadata, which has the real width of each file (sizes without hard crop keep each image's proportions, so they can be narrower than the registered width).
+- `is_cover: true` (hero backgrounds) uses `full`, `cover-desktop`, `cover-tablet` (1024-1279px screens), `cover-tablet-portrait` and `cover-mobile-portrait`. A `tablet_img` is only used for 768-1023px screens; larger screens always get the main image. Phones get the `mobile_img`, else the `tablet_img`, else the main image, in a portrait crop; without one, the smallest file at least 1000px tall (or the tallest file), so a very large original isn't sent to phones when a generated size would do.
+- A URL of a generated size (`photo-800x533.jpg`) is resolved to its attachment; URLs outside the media library are printed as a plain lazy image.
+- WebP `<source>` elements are added when the image is WebP or a `.webp` copy exists (`image.jpg.webp`).
+- Non-priority images use `data-src` / `data-srcset` and the `lazy-image` class; `js/picture-optimization.js` swaps them in with an IntersectionObserver (100px margin) only when they approach the viewport, and picks up images added later (e.g. Splide clones); browsers without IntersectionObserver load every image at once. A `<noscript>` copy is printed for browsers without JavaScript.
+- Lazy images get `--ar-{breakpoint}-w/h` custom properties with the real size of the file each breakpoint serves; `styles/globals/_picture-optimization.scss` turns them into an `aspect-ratio`, so their space is reserved before they load. Its breakpoint list must match `$GLOBALS['breakpoints']`.
+- `is_priority: true` loads the image eagerly with `fetchpriority="high"` (the hero background); the header logo and the hero side portraits pass `fetch_priority: false`, so they load eagerly without competing with the hero image.
 
 ### CSS loading
 
