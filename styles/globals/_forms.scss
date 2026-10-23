@@ -295,9 +295,10 @@ input[type="hidden"] {
     top: 0%;
     z-index: -1;
     display: block;
-    background:
-      linear-gradient(rgba(var(--primary-dark)) 31%),
-      rgb(var(var(--secondary-light)));
+    background: linear-gradient(
+      rgba(var(--primary-dark)) 31%,
+      rgb(var(--secondary-light))
+    );
   }
 
   &:hover {
