@@ -23,7 +23,7 @@
         'title' => !empty($form_section['contact_form_title']) ? $form_section['contact_form_title'] : "",
         'tag' => !empty($form_section['contact_form_title_tag']) ? $form_section['contact_form_title_tag'] : "p",
         'link' => !empty($form_section['contact_form_link']) ? $form_section['contact_form_link'] : "",
-        'form' => !empty($form_section['contact_form']) ? $form_section['contact_form'] : null,
+        'form_html' => get_selected_form_html($form_section),
       ];
       get_template_part('template-parts/footer', 'form', $args);
     }

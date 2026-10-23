@@ -17,9 +17,11 @@
 
             <div class="contact-form-footer__col">
 
-                <div class="contact-form-footer__form">
-                    <?php render_gravity_form($args['form'], display_title: false, display_description: false); ?>
-                </div>
+                <?php if (!empty($args['form_html'])): ?>
+                    <div class="contact-form-footer__form">
+                        <?= $args['form_html'] ?>
+                    </div>
+                <?php endif; ?>
 
             </div>
 
