@@ -9,6 +9,8 @@ patch (1.0.x) for fixes, minor (1.x.0) for new features or changes editors can s
 - Every Gravity Forms field (Contact Form block and footer form in Site Options) has a **Form Type** select:
   Gravity Form, Custom code or None. **Custom code** shows a **Form Code** textarea for the embed code or script of a
   third-party form (e.g. a CRM), printed as is. Forms saved before this keep their Gravity Form.
+  `footer.php` passes the printed form to `template-parts/footer-form.php` as `form_html`, and still passes the
+  Gravity Form ID as `form` for child themes that override only one of the two files.
 
 ### Fixed
 - Section content of blocks (Main Content, Text Content, FAQ answers, columns, etc.) is no longer passed through
