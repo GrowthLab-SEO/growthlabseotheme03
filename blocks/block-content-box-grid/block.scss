@@ -34,7 +34,8 @@
   }
 }
 
-.content-box {
+// Scoped to the block: the homepage heroes use .content-box too
+.content-box-grid .content-box {
   max-width: 61.2rem;
   min-width: 280px;
   height: auto;
@@ -42,7 +43,7 @@
   display: block;
   flex: 1 0 calc(50% - (var(--sp-sm) / 2));
 
-  $parent: &;
+  $parent: ".content-box";
 
   &::before {
     content: none;
@@ -138,7 +139,7 @@
     }
   }
 
-  .content-box {
+  .content-box-grid .content-box {
     max-width: 100%;
   }
 }
@@ -152,7 +153,7 @@
     }
   }
 
-  .content-box {
+  .content-box-grid .content-box {
     max-width: 100%;
     flex: 1 0 100%;
   }
