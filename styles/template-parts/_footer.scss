@@ -282,7 +282,7 @@ main:has(+ .site-footer .contact-form-footer) > section:last-child {
       a {
         &:hover {
           cursor: pointer;
-          color: rgb(var(--secondary-dark)) x;
+          color: rgb(var(--secondary-dark));
         }
       }
     }
