@@ -21,7 +21,7 @@ if (get_field('toggle_block')):
 
             <?php if ($text_content): ?>
                 <div class="content-box-grid__content formatted-text tx-center">
-                    <?= wp_kses_post($text_content) ?>
+                    <?= $text_content ?>
                 </div>
             <?php endif ?>
 
@@ -45,7 +45,7 @@ if (get_field('toggle_block')):
                                             $title_html = !empty($item['title_link']) ? '<a href="' . esc_url($item['title_link']['url'] ?? '') . '"' . ($title_link_target ? ' target="' . esc_attr($title_link_target) . '"' . ($title_link_target === '_blank' ? ' rel="noopener noreferrer"' : '') : '') . ' aria-label="' . esc_attr($item['title'] ?? '') . '">' . ($item['title'] ?? '') . "</a>" : ($item['title'] ?? '');
                                             print_title($title_html, $item['title_tag'] ?? '', "content-box__title");
                                             ?>
-                                            <?= wp_kses_post($item['text_content'] ?? '') ?>
+                                            <?= $item['text_content'] ?? '' ?>
 
                                         </div>
 

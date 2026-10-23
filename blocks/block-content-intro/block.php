@@ -53,7 +53,7 @@ if (get_field('toggle_block')):
                 if (!empty($columns['title'])) echo "<div class='col__title'>" . wp_kses_post($columns['title']) . "</div>";
                 ?>
                 <div class="col__content formatted-text">
-                    <?= wp_kses_post($columns['content'] ?? "") ?>
+                    <?= $columns['content'] ?? "" ?>
                 </div>
             </div>
 
@@ -65,7 +65,7 @@ if (get_field('toggle_block')):
                     if (!empty($cta_box['content'])):
                 ?>
                         <div class="inner-cta-box__content formatted-text">
-                            <?= wp_kses_post($cta_box['content']) ?>
+                            <?= $cta_box['content'] ?>
                         </div>
                 <?php
                     endif;

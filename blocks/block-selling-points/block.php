@@ -31,7 +31,7 @@ if (get_field('toggle_block')):
 
             <?php if (isset($subtitle) && $text_content): ?>
                 <div class="selling-points__content formatted-text tx-center">
-                    <?= wp_kses_post($text_content) ?>
+                    <?= $text_content ?>
                 </div>
             <?php endif ?>
 

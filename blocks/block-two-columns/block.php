@@ -35,7 +35,7 @@ if (get_field('toggle_block')):
 
             <div class="two-columns__col">
                 <div class="formatted-text two-columns__content">
-                    <?= wp_kses_post($text_content ?? "") ?>
+                    <?= $text_content ?? "" ?>
                 </div>
             </div>
 

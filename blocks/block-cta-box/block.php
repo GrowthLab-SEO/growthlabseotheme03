@@ -51,7 +51,7 @@ if (get_field('toggle_block')):
                 <div class="cta-box__main">
                     <?php if ($box_style === "full" && isset($text_content) && $text_content): ?>
                         <div class="cta-box__content tx-center formatted-text">
-                            <?= wp_kses_post($text_content) ?>
+                            <?= $text_content ?>
                         </div>
                     <?php endif ?>
 

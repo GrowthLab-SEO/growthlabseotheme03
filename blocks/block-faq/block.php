@@ -35,7 +35,7 @@ if (get_field('toggle_block')):
 
                 <?php if ($text_content): ?>
                     <div class="faq__content formatted-text">
-                        <?= wp_kses_post($text_content) ?>
+                        <?= $text_content ?>
                     </div>
                 <?php endif ?>
 
@@ -58,7 +58,7 @@ if (get_field('toggle_block')):
                                 </div>
                                 <div class="faq__answer accordion__content" id="<?= esc_attr($answer_id) ?>">
                                     <div class="formatted-text accordion__inner">
-                                        <?= wp_kses_post($item['answer'] ?? '') ?>
+                                        <?= $item['answer'] ?? '' ?>
                                     </div>
                                 </div>
                             </div>

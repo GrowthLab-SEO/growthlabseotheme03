@@ -33,7 +33,7 @@ if (get_field('toggle_block')):
                     if (isset($main_content) && !empty($main_content)):
                     ?>
                         <div class="contact-form__content formatted-text tx-center">
-                            <?= wp_kses_post($main_content) ?>
+                            <?= $main_content ?>
                         </div>
                     <?php
                     endif;
