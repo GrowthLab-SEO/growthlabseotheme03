@@ -217,7 +217,7 @@ span {
   margin: 0 auto;
 }
 
-.nice-bg {
+.bg-gradient {
   position: relative;
   // Base background identical to the loaded state, without the image
   background: linear-gradient(
@@ -253,7 +253,7 @@ span {
     }
   }
 
-  .nice-bg {
+  .bg-gradient {
     background: none;
     &::after {
       content: none;
