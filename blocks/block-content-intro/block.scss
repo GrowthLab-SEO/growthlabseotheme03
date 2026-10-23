@@ -21,10 +21,6 @@
     *:not(a) {
       color: rgb(var(--secondary)) !important;
     }
-
-    &__pretitle {
-      color: rgb(var(--secondary-dark));
-    }
   }
 
   &:not(:has(.inner-cta-box__content)) {
@@ -283,16 +279,6 @@
         path {
           fill: rgb(var(--primary));
         }
-      }
-    }
-
-    &__pretitle {
-      flex: 0 0 100%;
-      color: rgb(var(--text));
-      text-align: center;
-
-      @media (min-width: v.$tablet) {
-        text-align: left;
       }
     }
 
