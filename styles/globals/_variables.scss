@@ -16,33 +16,8 @@ Color scheme is defined in theme-functions/color-scheme.php by dynamic selection
 --text:        #232323; // rgb(35, 35, 35)
 */
 
-:root {
-  /* //Fonts
-  --font-secondary: "Khand", sans-serif;
-  --font-primary: "Figtree", sans-serif;
-
-  //Colors
-  --primary: 14, 93, 184;
-  --primary-dark: 3, 27, 58;
-  --primary-light: 43, 125, 224;
-
-  --secondary: 244, 248, 253;
-  --secondary-dark: 176, 211, 249;
-  --secondary-light: 255, 255, 255;
-
-  --tertiary: 11, 50, 147;
-  --tertiary-dark: 7, 29, 58;
-  --tertiary-light: 134, 157, 183;
-
-  --text: 35, 35, 35; */
-
-  //Spacing
-  --container: 1240px;
-  --sp-xsm: 1.6rem;
-  --sp-sm: 3.2rem;
-  --sp-md: 4.8rem;
-  --sp-lg: 6.4rem;
-}
+// The custom properties (:root) are in _root.scss, which only the main stylesheet includes:
+// this file is used by every stylesheet and must not output CSS
 
 //Breakpoints
 $mobile: 480px;
