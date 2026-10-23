@@ -24,6 +24,8 @@
         'tag' => !empty($form_section['contact_form_title_tag']) ? $form_section['contact_form_title_tag'] : "p",
         'link' => !empty($form_section['contact_form_link']) ? $form_section['contact_form_link'] : "",
         'form_html' => get_selected_form_html($form_section),
+        // Gravity Form ID, kept for child themes whose footer-form.php reads it
+        'form' => in_array($form_section['contact_form_type'] ?? '', ['', 'gravity_form'], true) && !empty($form_section['contact_form']) ? $form_section['contact_form'] : null,
       ];
       get_template_part('template-parts/footer', 'form', $args);
     }

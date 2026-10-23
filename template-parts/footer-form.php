@@ -1,4 +1,8 @@
-<?php $form_link = !empty($args['link']) && is_array($args['link']) ? $args['link'] : null; ?>
+<?php
+// Child themes whose footer.php only passes the Gravity Form ID ('form')
+if (!isset($args['form_html'])) $args['form_html'] = get_selected_form_html(['contact_form' => $args['form'] ?? null]);
+
+$form_link = !empty($args['link']) && is_array($args['link']) ? $args['link'] : null; ?>
 <section class="contact-form-footer">
     <div class="contact-form-footer__wrapper container">
         <div class="contact-form-footer__inner">
