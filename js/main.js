@@ -685,3 +685,37 @@ window.addEventListener("load", () => {
     ? document.addEventListener("DOMContentLoaded", init)
     : init();
 })();
+
+// Observe Section Visibility
+(function observeSectionVisibility() {
+  "use strict";
+
+  const sections = document.querySelectorAll("section");
+
+  if (!sections.length) return;
+
+  const visibilityObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (
+          entry.isIntersecting &&
+          !entry.target.hasAttribute("data-visible")
+        ) {
+          entry.target.setAttribute("data-visible", "true");
+        }
+        // Do not remove the attribute when exiting
+      });
+    },
+    { rootMargin: "0px", threshold: 0.1 }, // Adjust threshold as needed
+  );
+
+  const initVisibility = () => {
+    sections.forEach((section) => visibilityObserver.observe(section));
+  };
+
+  if (document.readyState === "complete") {
+    initVisibility();
+  } else {
+    window.addEventListener("load", initVisibility, { once: true });
+  }
+})();
