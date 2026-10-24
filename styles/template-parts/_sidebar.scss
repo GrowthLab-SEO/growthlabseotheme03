@@ -78,6 +78,8 @@
 
           &:not(.accordion__heading)::after {
             content: "\276F";
+            // Decorative: no text for screen readers (browsers without the alt syntax keep the line above)
+            content: "\276F" / "";
             font-size: 20px;
           }
         }
