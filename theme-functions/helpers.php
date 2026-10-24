@@ -446,6 +446,14 @@ if (!function_exists('get_posts_grid_page_arg')) {
     }
 }
 
+// Former name of get_posts_grid_page_arg() in theme-01. It calls the same function, so grids keep one counter.
+if (!function_exists('get_next_posts_grid_page_arg')) {
+    function get_next_posts_grid_page_arg()
+    {
+        return get_posts_grid_page_arg();
+    }
+}
+
 // Returns the current block's ACF values with every field of its field groups present. Fields that were never saved
 // (e.g. added after the block was created) get their ACF default value, so templates can keep extracting them into
 // variables without undefined variable warnings. Empty defaults are null, so isset() checks keep working as before.
@@ -633,17 +641,24 @@ if (!function_exists('get_page_hero_title')) {
     {
         if (is_home()) {
             $page_id = (int) get_option('page_for_posts');
-            return $page_id ? get_the_title($page_id) : __('Blog', 'growthlabseotheme03');
-        }
-        if (is_search()) {
+            $title = $page_id ? get_the_title($page_id) : __('Blog', 'growthlabseotheme03');
+        } elseif (is_search()) {
             /* translators: %s: search query */
-            return sprintf(__('Search results for: %s', 'growthlabseotheme03'), get_search_query());
+            $title = sprintf(__('Search results for: %s', 'growthlabseotheme03'), get_search_query());
+        } elseif (is_singular()) {
+            $title = get_the_title(get_queried_object_id());
+        } elseif (is_category() || is_tag() || is_tax()) {
+            $title = single_term_title('', false);
+        } elseif (is_post_type_archive()) {
+            $title = post_type_archive_title('', false);
+        } elseif (is_archive()) {
+            $title = get_the_archive_title();
+        } else {
+            $title = '';
         }
-        if (is_singular()) return get_the_title(get_queried_object_id());
-        if (is_category() || is_tag() || is_tax()) return single_term_title('', false);
-        if (is_post_type_archive()) return post_type_archive_title('', false);
-        if (is_archive()) return get_the_archive_title();
-        return '';
+
+        // Lets a theme or a child theme change the fallback title, e.g. to translate the search title
+        return apply_filters('theme_page_hero_title', $title);
     }
 }
 
@@ -814,3 +829,85 @@ function phonenumber($atts, $content = null)
     return $wrapper ? "<$wrapper$id_class>$link</$wrapper>" : $link;
 }
 add_shortcode('phonenumber', 'phonenumber');
+
+if (!function_exists('transform_inline_font_sizes')) {
+    // Converts inline font-size styles into custom CSS variables
+    function transform_inline_font_sizes(
+        string $html,
+        string $font_size_var = '--fs'
+    ): string {
+
+        if (trim($html) === '') {
+            return $html;
+        }
+
+        $previous_errors = libxml_use_internal_errors(true);
+
+        $dom = new DOMDocument();
+
+        // Wrap the fragment in a container so multi-root WYSIWYG markup isn't nested into its first element, and declare
+        // UTF-8 instead of converting to HTML entities (mb_convert_encoding 'HTML-ENTITIES' is deprecated in PHP 8.2+)
+        $dom->loadHTML(
+            '<?xml encoding="UTF-8"><div id="transform-inline-font-sizes">' . $html . '</div>',
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+        libxml_use_internal_errors($previous_errors);
+
+        $container = $dom->getElementById('transform-inline-font-sizes');
+        if (!$container) {
+            return $html;
+        }
+
+        foreach ($container->getElementsByTagName('*') as $element) {
+
+            if (!$element->hasAttribute('style')) {
+                continue;
+            }
+
+            $style = $element->getAttribute('style');
+
+            if (
+                !preg_match(
+                    '/font-size\s*:\s*([^;]+)/i',
+                    $style,
+                    $matches
+                )
+            ) {
+                continue;
+            }
+
+            $font_size = trim($matches[1]);
+
+            // Remove the original font-size
+            $style = preg_replace(
+                '/font-size\s*:\s*[^;]+;?/i',
+                '',
+                $style
+            );
+
+            $style = trim($style);
+
+            if ($style !== '' && substr($style, -1) !== ';') {
+                $style .= ';';
+            }
+
+            // Add the variable and the new rule
+            $style .= sprintf(
+                '%s:%s;font-size:calc(var(%s) * var(--font-scale, 1));',
+                $font_size_var,
+                $font_size,
+                $font_size_var
+            );
+
+            $element->setAttribute('style', $style);
+        }
+
+        $output = '';
+        foreach ($container->childNodes as $child) {
+            $output .= $dom->saveHTML($child);
+        }
+
+        return $output;
+    }
+}
