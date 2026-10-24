@@ -98,7 +98,8 @@ add_action('switch_theme', function ($new_name, $new_theme, $old_theme) {
     }
 }, 10, 3);
 
-add_action('init', 'register_acf_blocks', 5);
+// After WordPress and plugins register their blocks and supports on init (default priority 10)
+add_action('init', 'register_acf_blocks', 11);
 
 /**
  * Load block assets only when block is present on the page
@@ -115,16 +116,14 @@ add_filter('should_load_separate_core_block_assets', '__return_true');
  * MODIFIED: Inline critical CSS for used blocks instead of enqueuing separate files
  */
 add_action('wp_enqueue_scripts', function () {
-    global $post;
-
-    if (!is_singular() || empty($post->post_content)) return;
-    if (strpos($post->post_content, '<!-- wp:') === false) return;
+    // Blocks of the current request, inner blocks and synced patterns included (parsed once per request)
+    $blocks = get_current_post_blocks();
+    if (empty($blocks)) return;
 
     $registered_blocks = WP_Block_Type_Registry::get_instance()->get_all_registered();
     if (empty($registered_blocks)) return;
 
-    // Flattened list (inner blocks included), parsed once per request
-    $blocks_in_use = array_filter(array_column(get_current_post_blocks(), 'blockName'));
+    $blocks_in_use = array_values(array_filter(array_column($blocks, 'blockName')));
 
     if (empty($blocks_in_use)) return;
 
