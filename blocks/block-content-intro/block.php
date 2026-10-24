@@ -50,7 +50,7 @@ if (get_field('toggle_block')):
 
             <div class="col">
                 <?php
-                if (!empty($columns['title'])) echo "<div class='col__title'>" . wp_kses_post($columns['title']) . "</div>";
+                if (!empty($columns['title'])) echo "<div class='col__title'>" . transform_inline_font_sizes(wp_kses_post($columns['title'])) . "</div>";
                 ?>
                 <div class="col__content formatted-text">
                     <?= $columns['content'] ?? "" ?>

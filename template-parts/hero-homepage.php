@@ -33,7 +33,7 @@ if (!$bg_mobile) $bg_mobile = [];
     <div class="hero__wrapper container">
         <div class="hero__content">
             <div class="hero__title tx-center">
-                <?= wp_kses_post($args["hero_title"] ?? '') ?>
+                <?= transform_inline_font_sizes(wp_kses_post($args["hero_title"] ?? '')) ?>
             </div>
 
             <?php if ($cta_button): ?>

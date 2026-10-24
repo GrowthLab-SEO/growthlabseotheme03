@@ -45,7 +45,7 @@ if (get_field('toggle_block')):
             <div class="cta-box__inner">
 
                 <div class="cta-box__title">
-                    <?= isset($title) && $title ? wp_kses_post($title) : ""; ?>
+                    <?= isset($title) && $title ? transform_inline_font_sizes(wp_kses_post($title)) : ""; ?>
                 </div>
 
                 <div class="cta-box__main">
