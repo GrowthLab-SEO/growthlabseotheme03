@@ -337,7 +337,7 @@ input[type="hidden"] {
   }
 
   &-field-label--type-sub {
-    display: none;
+    @include m.visually-hidden;
   }
 }
 
@@ -347,14 +347,16 @@ input[type="hidden"] {
 
   $ancestor: &;
 
+  // Labels hidden in the form settings stay available to screen readers
   &.hidden_label {
     #{$ancestor}_label {
-      display: none;
+      @include m.visually-hidden;
     }
   }
 
+  // The design shows placeholders instead of labels: the labels stay for screen readers
   &_label {
-    display: none;
+    @include m.visually-hidden;
   }
 
   &_visibility {
