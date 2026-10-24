@@ -125,6 +125,9 @@ cd wp-content/themes/growthlabseotheme03
 npm install
 npm run build   # build everything once (gulp build)
 npm run watch   # build once, then rebuild on changes (gulp default task, same as npx gulp)
+npm run build:child -- --child=../<child theme>   # build a child theme (also watch:child, see CHILD-THEMES.md)
+npm run create-child -- --name="Client"         # new child theme from child-theme-starter/
+npm run verify  # before pushing: PHP syntax, build, local pages with the parent and the compat-test child theme
 ```
 
 `gulpfile.js` exports two tasks: `build` compiles everything once, in parallel, and `default` runs `build` and then **keeps watching** for changes (stop it with Ctrl+C).
@@ -410,6 +413,7 @@ How it works (`theme-functions/helpers.php`):
 ### CSS loading
 
 - `inline_main_critical_css()` (`functions.php`) prints one `<style id="main-css">` in `<head>` with the font CSS, the color variables, `styles/main-min.css`, the active theme's `style.css`, the Splide core CSS (only when the request renders a Logos/Posts Carousel in the content, a synced pattern or a sidebar block widget) and the CSS of the theme blocks used on the page. `{theme-path}` in the CSS is replaced with the theme URL. Comments and whitespace are stripped (spaces around `:` and `,` are kept, since they can be significant). The result is cached in a transient for a week, keyed by the modification times of the CSS files and of `functions.php`, the theme URL, the blocks in use, the Splide flag and the font/color CSS; Customizer previews skip the cache.
+- Pieces of the inline CSS that depend on the page: the **hero** styles of the homepage variants are split out of `main-min.css` by the build into `styles/heroes/` and only the page hero's files are printed (`theme_get_hero_css_files()`, filter `theme_hero_css_files`); the **card** styles live in `styles/cards/` and only the cards the page renders are printed (the `get_template_part` action marks them, and an output buffer fills a placeholder where the block styles start); a **child theme**'s compiled `styles/main-min.css` is printed after the parent styles and before its `style.css` (see CHILD-THEMES.md).
 - On singular pages (blocks inside synced patterns included, see `get_current_post_blocks()`) the stylesheets of the blocks in use are dequeued (their `block-min.css` is inlined instead), and the styles and scripts of every unused non-core block, plugin blocks included, are dequeued.
 - Page-template stylesheets (`styles/page-templates/*-min.css`) are enqueued as regular files.
 - Theme asset URLs are versioned with the file modification time.
