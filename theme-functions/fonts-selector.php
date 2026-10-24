@@ -1,9 +1,5 @@
 <?php
-// Define the default fonts
-$default_fonts = [
-    'primary' => 'Figtree',
-    'secondary' => 'Khand'
-];
+// The default fonts ($default_fonts) are defined in theme-functions/theme-config.php, which loads first
 
 // ─── CORE FUNCTION: reads the Font Library + theme fonts ─────────────────────
 if (! function_exists('theme_get_all_fonts')) {
@@ -23,16 +19,17 @@ if (! function_exists('theme_get_all_fonts')) {
      */
     function theme_get_all_fonts(): array
     {
-        // 1. Theme base fonts — always available, keyed by slug
+        // 1. Theme base fonts (the defaults of theme-config.php) — always available, keyed by slug
+        global $default_fonts;
         $fonts = [
             'primary' => [
-                'name'        => 'Figtree',
-                'font_family' => '"Figtree", sans-serif',
+                'name'        => $default_fonts['primary'],
+                'font_family' => '"' . $default_fonts['primary'] . '", sans-serif',
                 'slug'        => 'primary',
             ],
             'secondary' => [
-                'name'        => 'Khand',
-                'font_family' => '"Khand", serif',
+                'name'        => $default_fonts['secondary'],
+                'font_family' => '"' . $default_fonts['secondary'] . '", serif',
                 'slug'        => 'secondary',
             ],
         ];
@@ -221,21 +218,8 @@ if (! function_exists('theme_get_default_font_faces')) {
      */
     function theme_get_default_font_faces(): array
     {
-        return [
-            'Khand' => [
-                ['weight' => '400', 'style' => 'normal', 'file' => 'khand-v22-latin/khand-v22-latin-regular.woff2', 'display' => 'swap'],
-                ['weight' => '500', 'style' => 'normal', 'file' => 'khand-v22-latin/khand-v22-latin-500.woff2', 'display' => 'swap'],
-                ['weight' => '600', 'style' => 'normal', 'file' => 'khand-v22-latin/khand-v22-latin-600.woff2', 'display' => 'swap'],
-                ['weight' => '700', 'style' => 'normal', 'file' => 'khand-v22-latin/khand-v22-latin-700.woff2', 'display' => 'swap'],
-            ],
-            'Figtree' => [
-                ['weight' => '400', 'style' => 'normal', 'file' => 'figtree-v9-latin/figtree-v9-latin-regular.woff2', 'display' => 'swap'],
-                ['weight' => '400', 'style' => 'italic', 'file' => 'figtree-v9-latin/figtree-v9-latin-italic.woff2', 'display' => 'swap'],
-                ['weight' => '500', 'style' => 'normal', 'file' => 'figtree-v9-latin/figtree-v9-latin-500.woff2', 'display' => 'swap'],
-                ['weight' => '600', 'style' => 'normal', 'file' => 'figtree-v9-latin/figtree-v9-latin-600.woff2', 'display' => 'swap'],
-                ['weight' => '700', 'style' => 'normal', 'file' => 'figtree-v9-latin/figtree-v9-latin-700.woff2', 'display' => 'swap'],
-            ],
-        ];
+        // This theme's files (theme-config.php)
+        return (array) theme_get_config('font_faces');
     }
 }
 
@@ -449,19 +433,8 @@ if (! function_exists('theme_get_above_fold_font_variants')) {
      */
     function theme_get_above_fold_font_variants(string $hero_style, string $first_block = ''): array
     {
-        $homepage_heroes = ['home', 'home_2', 'home_3', 'home_4', 'home_5', 'home_6'];
-
-        $variants = [
-            // Hero titles
-            ['role' => 'secondary', 'weight' => '600', 'style' => 'normal', 'hero_styles' => $homepage_heroes],
-            ['role' => 'secondary', 'weight' => '700', 'style' => 'normal', 'hero_styles' => ['default']],
-            // Header menu, phone button and hero text
-            ['role' => 'primary', 'weight' => '400', 'style' => 'normal'],
-            ['role' => 'primary', 'weight' => '600', 'style' => 'normal'],
-            ['role' => 'primary', 'weight' => '700', 'style' => 'normal'],
-            // Desktop menu only
-            ['role' => 'primary', 'weight' => '500', 'style' => 'normal', 'media' => '(min-width: 1200px)'],
-        ];
+        // Measured on this theme's templates (theme-config.php)
+        $variants = (array) theme_get_config('above_fold_font_variants');
 
         $variants = array_values(array_filter($variants, fn($variant) =>
             (empty($variant['hero_styles']) || in_array($hero_style, $variant['hero_styles'], true))
@@ -489,22 +462,8 @@ if (! function_exists('theme_get_first_block_font_variants')) {
     {
         if ($block_name === '') return [];
 
-        $map = [
-            'acf/contact-form'      => ['s600', 'p400', 'p700'],
-            'acf/content-box-grid'  => ['s600', 's400', 'p400'],
-            'acf/content-intro'     => ['s700', 's600', 's400', 'p400'],
-            'acf/cta-box'           => ['s600', 's400'],
-            'acf/faq'               => ['s600', 'p400'],
-            'acf/featured-video'    => ['p400'],
-            'acf/logos-carousel'    => ['s400'],
-            'acf/office-locations'  => ['s600', 'p400', 'p700'],
-            'acf/posts-carousel'    => ['s600', 's400', 'p400'],
-            'acf/posts-grid'        => ['s600', 's400', 'p400'],
-            'acf/selling-points'    => ['s600', 'p700'],
-            'acf/two-columns'       => ['s600', 's400', 'p400'],
-            'core'                  => ['p400', 'p700'],
-            'default'               => ['s600', 's400', 'p400'],
-        ];
+        // Measured on this theme's blocks (theme-config.php)
+        $map = (array) theme_get_config('first_block_font_variants');
 
         $key   = str_starts_with($block_name, 'core/') ? 'core' : (isset($map[$block_name]) ? $block_name : 'default');
         $roles = ['p' => 'primary', 's' => 'secondary'];

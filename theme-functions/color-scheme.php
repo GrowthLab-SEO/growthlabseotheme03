@@ -1,23 +1,5 @@
 <?php
-// Define the default colors
-$default_colors = [
-    'primary' => [
-        'default' => '#0e5db8',
-        'dark'    => '#031b3a',
-        'light'   => '#2b7de0'
-    ],
-    'secondary' => [
-        'default' => '#f4f8fd',
-        'dark'    => '#b0d3f9',
-        'light'   => '#FFFFFF'
-    ],
-    'tertiary' => [
-        'default' => '#0b3293',
-        'dark'    => '#071d3a',
-        'light'   => '#869db7'
-    ],
-    'text' => '#232323'
-];
+// The default colors ($default_colors) are defined in theme-functions/theme-config.php, which loads first
 
 if (!function_exists('theme_customize_register')) {
     function theme_customize_register($wp_customize)
@@ -103,13 +85,5 @@ if (!function_exists('hex_to_rgb')) {
         return implode(', ', array_map('hexdec', str_split($hex, 2)));
     }
 }
-
-// Enqueue inline styles with customizer CSS
-/* function theme_enqueue_styles()
-{
-    $color_scheme = theme_get_customizer_css();
-    wp_add_inline_style('growthlabseotheme03-main-stylesheet', $color_scheme);
-}
-add_action('wp_enqueue_scripts', 'theme_enqueue_styles'); */
 
 add_action('customize_register', 'theme_customize_register');
