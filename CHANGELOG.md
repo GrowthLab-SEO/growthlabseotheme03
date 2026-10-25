@@ -3,6 +3,16 @@
 All notable changes to GrowthLab Theme 03. The version is in `style.css` and goes up with every update that is pushed:
 patch (1.0.x) for fixes, minor (1.x.0) for new features or changes editors can see.
 
+## 1.2.1 - 2026-10-24
+
+### Fixed
+- The side portrait of the homepage heroes v4 and v6 loads right away (preloaded, high priority), like in the other
+  themes, instead of waiting for the lazy loading script. It is usually the largest image on phones, so this improves
+  the LCP of those pages. Same files and sizes as before.
+
+### Check after updating
+- Homepages with hero v4 or v6 and a side portrait: the portrait shows as before.
+
 ## 1.2.0 - 2026-10-24
 
 ### Added
