@@ -34,6 +34,7 @@ patch (1.0.x) for fixes, minor (1.x.0) for new features or changes editors can s
 
 ### Fixed
 - The blog filter buttons and the location cards of block widgets keep their styles.
+- The video of the CTA box fills the height of its box.
 - Items of ordered lists in formatted content are numbered.
 - The first section after the hero and a floating CTA box render right away, without being clipped or jumping above
   the hero while the page loads. Sections further down keep rendering only when they get near the screen.
