@@ -44,6 +44,8 @@ if (!function_exists('theme_get_config')) {
      *   blocks, "default" for the rest). Codes: "s600" = secondary font weight 600, "p400" = primary font weight 400
      * - excerpt_length: words of the excerpts, 'default' and optionally by post type
      * - splide_blocks: blocks that render a Splide carousel (its scripts and CSS load only when one is on the page)
+     * - template_styles_after_main: print the page template stylesheets after the main styles, so their rules win
+     *   over the main rules of the same specificity (this theme's styles were written for that order)
      */
     function theme_get_config(string $key)
     {
@@ -94,6 +96,7 @@ if (!function_exists('theme_get_config')) {
             ],
             'excerpt_length' => ['default' => 10, 'team' => 50],
             'splide_blocks' => ['acf/logos-carousel', 'acf/posts-carousel'],
+            'template_styles_after_main' => true,
         ];
 
         return $config[$key] ?? null;

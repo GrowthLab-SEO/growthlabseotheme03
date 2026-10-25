@@ -22,7 +22,8 @@ patch (1.0.x) for fixes, minor (1.x.0) for new features or changes editors can s
 
 ### Changed
 - The inline theme styles print at `wp_head` priority 10 (it was 1), like the other themes: after the WordPress block
-  styles, so the theme styles win over them.
+  styles, so the theme styles win over them. The page template stylesheets (default, blog, team member) still print
+  after the main styles, as before (`template_styles_after_main` in `theme-functions/theme-config.php`).
 - ACF blocks are registered at `init` priority 11 (it was 5), like the other themes.
 - The blog filters build the cards of their results from the theme's post card (and from its child theme override).
 - Only the styles of the hero the page uses and of the cards it renders are printed, so the inline CSS is smaller.
