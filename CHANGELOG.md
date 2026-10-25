@@ -1,7 +1,5 @@
 # Changelog
 
-test: webhook
-
 All notable changes to GrowthLab Theme 03. The version is in `style.css` and goes up with every update that is pushed:
 patch (1.0.x) for fixes, minor (1.x.0) for new features or changes editors can see.
 
