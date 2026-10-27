@@ -18,8 +18,13 @@
   &.image {
     background-color: rgba(var(--primary-dark));
 
-    *:not(a) {
-      color: rgb(var(--secondary)) !important;
+    // Light text on dark backgrounds. The content, the CTA box text and the icon buttons set their own color for light
+    // backgrounds further down, so they are listed here to win by specificity
+    *:not(a),
+    .col__content :not(a),
+    .inner-cta-box__content :not(a),
+    .inner-cta-box__buttons .btn:has(svg) span {
+      color: rgb(var(--secondary));
     }
   }
 
@@ -306,12 +311,9 @@
           margin-top: var(--sp-xsm);
         }
 
+        // Base size on mobile and tablet; sizes chosen in the editor scale from it (transform_inline_font_sizes())
         @media (max-width: calc(v.$ldpi - 1px)) {
-          font-size: clamp(4rem, 2vw, 6rem) !important;
-
-          * {
-            font-size: inherit !important;
-          }
+          font-size: clamp(4rem, 2vw, 6rem);
         }
       }
 

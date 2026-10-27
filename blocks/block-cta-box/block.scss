@@ -199,12 +199,9 @@
     h6 {
       line-height: 0.95;
 
+      // Base size on mobile and tablet; sizes chosen in the editor scale from it (transform_inline_font_sizes())
       @media (max-width: calc(v.$ldpi - 1px)) {
-        font-size: clamp(5rem, 6vw, 10rem) !important;
-
-        * {
-          font-size: inherit !important;
-        }
+        font-size: clamp(5rem, 6vw, 10rem);
       }
     }
 
