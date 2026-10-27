@@ -2,6 +2,7 @@
   "name": "acf/selling-points",
   "textdomain": "growthlabseotheme03",
   "title": "Selling Points",
+  "description": "Up to seven items, each an icon and a short title with an optional link, under a title, subtitle and text, over the items' own background image. For key benefits or the main practice areas. Needs: an icon (SVG) and a title per item.",
   "style": ["file:./block-min.css"],
   "category": "growthlabseotheme03-blocks",
   "icon": "block-default",
