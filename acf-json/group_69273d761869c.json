@@ -96,15 +96,7 @@
             "type": "true_false",
             "instructions": "",
             "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_69273d7623067",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
+            "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -129,11 +121,6 @@
                 [
                     {
                         "field": "field_69273d762e493",
-                        "operator": "==",
-                        "value": "1"
-                    },
-                    {
-                        "field": "field_69273d7623067",
                         "operator": "==",
                         "value": "1"
                     }
@@ -235,15 +222,7 @@
             "type": "wysiwyg",
             "instructions": "",
             "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_6927558d20842",
-                        "operator": "!=",
-                        "value": "1"
-                    }
-                ]
-            ],
+            "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -555,5 +534,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1792435608
+    "modified": 1793126360
 }

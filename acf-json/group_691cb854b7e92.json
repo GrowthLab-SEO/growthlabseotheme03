@@ -457,20 +457,7 @@
             "type": "link",
             "instructions": "",
             "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_691cb854bf33b",
-                        "operator": "==",
-                        "value": "1"
-                    },
-                    {
-                        "field": "field_690e5f0c51fd3",
-                        "operator": "!=",
-                        "value": "1"
-                    }
-                ]
-            ],
+            "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
@@ -501,5 +488,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1776801630
+    "modified": 1793126219
 }
