@@ -11,7 +11,7 @@ $link_target = $args['link_target'] ?? '';
         <div class='team-card__pic-wrapper'>
             <?php
             if (isset($args['picture']) && $args['picture']) {
-                img_print_picture_tag(img: $args["picture"], max_size: "large", min_size: "featured-small", classes: "team-card__pic");
+                img_print_picture_tag(img: $args["picture"], max_size: "large", min_size: "featured-small", classes: "team-card__pic", context: 'card/team/picture');
             } else {
                 echo get_theme_svg('assets/icons/icon-file-image.svg');
             }

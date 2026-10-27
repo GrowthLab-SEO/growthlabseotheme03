@@ -14,14 +14,14 @@ if (get_field('toggle_block')):
         <?= get_block_extract_attribute($extract_block_from_content ?? false, $place ?? '') ?>>
 
         <?php
-        if (isset($background_image) && $background_image && isset($background_type) && $background_type === 'image') img_print_picture_tag(img: $background_image, is_cover: true, classes: "contact-form__bg bg-image");
+        if (isset($background_image) && $background_image && isset($background_type) && $background_type === 'image') img_print_picture_tag(img: $background_image, is_cover: true, classes: "contact-form__bg bg-image", context: 'block/contact-form/background');
         ?>
 
         <div class="contact-form__layer">
 
             <div class="contact-form__wrapper <?= $reverse_columns ? "reverse" : "" ?>">
 
-                <?php if (isset($side_image) && $side_image) img_print_picture_tag(img: $side_image, is_cover: true, classes: "contact-form__side-img") ?>
+                <?php if (isset($side_image) && $side_image) img_print_picture_tag(img: $side_image, is_cover: true, classes: "contact-form__side-img", context: 'block/contact-form/side-image') ?>
 
                 <div class="contact-form__inner container">
 

@@ -27,7 +27,8 @@ if (!$bg_mobile) $bg_mobile = [];
         mobile_img: $bg_mobile,
         is_cover: true,
         classes: "hero__bg-image bg-image",
-        is_priority: true
+        is_priority: true,
+        context: 'hero/home/background'
     ); ?>
 
     <div class="hero__wrapper container">
@@ -61,6 +62,7 @@ if (!$bg_mobile) $bg_mobile = [];
     <?php if ($use_custom_badge_image && !empty($hero_pictures['badge'])) img_print_picture_tag(
         img: $hero_pictures['badge'],
         classes: "hero__badge",
-        max_size: "medium"
+        max_size: "medium",
+        context: 'hero/home/badge'
     ); ?>
 </section>

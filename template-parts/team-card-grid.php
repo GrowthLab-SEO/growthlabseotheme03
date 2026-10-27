@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
             $bg_item_url = '';
             if (isset($args['picture']) && $args['picture'] && $args['picture'] !== '') {
                 $bg_item_url = get_template_directory_uri() . '/assets/img/thumbnail-bg.webp';
-                img_print_picture_tag(img: $args["picture"], max_size: "cover-mobile", min_size: "featured-small", classes: "team-card-grid__pic");
+                img_print_picture_tag(img: $args["picture"], max_size: "cover-mobile", min_size: "featured-small", classes: "team-card-grid__pic", context: 'card/team-grid/picture');
             } else {
                 echo get_theme_svg('assets/icons/icon-file-image.svg');
             }

@@ -72,9 +72,9 @@ if (get_field('toggle_block')):
         <?= get_block_extract_attribute($extract_block_from_content ?? false, $place ?? '') ?>>
 
         <?php
-        if (isset($background_image) && $background_image && isset($background_type) && $background_type === 'image') img_print_picture_tag(img: $background_image, is_cover: true, classes: "posts-carousel__bg bg-image");
+        if (isset($background_image) && $background_image && isset($background_type) && $background_type === 'image') img_print_picture_tag(img: $background_image, is_cover: true, classes: "posts-carousel__bg bg-image", context: 'block/posts-carousel/background');
 
-        if ($logo_symbol) img_print_picture_tag(img: $logo_symbol, classes: "posts-carousel__symbol");
+        if ($logo_symbol) img_print_picture_tag(img: $logo_symbol, classes: "posts-carousel__symbol", context: 'block/posts-carousel/logo-symbol');
         ?>
 
         <div class="posts-carousel__wrapper container">
@@ -218,7 +218,7 @@ if (get_field('toggle_block')):
                                             <img data-src="<?= esc_url($bg_item_url) ?>" alt="" class="thumbnail__bg lazy-image">
                                             <?php
                                             if (!empty($post_fields['headshot'])) {
-                                                img_print_picture_tag(img: ($post_fields['headshot'] ?? ''), max_size: "medium", min_size: "medium", classes: "thumbnail__pic");
+                                                img_print_picture_tag(img: ($post_fields['headshot'] ?? ''), max_size: "medium", min_size: "medium", classes: "thumbnail__pic", context: 'block/posts-carousel/thumbnail');
                                             } else {
                                                 echo get_theme_svg('assets/icons/icon-file-image.svg');
                                             }

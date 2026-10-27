@@ -18,7 +18,7 @@ if (get_field('toggle_block')):
         <?= get_block_extract_attribute($extract_block_from_content ?? false, $place ?? '') ?>>
 
         <?php
-        if (isset($background_image) && $background_image && $background_type === 'image') img_print_picture_tag(img: $background_image, is_cover: true, classes: "selling-points__bg bg-image gradient-overlay");
+        if (isset($background_image) && $background_image && $background_type === 'image') img_print_picture_tag(img: $background_image, is_cover: true, classes: "selling-points__bg bg-image gradient-overlay", context: 'block/selling-points/background');
         ?>
 
 
@@ -46,7 +46,7 @@ if (get_field('toggle_block')):
                         <<?= $item_wrapper ?> class="item" <?= !empty($item['link']) ? 'href="' . esc_url($item['link']['url'] ?? '') . '"' . ($item_target ? ' target="' . esc_attr($item_target) . '"' . ($item_target === '_blank' ? ' rel="noopener noreferrer"' : '') : '') : "" ?>>
                             <?php
                             if ($items_background_image && !empty($items_background_image)) {
-                                img_print_picture_tag(img: $items_background_image, is_cover: false, classes: "item__bg", max_size: "featured-small", min_size: "thumbnail");
+                                img_print_picture_tag(img: $items_background_image, is_cover: false, classes: "item__bg", max_size: "featured-small", min_size: "thumbnail", context: 'block/selling-points/items-background');
                             } else {
                                 $bg_item_url = get_template_directory_uri() . '/assets/img/figure_selling_points.webp';
                                 echo '<img data-src="' . esc_url($bg_item_url) . '" alt="" class="item__bg lazy-image">';
@@ -54,7 +54,7 @@ if (get_field('toggle_block')):
                             ?>
 
                             <div class="item__icon">
-                                <?php if (!empty($item['icon'])) img_print_picture_tag(img: $item['icon'], max_size: "thumbnail"); ?>
+                                <?php if (!empty($item['icon'])) img_print_picture_tag(img: $item['icon'], max_size: "thumbnail", context: 'block/selling-points/icon'); ?>
                             </div>
                             <?php print_title($item['title'] ?? '', !empty($item['title_tag']) ? $item['title_tag'] : "h3", "item__title tx-center"); ?>
                         </<?= $item_wrapper ?>>

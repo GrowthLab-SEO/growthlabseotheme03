@@ -16,7 +16,7 @@ if (get_field('toggle_block')):
 
         <?php
         if (isset($background_image) && $background_image && isset($background_type) && $background_type === 'image') {
-            img_print_picture_tag(img: $background_image, is_cover: true, classes: "cta-box__bg bg-image");
+            img_print_picture_tag(img: $background_image, is_cover: true, classes: "cta-box__bg bg-image", context: 'block/cta-box/background');
         } elseif (isset($background_video) && $background_video && isset($background_type) && $background_type === 'video') {
             $video_url = $background_video['url'] ?? null;
             if ($video_url) {
@@ -36,9 +36,9 @@ if (get_field('toggle_block')):
             $logo_symbol = (get_current_language_options()['logo_symbol'] ?? null) ?: (get_field_options('options')['logo_symbol'] ?? null);
 
             if (!empty($side_image)) {
-                img_print_picture_tag(img: $side_image, max_size: "content", min_size: "featured-small", classes: "cta-box__side-image");
+                img_print_picture_tag(img: $side_image, max_size: "content", min_size: "featured-small", classes: "cta-box__side-image", context: 'block/cta-box/side-image');
             } elseif (!empty($logo_symbol)) {
-                img_print_picture_tag(img: $logo_symbol, max_size: "medium", classes: "cta-box__symbol");
+                img_print_picture_tag(img: $logo_symbol, max_size: "medium", classes: "cta-box__symbol", context: 'block/cta-box/logo-symbol');
             }
             ?>
 

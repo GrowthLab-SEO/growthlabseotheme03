@@ -13,7 +13,7 @@
     $phone_number = $contact_phone ?: $main_phone_number;
 
 
-    if (isset($footer_background_image) && $footer_background_image) img_print_picture_tag(img: $footer_background_image, is_cover: true, classes: "site-footer__bg bg-image");
+    if (isset($footer_background_image) && $footer_background_image) img_print_picture_tag(img: $footer_background_image, is_cover: true, classes: "site-footer__bg bg-image", context: 'footer/background');
     ?>
 
     <?php

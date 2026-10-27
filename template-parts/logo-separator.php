@@ -12,7 +12,7 @@ foreach ($args as $key => $value) $$key = $value;
     $logo_symbol = (get_current_language_options()['logo_symbol'] ?? null) ?: (get_field_options('options')['logo_symbol'] ?? null);
 
     if ($logo_symbol) {
-        img_print_picture_tag(img: $logo_symbol, max_size: "medium");
+        img_print_picture_tag(img: $logo_symbol, max_size: "medium", context: 'separator/logo-symbol');
     } else {
         echo get_theme_svg('assets/img/ampersand-symbol.svg');
     } ?>

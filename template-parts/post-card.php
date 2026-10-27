@@ -21,9 +21,9 @@ $link_target_attr = $link_target ? ' target="' . esc_attr($link_target) . '"' . 
             echo "<span class='post-card__cat'>" . esc_html($args['cat']) . "</span>";
         }
         if (isset($args['picture']) && $args['picture']) {
-            img_print_picture_tag(img: $args["picture"], max_size: "content", min_size: "featured-small", classes: "post-card__pic");
+            img_print_picture_tag(img: $args["picture"], max_size: "content", min_size: "featured-small", classes: "post-card__pic", context: 'card/post/picture');
         } elseif ($default_image) {
-            img_print_picture_tag(img: $default_image, max_size: "content", min_size: "featured-small", classes: "post-card__pic");
+            img_print_picture_tag(img: $default_image, max_size: "content", min_size: "featured-small", classes: "post-card__pic", context: 'card/post/default-image');
         } else {
             echo get_theme_svg('assets/icons/icon-file-image.svg');
         }

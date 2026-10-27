@@ -38,7 +38,8 @@ if (get_field('toggle_block')):
                                             <?= img_generate_picture_tag(
                                                 img: $logo['logo'],
                                                 max_size: "medium",
-                                                classes: "logo__pic"
+                                                classes: "logo__pic",
+                                                context: 'block/logos-carousel/logo'
                                             ); ?>
 
 

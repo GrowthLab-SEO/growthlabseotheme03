@@ -453,6 +453,56 @@ They work in WYSIWYG fields and in the post content, not in Link, Text or URL fi
 
 - `[phonenumber]`: prints the Main Phone Number of Site Options as a tel: link, so the number shown in the content follows Site Options. Attributes: link_class (classes of the link, e.g. "btn btn--primary" for a button), link_id, wrapper (element around the link: span, p, strong, h2...), target, and text (shown only when Site Options has no number). All attributes are escaped because any user who can edit posts (including contributors) can use it. Attributes: `target` (default '_self'), `link_id` (default ''), `link_class` (default ''), `wrapper` (default ''), `text` (default '').
 
+## Images
+
+Every image the theme prints has a context. A child theme changes the sizes or loading of an image by its context in its `functions.php`, without overriding the template: `theme_set_picture_sizes('hero/*/side-portrait', max_size: 'large', min_size: 'content');` (`*` matches one part), or the `theme_picture_args` filter for any argument. Cover images use the cover sizes and ignore max and min sizes: pass `is_cover: false` to use them.
+
+| Context | File | Sizes | Loading |
+|---|---|---|---|
+| `block/contact-form/background` | `blocks/block-contact-form/block.php` | cover sizes | lazy |
+| `block/contact-form/side-image` | `blocks/block-contact-form/block.php` | cover sizes | lazy |
+| `block/content-intro/background` | `blocks/block-content-intro/block.php` | cover sizes | lazy |
+| `block/content-intro/featured-image` | `blocks/block-content-intro/block.php` | max set by the template, min `featured-small` | lazy |
+| `block/content-intro/logo-symbol` | `blocks/block-content-intro/block.php` | max `medium`, min `auto` | lazy |
+| `block/cta-box/background` | `blocks/block-cta-box/block.php` | cover sizes | lazy |
+| `block/cta-box/logo-symbol` | `blocks/block-cta-box/block.php` | max `medium`, min `auto` | lazy |
+| `block/cta-box/side-image` | `blocks/block-cta-box/block.php` | max `content`, min `featured-small` | lazy |
+| `block/faq/background` | `blocks/block-faq/block.php` | cover sizes | lazy |
+| `block/faq/logo-symbol` | `blocks/block-faq/block.php` | max `medium`, min `auto` | lazy |
+| `block/faq/side-image` | `blocks/block-faq/block.php` | max `content`, min `featured-small` | lazy |
+| `block/featured-video/cover` | `blocks/block-featured-video/block.php` | cover sizes | lazy |
+| `block/logos-carousel/logo` | `blocks/block-logos-carousel/block.php` | max `medium`, min `auto` | lazy |
+| `block/posts-carousel/background` | `blocks/block-posts-carousel/block.php` | cover sizes | lazy |
+| `block/posts-carousel/logo-symbol` | `blocks/block-posts-carousel/block.php` | max `full`, min `auto` | lazy |
+| `block/posts-carousel/thumbnail` | `blocks/block-posts-carousel/block.php` | max `medium`, min `medium` | lazy |
+| `block/posts-grid/background` | `blocks/block-posts-grid/block.php` | cover sizes | lazy |
+| `block/selling-points/background` | `blocks/block-selling-points/block.php` | cover sizes | lazy |
+| `block/selling-points/icon` | `blocks/block-selling-points/block.php` | max `thumbnail`, min `auto` | lazy |
+| `block/selling-points/items-background` | `blocks/block-selling-points/block.php` | max `featured-small`, min `thumbnail` | lazy |
+| `block/two-columns/background` | `blocks/block-two-columns/block.php` | cover sizes | lazy |
+| `block/two-columns/image` | `blocks/block-two-columns/block.php` | max `large`, min `content` | lazy |
+| `card/default/default-image` | `template-parts/default-card.php` | max `content`, min `featured-small` | lazy |
+| `card/default/picture` | `template-parts/default-card.php` | max `cover-mobile`, min `featured-small` | lazy |
+| `card/post/default-image` | `template-parts/post-card.php` | max `content`, min `featured-small` | lazy |
+| `card/post/picture` | `template-parts/post-card.php` | max `content`, min `featured-small` | lazy |
+| `card/team-grid/picture` | `template-parts/team-card-grid.php` | max `cover-mobile`, min `featured-small` | lazy |
+| `card/team/picture` | `template-parts/team-card.php` | max `large`, min `featured-small` | lazy |
+| `footer/background` | `footer.php` | cover sizes | lazy |
+| `hero/default/background` | `template-parts/hero-default.php` | cover sizes | priority |
+| `hero/home/background` | `template-parts/hero-homepage.php` | cover sizes | priority |
+| `hero/home/badge` | `template-parts/hero-homepage.php` | max `medium`, min `auto` | lazy |
+| `hero/home_2/background` | `template-parts/hero-homepage-v2.php` | cover sizes | priority |
+| `hero/home_3/background` | `template-parts/hero-homepage-v3.php` | cover sizes | priority |
+| `hero/home_4/background` | `template-parts/hero-homepage-v4.php` | cover sizes | priority |
+| `hero/home_4/side-portrait` | `template-parts/hero-homepage-v4.php` | cover sizes | priority |
+| `hero/home_5/background` | `template-parts/hero-homepage-v5.php` | cover sizes | priority |
+| `hero/home_6/background` | `template-parts/hero-homepage-v6.php` | cover sizes | priority |
+| `hero/home_6/side-portrait` | `template-parts/hero-homepage-v6.php` | cover sizes | priority |
+| `separator/logo-symbol` | `template-parts/logo-separator.php` | max `medium`, min `auto` | lazy |
+| `single/post/featured-image` | `single.php` | cover sizes | lazy |
+| `single/team/headshot` | `single-team.php` | max `cover-mobile`, min `auto` | lazy |
+| `site/logo` | `header.php` | max `medium`, min `thumbnail` | priority |
+
 ## Logo symbol
 
 The logo symbol (Site Options, `logo_symbol`) is the brand mark the theme prints as decoration. Editors replace it in Site Options and every place follows. Blocks that print it say so in their entry; template parts that print it: `template-parts/logo-separator.php`.

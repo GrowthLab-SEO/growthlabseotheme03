@@ -23,7 +23,7 @@ if (get_field('toggle_block')):
 
         <?php
         if ($show_top_separator) get_template_part("template-parts/logo", "separator", ["classes" => "two-columns__separator $reverse"]);
-        if (isset($background_type) && $background_type === "img") img_print_picture_tag(img: $background_image, is_cover: true, classes: "two-columns__bg bg-image gradient-overlay");
+        if (isset($background_type) && $background_type === "img") img_print_picture_tag(img: $background_image, is_cover: true, classes: "two-columns__bg bg-image gradient-overlay", context: 'block/two-columns/background');
         ?>
 
         <div class="
@@ -45,7 +45,8 @@ if (get_field('toggle_block')):
                     img: $image,
                     max_size: "large",
                     min_size: "content",
-                    classes: "two-columns__image $reverse"
+                    classes: "two-columns__image $reverse",
+                    context: 'block/two-columns/image'
                 );
                 ?>
             </div>

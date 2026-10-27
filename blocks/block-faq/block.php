@@ -14,15 +14,15 @@ if (get_field('toggle_block')):
         <?= get_block_extract_attribute($extract_block_from_content ?? false, $place ?? '') ?>>
 
         <?php
-        if (isset($background_image) && $background_image && isset($background_type) && $background_type === 'image') img_print_picture_tag(img: $background_image, is_cover: true, classes: "faq__bg bg-image gradient-overlay");
+        if (isset($background_image) && $background_image && isset($background_type) && $background_type === 'image') img_print_picture_tag(img: $background_image, is_cover: true, classes: "faq__bg bg-image gradient-overlay", context: 'block/faq/background');
         ?>
 
         <?php
         $logo_symbol = (get_current_language_options()['logo_symbol'] ?? null) ?: (get_field_options('options')['logo_symbol'] ?? null);
         if (isset($side_image) && !empty($side_image)) {
-            img_print_picture_tag(img: $side_image, max_size: "content", min_size: "featured-small", classes: "faq__side-image");
+            img_print_picture_tag(img: $side_image, max_size: "content", min_size: "featured-small", classes: "faq__side-image", context: 'block/faq/side-image');
         } elseif ($logo_symbol) {
-            img_print_picture_tag(img: $logo_symbol, max_size: "medium", classes: "faq__symbol");
+            img_print_picture_tag(img: $logo_symbol, max_size: "medium", classes: "faq__symbol", context: 'block/faq/logo-symbol');
         }
         ?>
 
