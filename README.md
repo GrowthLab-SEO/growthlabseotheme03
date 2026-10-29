@@ -107,6 +107,15 @@ An ACF sync closure in `theme-functions/acf-functions.php` runs on `wppusher_the
 - The new hash is stored **before** importing, so items cut off by the time limit are not retried until the JSON changes again; finish them with **ACF > Field Groups > Sync available**.
 - Multisite is not supported.
 
+### Creating a child theme
+
+Client sites always run a child theme. From this theme's folder (see [CHILD-THEMES.md](CHILD-THEMES.md) for the full guide):
+
+1. `npm install` once, to install gulp and Sass. Without it the next commands fail ("gulp" is not recognized).
+2. `npm run create-child -- --name="Client Name"` creates `../growthlabseotheme03-client-name` and builds it.
+3. Activate the child theme under Appearance > Themes.
+4. After every change to its styles, scripts or blocks: `npm run build:child -- --child=../growthlabseotheme03-client-name` (or `npm run watch:child -- --child=…` to rebuild on save). The theme loads the child's compiled files only, and they are committed with the child theme.
+
 ### Child themes
 
 - Blocks in the child theme's `blocks/*/block.json` are registered too; a child block with the same `name` as a parent block replaces it. Use the `growthlabseotheme03-blocks` category in `block.json`.
@@ -125,8 +134,8 @@ cd wp-content/themes/growthlabseotheme03
 npm install
 npm run build   # build everything once (gulp build)
 npm run watch   # build once, then rebuild on changes (gulp default task, same as npx gulp)
+npm run create-child -- --name="Client"         # new child theme from child-theme-starter/, built
 npm run build:child -- --child=../<child theme>   # build a child theme (also watch:child, see CHILD-THEMES.md)
-npm run create-child -- --name="Client"         # new child theme from child-theme-starter/
 npm run verify  # before pushing: PHP syntax, build, local pages with the parent and the compat-test child theme
 ```
 
