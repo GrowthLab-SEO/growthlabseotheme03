@@ -20,7 +20,11 @@
   $line-height: 1.25
 ) {
   position: relative;
-  color: if($color != null, $color, rgb(var(--primary-dark)));
+  @if $color != null {
+    color: $color;
+  } @else {
+    color: rgb(var(--primary-dark));
+  }
   font-family: var(--font-secondary);
   font-style: normal;
   font-weight: $font-weight;
